@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
 import { StatsCards } from './_components/stats-cards'
-import { StatsCardsSkeleton } from '@/skeletons/stats-card-skeleton'
+import { StatsCardsSkeleton } from '@/components/skeletons/stats-card-skeleton'
 import {
   Card,
   CardContent,
@@ -17,10 +17,12 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { RecentSwaps } from './_components/recent-swaps'
+import { RecommendedMatches } from './_components/recomended-matches'
 
 const page = () => {
   return (
-    <div className='space-y-8 p-4'>
+    <div className='min-h-full space-y-8 p-4'>
       <div>
         <h2 className='text-3xl font-bold tracking-tight'>Dashboard</h2>
         <p className='text-muted-foreground'>
@@ -112,6 +114,23 @@ const page = () => {
             </Button>
           </CardFooter>
         </Card>
+      </div>
+
+      <div className='grid gap-4 md:grid-cols-2'>
+        <Suspense
+          fallback={
+            <div className='bg-muted h-[400px] w-full animate-pulse rounded-lg' />
+          }
+        >
+          <RecentSwaps />
+        </Suspense>
+        <Suspense
+          fallback={
+            <div className='bg-muted h-[400px] w-full animate-pulse rounded-lg' />
+          }
+        >
+          <RecommendedMatches />
+        </Suspense>
       </div>
     </div>
   )

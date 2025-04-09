@@ -4,14 +4,13 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { UserMenu } from '@/components/user-menu'
 import { Bell, Menu, MessageSquare, Search } from 'lucide-react'
+import { MobileSidebar } from './mobile-sidebar'
 
 export const DashboardNavbar = () => {
   return (
     <nav className='flex h-full items-center justify-between px-4'>
       <div className='flex items-center gap-2'>
-        <Button variant='ghost' size='icon'>
-          <Menu className='size-5' />
-        </Button>
+        <MobileSidebar />
         <h2 className=''>SkillSwap</h2>
       </div>
 

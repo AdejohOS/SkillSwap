@@ -9,13 +9,17 @@ import {
   DropdownMenuTrigger
 } from './ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
-import { LayoutDashboard, Loader, LogOut } from 'lucide-react'
+import { Loader, LogOut, User } from 'lucide-react'
 import { DottedSeparator } from './ui/dotted-separator'
+import { RiDashboardHorizontalLine } from 'react-icons/ri'
+import { useLogout } from '@/hooks/use-logout'
 
 export const UserMenu = () => {
   const { data: user, isLoading } = useGetProfile()
 
   const router = useRouter()
+
+  const { mutate: logout } = useLogout()
 
   if (isLoading) {
     return (
@@ -51,11 +55,6 @@ export const UserMenu = () => {
         sideOffset={10}
       >
         <div className='flex flex-col items-center justify-center gap-2 px-2.5 py-4'>
-          <Avatar className='size-[52px] border border-neutral-700'>
-            <AvatarFallback className='flex items-center justify-center bg-neutral-200 text-xl font-medium text-neutral-500'>
-              {avatarFallback}
-            </AvatarFallback>
-          </Avatar>
           <div className='flex flex-col items-center justify-center'>
             <p className='text-neutral text-sm font-medium'>
               {full_name || 'User'}
@@ -65,12 +64,23 @@ export const UserMenu = () => {
         </div>
         <DottedSeparator className='mb-1' />
         <DropdownMenuItem
+          onClick={() => router.push('/dashboard/profile')}
+          className='flex h-10 cursor-pointer items-center font-medium'
+        >
+          <User className='mr-2 size-4' /> Profile
+        </DropdownMenuItem>
+        <DropdownMenuItem
           onClick={() => router.push('/dashboard')}
           className='flex h-10 cursor-pointer items-center font-medium'
         >
-          <LayoutDashboard className='mr-2 size-4' /> Dashboard
+          <RiDashboardHorizontalLine className='mr-2 size-4' /> Dashboard
         </DropdownMenuItem>
-        <DropdownMenuItem className='flex h-10 cursor-pointer items-center font-medium text-amber-700'>
+
+        <DottedSeparator className='my-1' />
+        <DropdownMenuItem
+          onClick={() => logout()}
+          className='flex h-10 cursor-pointer items-center font-medium text-amber-700'
+        >
           <LogOut className='mr-2 size-4' /> Logout
         </DropdownMenuItem>
       </DropdownMenuContent>
