@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
-export function StatsCardsSkeleton() {
+export const StatsCardsSkeleton = () => {
   return (
     <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
       {Array(4)

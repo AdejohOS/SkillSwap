@@ -1,14 +1,8 @@
 'use client'
 import { cn } from '@/lib/utils'
-import { SettingsIcon, UsersIcon } from 'lucide-react'
+import { SettingsIcon } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import {
-  GoCheckCircle,
-  GoCheckCircleFill,
-  GoHome,
-  GoHomeFill
-} from 'react-icons/go'
 import {
   RiDashboardHorizontalLine,
   RiGraduationCapFill,
@@ -19,11 +13,18 @@ import { PiUsersThree, PiUsersThreeFill } from 'react-icons/pi'
 import { BiMessageSquare, BiSolidMessageSquare } from 'react-icons/bi'
 import { MdLightbulb, MdLightbulbOutline } from 'react-icons/md'
 import { RiDashboardHorizontalFill } from 'react-icons/ri'
+import { FaRegBookmark, FaBookmark } from 'react-icons/fa'
 
 const routes = [
   {
-    label: 'Overview',
+    label: 'Dashboard',
     href: '',
+    icon: RiDashboardHorizontalLine,
+    activeIcon: RiDashboardHorizontalFill
+  },
+  {
+    label: 'Analytics',
+    href: '/analytics',
     icon: RiDashboardHorizontalLine,
     activeIcon: RiDashboardHorizontalFill
   },
@@ -40,14 +41,14 @@ const routes = [
     activeIcon: IoBookSharp
   },
   {
-    label: 'Active Swaps',
-    href: '/active-swaps',
+    label: 'Exchanges',
+    href: '/exchanges',
     icon: PiUsersThree,
     activeIcon: PiUsersThreeFill
   },
   {
-    label: 'Messages',
-    href: '/messages',
+    label: 'Credits',
+    href: '/credits',
     icon: BiMessageSquare,
     activeIcon: BiSolidMessageSquare
   },
@@ -56,6 +57,12 @@ const routes = [
     href: '/discover',
     icon: MdLightbulbOutline,
     activeIcon: MdLightbulb
+  },
+  {
+    label: 'Saved Searches',
+    href: '/saved-searches',
+    icon: FaRegBookmark,
+    activeIcon: FaBookmark
   },
   {
     label: 'Settings',
@@ -72,7 +79,10 @@ export const Navigation = () => {
     <ul className='flex flex-col'>
       {routes.map(route => {
         const fullHref = `/dashboard${route.href}`
-        const isActive = pathname === fullHref
+        const isOverview = route.href === ''
+        const isActive = isOverview
+          ? pathname === '/dashboard'
+          : pathname.startsWith(fullHref) || pathname === fullHref
         const Icon = isActive ? route.activeIcon : route.icon
 
         return (

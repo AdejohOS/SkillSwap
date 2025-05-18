@@ -1,7 +1,6 @@
 import Link from 'next/link'
-import { ArrowRight, Star } from 'lucide-react'
+import { Star } from 'lucide-react'
 
-import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -11,100 +10,118 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { createClient } from '@/utils/supabase/server'
 
-export function RecommendedMatches() {
-  // In a real app, you would fetch this data from your API
-  const matches = [
-    {
-      id: '1',
-      user: {
-        name: 'Morgan Lee',
-        avatar: '/placeholder.svg?height=40&width=40',
-        initials: 'ML',
-        rating: 4.8
-      },
-      theyTeach: 'French Language',
-      theyWant: 'Web Development',
-      matchScore: 95
-    },
-    {
-      id: '2',
-      user: {
-        name: 'Taylor Kim',
-        avatar: '/placeholder.svg?height=40&width=40',
-        initials: 'TK',
-        rating: 4.6
-      },
-      theyTeach: 'Digital Marketing',
-      theyWant: 'Graphic Design',
-      matchScore: 87
-    },
-    {
-      id: '3',
-      user: {
-        name: 'Jordan Rivera',
-        avatar: '/placeholder.svg?height=40&width=40',
-        initials: 'JR',
-        rating: 4.9
-      },
-      theyTeach: 'Piano Lessons',
-      theyWant: 'Photography',
-      matchScore: 82
-    }
-  ]
+interface RecommendedMatchesProps {
+  userId: string
+}
+
+export const RecommendedMatches = async ({
+  userId
+}: RecommendedMatchesProps) => {
+  const supabase = await createClient()
+
+  // Get reciprocal matches
+  const { data: matches, error } = await supabase
+    .rpc('find_reciprocal_matches', {
+      current_user_id: userId
+    })
+    .limit(3)
+
+  if (error) {
+    console.error('Error finding recommended matches:', error)
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Recommended Matches</CardTitle>
+          <CardDescription>Users with complementary skills</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className='text-muted-foreground text-sm'>
+            Error loading recommended matches.
+          </p>
+        </CardContent>
+      </Card>
+    )
+  }
 
   return (
-    <Card className='col-span-1'>
+    <Card className='col-span-3'>
       <CardHeader>
         <CardTitle>Recommended Matches</CardTitle>
-        <CardDescription>
-          People who can teach what you want to learn
-        </CardDescription>
+        <CardDescription>Users with complementary skills</CardDescription>
       </CardHeader>
       <CardContent className='space-y-4'>
-        {matches.map(match => (
-          <div
-            key={match.id}
-            className='flex items-center justify-between space-x-4 rounded-md border p-4'
-          >
-            <div className='flex items-center space-x-4'>
+        {matches && matches.length > 0 ? (
+          matches.map(match => (
+            <div key={match.user2_id} className='flex items-center space-x-4'>
               <Avatar>
-                <AvatarImage src={match.user.avatar} alt={match.user.name} />
-                <AvatarFallback>{match.user.initials}</AvatarFallback>
+                <AvatarImage
+                  src={
+                    match.user2_avatar_url ||
+                    '/placeholder.svg?height=32&width=32'
+                  }
+                  alt={match.user2_name}
+                />
+                <AvatarFallback>
+                  {match.user2_name?.substring(0, 2).toUpperCase() || '??'}
+                </AvatarFallback>
               </Avatar>
-              <div>
+              <div className='flex-1 space-y-1'>
                 <div className='flex items-center'>
                   <p className='text-sm leading-none font-medium'>
-                    {match.user.name}
+                    {match.user2_name}
                   </p>
-                  <div className='ml-2 flex items-center text-xs'>
-                    <Star className='fill-primary text-primary mr-1 h-3 w-3' />
-                    <span>{match.user.rating}</span>
-                  </div>
+                  <Badge
+                    variant='outline'
+                    className='ml-2 flex items-center space-x-1'
+                  >
+                    <Star className='fill-primary text-primary h-3 w-3' />
+                    <span>{Math.round(match.match_score)}%</span>
+                  </Badge>
                 </div>
-                <div className='text-muted-foreground mt-1 flex flex-col text-xs'>
-                  <span>Can teach: {match.theyTeach}</span>
-                  <span>Wants to learn: {match.theyWant}</span>
-                </div>
+                <p className='text-muted-foreground text-xs'>
+                  <span className='font-medium'>
+                    {match.i_can_teach_skill_title}
+                  </span>{' '}
+                  ↔{' '}
+                  <span className='font-medium'>
+                    {match.they_can_teach_skill_title}
+                  </span>
+                </p>
               </div>
+              <Button variant='ghost' size='sm' asChild>
+                <Link href={`/dashboard/profile/${match.user2_id}`}>View</Link>
+              </Button>
             </div>
-            <div className='flex flex-col items-end gap-2'>
-              <div className='text-xs font-medium'>
-                <span className='text-primary'>{match.matchScore}%</span> match
-              </div>
-              <Button variant='ghost' size='sm' className='h-8 w-8 p-0'>
-                <ArrowRight className='h-4 w-4' />
-                <span className='sr-only'>View profile</span>
+          ))
+        ) : (
+          <div className='flex flex-col items-center justify-center py-8 text-center'>
+            <Star className='text-muted-foreground mb-4 h-12 w-12' />
+            <h3 className='text-lg font-medium'>No matches found</h3>
+            <p className='text-muted-foreground mb-4 text-sm'>
+              Add more skills or learning requests to find potential matches.
+            </p>
+            <div className='flex gap-2'>
+              <Button variant='outline' size='sm' asChild>
+                <Link href='/dashboard/skills/new'>Add Skill</Link>
+              </Button>
+              <Button size='sm' asChild>
+                <Link href='/dashboard/learning/new'>Add Request</Link>
               </Button>
             </div>
           </div>
-        ))}
+        )}
       </CardContent>
-      <CardFooter>
-        <Button variant='outline' className='w-full' asChild>
-          <Link href='/dashboard/discover'>Discover More</Link>
-        </Button>
-      </CardFooter>
+      {matches && matches.length > 0 && (
+        <CardFooter>
+          <Button variant='outline' className='w-full' asChild>
+            <Link href='/dashboard/exchanges/find'>Find More Matches</Link>
+          </Button>
+        </CardFooter>
+      )}
     </Card>
   )
 }

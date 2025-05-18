@@ -1,139 +1,62 @@
 import React, { Suspense } from 'react'
+
+import { AnalyticsHeader } from './analytics/_components/analytics-header'
+import { AnalyticsTabs } from './analytics/_components/analytics-tabs'
+import { createClient } from '@/utils/supabase/server'
+import { redirect } from 'next/navigation'
+import { StatsCardsSkeleton } from '@/components/skeletons/stats-cards-skeleton'
+import { CreditBalance } from './_components/credit-balance'
 import { StatsCards } from './_components/stats-cards'
-import { StatsCardsSkeleton } from '@/components/skeletons/stats-card-skeleton'
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card'
-import {
-  ArrowRight,
-  BookOpen,
-  GraduationCap,
-  MessageSquare,
-  Users
-} from 'lucide-react'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { RecentSwaps } from './_components/recent-swaps'
+import { RecentExchanges } from './_components/recent-exchanges'
+import { RecentExchangesSkeleton } from '@/components/skeletons/recent-exchanges-skeleton'
 import { RecommendedMatches } from './_components/recomended-matches'
+import { RecommendedMatchesSkeleton } from '@/components/skeletons/recommended-matches-skeleton'
 
-const page = () => {
+export const dynamic = 'force-dynamic'
+
+const Page = async () => {
+  const supabase = await createClient()
+
+  const {
+    data: { user }
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    redirect('/')
+  }
   return (
-    <div className='min-h-full space-y-8 p-4'>
-      <div>
-        <h2 className='text-3xl font-bold tracking-tight'>Dashboard</h2>
-        <p className='text-muted-foreground'>
-          Welcome to SkillSwap, your peer learning marketplace.
-        </p>
-      </div>
-      <Suspense fallback={<StatsCardsSkeleton />}>
-        <StatsCards />
-      </Suspense>
+    <div className='min-h-full p-4'>
+      <div className='flex flex-col gap-5'>
+        <div className='flex justify-between'>
+          <div>
+            <h2 className='text-3xl font-bold tracking-tight'>Dashboard</h2>
+            <p className='text-muted-foreground'>
+              An overview of your SkillSwap experience.
+            </p>
+          </div>
 
-      <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
-        <Card>
-          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium'>My Skills</CardTitle>
-            <GraduationCap className='text-muted-foreground h-4 w-4' />
-          </CardHeader>
-          <CardContent>
-            <div className='text-2xl font-bold'>3</div>
-            <p className='text-muted-foreground text-xs'>
-              Skills you can teach others
-            </p>
-          </CardContent>
-          <CardFooter>
-            <Button variant='ghost' className='w-full' asChild>
-              <Link href='/dashboard/skills'>
-                Manage Skills
-                <ArrowRight className='ml-2 h-4 w-4' />
-              </Link>
-            </Button>
-          </CardFooter>
-        </Card>
-        <Card>
-          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium'>
-              Learning Requests
-            </CardTitle>
-            <BookOpen className='text-muted-foreground h-4 w-4' />
-          </CardHeader>
-          <CardContent>
-            <div className='text-2xl font-bold'>2</div>
-            <p className='text-muted-foreground text-xs'>
-              Skills you want to learn
-            </p>
-          </CardContent>
-          <CardFooter>
-            <Button variant='ghost' className='w-full' asChild>
-              <Link href='/dashboard/learning'>
-                Manage Requests
-                <ArrowRight className='ml-2 h-4 w-4' />
-              </Link>
-            </Button>
-          </CardFooter>
-        </Card>
-        <Card>
-          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium'>Active Swaps</CardTitle>
-            <Users className='text-muted-foreground h-4 w-4' />
-          </CardHeader>
-          <CardContent>
-            <div className='text-2xl font-bold'>1</div>
-            <p className='text-muted-foreground text-xs'>
-              Ongoing skill exchanges
-            </p>
-          </CardContent>
-          <CardFooter>
-            <Button variant='ghost' className='w-full' asChild>
-              <Link href='/dashboard/swaps'>
-                View Swaps
-                <ArrowRight className='ml-2 h-4 w-4' />
-              </Link>
-            </Button>
-          </CardFooter>
-        </Card>
-        <Card>
-          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium'>Messages</CardTitle>
-            <MessageSquare className='text-muted-foreground h-4 w-4' />
-          </CardHeader>
-          <CardContent>
-            <div className='text-2xl font-bold'>5</div>
-            <p className='text-muted-foreground text-xs'>Unread messages</p>
-          </CardContent>
-          <CardFooter>
-            <Button variant='ghost' className='w-full' asChild>
-              <Link href='/dashboard/messages'>
-                View Messages
-                <ArrowRight className='ml-2 h-4 w-4' />
-              </Link>
-            </Button>
-          </CardFooter>
-        </Card>
-      </div>
+          <CreditBalance userId={user.id} />
+        </div>
 
-      <div className='grid gap-4 md:grid-cols-2'>
-        <Suspense
-          fallback={
-            <div className='bg-muted h-[400px] w-full animate-pulse rounded-lg' />
-          }
-        >
-          <RecentSwaps />
+        <Suspense fallback={<StatsCardsSkeleton />}>
+          <StatsCards userId={user.id} />
         </Suspense>
-        <Suspense
-          fallback={
-            <div className='bg-muted h-[400px] w-full animate-pulse rounded-lg' />
-          }
-        >
-          <RecommendedMatches />
-        </Suspense>
+
+        <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-7'>
+          <div className='col-span-4'>
+            <Suspense fallback={<RecentExchangesSkeleton />}>
+              <RecentExchanges userId={user.id} />
+            </Suspense>
+          </div>
+          <div className='col-span-3'>
+            <Suspense fallback={<RecommendedMatchesSkeleton />}>
+              <RecommendedMatches userId={user.id} />
+            </Suspense>
+          </div>
+        </div>
       </div>
     </div>
   )
 }
 
-export default page
+export default Page

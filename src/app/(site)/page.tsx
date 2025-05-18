@@ -1,11 +1,18 @@
-import { Hero } from "@/components/hero";
+import { CoreFeatures } from '@/components/core-features'
+import { CreditSystem } from '@/components/credit-system'
+import { Hero } from '@/components/hero'
+import { HowItWorks } from '@/components/how-it-works'
+import { JoinCommunity } from '@/components/join-community'
 
 export default function Home() {
   return (
-    <section className="">
-      <div className="mx-auto max-w-7xl px-4">
-        <Hero />
-      </div>
+    <section className=''>
+      <Hero />
+      <HowItWorks />
+      <CreditSystem />
+
+      <CoreFeatures />
+      <JoinCommunity />
     </section>
-  );
+  )
 }
