@@ -30,7 +30,7 @@ const Page = async () => {
         </p>
       </div>
 
-      <ProfileForm profile={profile} />
+      <ProfileForm profile={profile ?? undefined} />
     </div>
   )
 }

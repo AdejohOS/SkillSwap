@@ -100,6 +100,7 @@ export type Database = {
       }
       exchanges: {
         Row: {
+          completed_at: string | null
           created_at: string | null
           created_by: string | null
           id: string
@@ -112,6 +113,7 @@ export type Database = {
           user2_id: string
         }
         Insert: {
+          completed_at?: string | null
           created_at?: string | null
           created_by?: string | null
           id?: string
@@ -124,6 +126,7 @@ export type Database = {
           user2_id: string
         }
         Update: {
+          completed_at?: string | null
           created_at?: string | null
           created_by?: string | null
           id?: string
@@ -339,6 +342,38 @@ export type Database = {
           website?: string | null
         }
         Relationships: []
+      }
+      recent_searches: {
+        Row: {
+          filters: Json | null
+          id: string
+          query: string | null
+          searched_at: string | null
+          user_id: string
+        }
+        Insert: {
+          filters?: Json | null
+          id?: string
+          query?: string | null
+          searched_at?: string | null
+          user_id: string
+        }
+        Update: {
+          filters?: Json | null
+          id?: string
+          query?: string | null
+          searched_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recent_searches_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       reviews: {
         Row: {
@@ -584,6 +619,7 @@ export type Database = {
       swaps: {
         Row: {
           agreement_details: string | null
+          completed_at: string | null
           created_at: string | null
           id: string
           learner_feedback: string | null
@@ -601,6 +637,7 @@ export type Database = {
         }
         Insert: {
           agreement_details?: string | null
+          completed_at?: string | null
           created_at?: string | null
           id?: string
           learner_feedback?: string | null
@@ -618,6 +655,7 @@ export type Database = {
         }
         Update: {
           agreement_details?: string | null
+          completed_at?: string | null
           created_at?: string | null
           id?: string
           learner_feedback?: string | null

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-import { Loader2, Trash } from 'lucide-react'
+import { Loader, Trash } from 'lucide-react'
 
 import {
   AlertDialog,
@@ -51,8 +51,10 @@ export const DeleteLearningRequestDialog = ({
 
       setIsOpen(false)
       router.refresh()
-    } catch (error: any) {
-      toast.error(error.message || 'Something went wrong. Please try again.')
+    } catch (error: unknown) {
+      if (error instanceof Error || typeof error === 'object') {
+        toast.error((error as Error)?.message || 'Something went wrong.')
+      }
     } finally {
       setIsLoading(false)
     }
@@ -85,7 +87,7 @@ export const DeleteLearningRequestDialog = ({
           >
             {isLoading ? (
               <>
-                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                <Loader className='mr-2 h-4 w-4 animate-spin' />
                 Deleting...
               </>
             ) : (

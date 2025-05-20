@@ -31,6 +31,29 @@ import { toast } from 'sonner'
 import { createClient } from '@/utils/supabase/client'
 import { Checkbox } from '@/components/ui/checkbox'
 
+interface LearningRequest {
+  id: string
+  title: string
+  description: string
+  category_id: string
+  current_skill_level: 'beginner' | 'intermediate' | 'advanced'
+  desired_level: 'beginner' | 'intermediate' | 'advanced'
+  preferred_learning_method: 'online' | 'in-person' | 'both'
+  goals?: string
+  availability: {
+    weekdays: boolean
+    weekends: boolean
+    mornings: boolean
+    afternoons: boolean
+    evenings: boolean
+  }
+}
+
+interface SkillCategory {
+  id: string
+  name: string
+}
+
 const learningRequestSchema = z.object({
   title: z
     .string()
@@ -74,8 +97,12 @@ const learningRequestSchema = z.object({
 
 type LearningRequestFormValues = z.infer<typeof learningRequestSchema>
 
-export const LearningRequestForm = ({ request }: { request?: any }) => {
-  const [categories, setCategories] = useState<any[]>([])
+export const LearningRequestForm = ({
+  request
+}: {
+  request?: LearningRequest
+}) => {
+  const [categories, setCategories] = useState<SkillCategory[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const supabase = createClient()
@@ -168,8 +195,10 @@ export const LearningRequestForm = ({ request }: { request?: any }) => {
 
       router.push('/dashboard/learning')
       router.refresh()
-    } catch (error: any) {
-      toast.error(error.message || 'Something went wrong. Please try again.')
+    } catch (error: unknown) {
+      if (error instanceof Error || typeof error === 'object') {
+        toast.error((error as Error)?.message || 'Something went wrong.')
+      }
     } finally {
       setIsLoading(false)
     }

@@ -17,44 +17,6 @@ import { ExchangeDetail } from '../_components/exchange-detail'
 
 export const dynamic = 'force-dynamic'
 
-interface Profile {
-  id: string
-  username: string
-  avatar_url: string | null
-}
-
-interface SkillOffering {
-  id: string
-  title: string
-  description: string
-  user_id: string
-}
-
-interface Swap {
-  id: string
-  status: string
-  scheduled_times: string[] | null
-  teacher_id: string
-  learner_id: string
-  skill_offerings: SkillOffering
-}
-
-interface Exchange {
-  id: string
-  status: string
-  created_at: string
-  updated_at: string
-  user1_id: string
-  user2_id: string
-  swap1_id: string
-  swap2_id: string
-  created_by: string
-  user1: Profile
-  user2: Profile
-  swap1: Swap
-  swap2: Swap
-}
-
 const Page = async ({
   params
 }: {

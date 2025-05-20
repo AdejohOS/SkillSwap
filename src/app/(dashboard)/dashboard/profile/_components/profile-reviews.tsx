@@ -28,14 +28,14 @@ export const ProfileReviews = async ({ userId }: ProfileReviewsProps) => {
       learner_id,
       teacher_rating,
       learner_feedback,
-      completion_date,
+      completed_at,
       skill_offerings(title)
     `
     )
     .eq('teacher_id', userId)
     .eq('status', 'completed')
     .not('teacher_rating', 'is', null)
-    .order('completion_date', { ascending: false })
+    .order('completed_at', { ascending: false })
 
   // Fetch reviews where user was a learner
   const { data: learnerSwaps } = await supabase
@@ -47,14 +47,14 @@ export const ProfileReviews = async ({ userId }: ProfileReviewsProps) => {
       teacher_id,
       learner_rating,
       teacher_feedback,
-      completion_date,
+      completed_at,
       skill_requests(title)
     `
     )
     .eq('learner_id', userId)
     .eq('status', 'completed')
     .not('learner_rating', 'is', null)
-    .order('completion_date', { ascending: false })
+    .order('completed_at', { ascending: false })
 
   // Fetch profiles for the reviewers
   const reviewerIds = [
@@ -82,7 +82,7 @@ export const ProfileReviews = async ({ userId }: ProfileReviewsProps) => {
       reviewerId: swap.learner_id,
       rating: swap.teacher_rating,
       feedback: swap.learner_feedback,
-      date: swap.completion_date,
+      date: swap.completed_at,
       skillTitle: swap.skill_offerings?.title,
       type: 'teacher'
     })) || []),
@@ -91,7 +91,7 @@ export const ProfileReviews = async ({ userId }: ProfileReviewsProps) => {
       reviewerId: swap.teacher_id,
       rating: swap.learner_rating,
       feedback: swap.teacher_feedback,
-      date: swap.completion_date,
+      date: swap.completed_at,
       skillTitle: swap.skill_requests?.title,
       type: 'learner'
     })) || [])

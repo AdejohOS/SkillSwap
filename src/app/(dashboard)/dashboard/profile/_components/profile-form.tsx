@@ -51,11 +51,20 @@ const profileFormSchema = z.object({
   avatar_url: z.string().optional()
 })
 
+interface Profile {
+  username: string
+  full_name: string | null
+  bio: string | null
+  location: string | null
+  website: string | null
+  avatar_url: string | null
+}
+
 type ProfileFormValues = z.infer<typeof profileFormSchema>
 
-export function ProfileForm({ profile }: { profile?: any }) {
+export function ProfileForm({ profile }: { profile?: Profile }) {
   const [isLoading, setIsLoading] = useState(false)
-  const [interests, setInterests] = useState<string[]>(profile?.interests || [])
+
   const [newInterest, setNewInterest] = useState('')
   const router = useRouter()
   const supabase = createClient()
@@ -87,7 +96,7 @@ export function ProfileForm({ profile }: { profile?: any }) {
 
       const profileData = {
         ...data,
-        interests,
+
         updated_at: new Date().toISOString()
       }
 
@@ -104,23 +113,13 @@ export function ProfileForm({ profile }: { profile?: any }) {
 
       router.push('/dashboard/profile')
       router.refresh()
-    } catch (error: any) {
-      toast.error(error.message || 'Something went wrong. Please try again.')
+    } catch (error: unknown) {
+      if (error instanceof Error || typeof error === 'object') {
+        toast.error((error as Error)?.message || 'Something went wrong.')
+      }
     } finally {
       setIsLoading(false)
     }
-  }
-
-  function addInterest(e: React.FormEvent) {
-    e.preventDefault()
-    if (newInterest.trim() && !interests.includes(newInterest.trim())) {
-      setInterests([...interests, newInterest.trim()])
-      setNewInterest('')
-    }
-  }
-
-  function removeInterest(interest: string) {
-    setInterests(interests.filter(i => i !== interest))
   }
 
   return (
@@ -226,7 +225,7 @@ export function ProfileForm({ profile }: { profile?: any }) {
                   <Input placeholder='Your city or region' {...field} />
                 </FormControl>
                 <FormDescription>
-                  Where you're based (optional).
+                  Where you&apos;re based (optional).
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -249,45 +248,6 @@ export function ProfileForm({ profile }: { profile?: any }) {
               </FormItem>
             )}
           />
-        </div>
-
-        <div>
-          <FormLabel>Interests</FormLabel>
-          <div className='mt-2 mb-4 flex flex-wrap gap-2'>
-            {interests.map((interest, index) => (
-              <Badge
-                key={index}
-                variant='secondary'
-                className='gap-1 px-3 py-1'
-              >
-                {interest}
-                <Button
-                  type='button'
-                  variant='ghost'
-                  size='icon'
-                  className='h-4 w-4 rounded-full'
-                  onClick={() => removeInterest(interest)}
-                >
-                  <X className='h-3 w-3' />
-                  <span className='sr-only'>Remove {interest}</span>
-                </Button>
-              </Badge>
-            ))}
-          </div>
-          <div className='flex gap-2'>
-            <Input
-              placeholder='Add an interest'
-              value={newInterest}
-              onChange={e => setNewInterest(e.target.value)}
-              className='max-w-sm'
-            />
-            <Button type='button' variant='outline' onClick={addInterest}>
-              Add
-            </Button>
-          </div>
-          <FormDescription className='mt-2'>
-            Add your interests to help others find common ground with you.
-          </FormDescription>
         </div>
 
         <div className='flex justify-end space-x-4'>

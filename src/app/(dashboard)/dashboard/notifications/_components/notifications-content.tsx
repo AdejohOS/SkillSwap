@@ -34,12 +34,26 @@ import { cn } from '@/lib/utils'
 import { createClient } from '@/utils/supabase/client'
 import { NotificationsEmptyState } from './notifications-empty-state'
 
+interface Notification {
+  id: string
+  title: string | null
+  user_id: string
+  type: string
+  message: string
+
+  related_type: string | null
+  related_id: string | null
+
+  url?: string
+  is_read: boolean | null
+  created_at: string | null
+}
 interface NotificationsContentProps {
   userId: string
 }
 
 export function NotificationsContent({ userId }: NotificationsContentProps) {
-  const [notifications, setNotifications] = useState<any[]>([])
+  const [notifications, setNotifications] = useState<Notification[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [filter, setFilter] = useState<string | null>(null)
   const router = useRouter()
@@ -111,8 +125,10 @@ export function NotificationsContent({ userId }: NotificationsContentProps) {
       )
 
       toast.success('All notifications marked as read')
-    } catch (error: any) {
-      toast.error('Failed to mark notifications as read')
+    } catch (error: unknown) {
+      if (error instanceof Error || typeof error === 'object') {
+        toast.error((error as Error)?.message || 'Something went wrong.')
+      }
     }
   }
 
@@ -133,13 +149,15 @@ export function NotificationsContent({ userId }: NotificationsContentProps) {
             : notification
         )
       )
-    } catch (error: any) {
-      toast.error('Failed to mark notification as read')
+    } catch (error: unknown) {
+      if (error instanceof Error || typeof error === 'object') {
+        toast.error((error as Error)?.message || 'Something went wrong.')
+      }
     }
   }
 
   // Handle notification click
-  function handleNotificationClick(notification: any) {
+  function handleNotificationClick(notification: Notification) {
     // Mark as read if not already read
     if (!notification.is_read) {
       markAsRead(notification.id)
@@ -278,7 +296,9 @@ export function NotificationsContent({ userId }: NotificationsContentProps) {
                       {notification.message}
                     </p>
                     <p className='text-muted-foreground text-xs'>
-                      {formatNotificationDate(notification.created_at)}
+                      {notification.created_at
+                        ? formatNotificationDate(notification.created_at)
+                        : ''}
                     </p>
                   </div>
                 </div>
@@ -316,7 +336,9 @@ export function NotificationsContent({ userId }: NotificationsContentProps) {
                           {notification.message}
                         </p>
                         <p className='text-muted-foreground text-xs'>
-                          {formatNotificationDate(notification.created_at)}
+                          {notification.created_at
+                            ? formatNotificationDate(notification.created_at)
+                            : ''}
                         </p>
                       </div>
                     </div>

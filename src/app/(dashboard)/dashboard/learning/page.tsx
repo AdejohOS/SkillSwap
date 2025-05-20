@@ -1,9 +1,8 @@
-import { LearningRequestsListSkeleton } from '@/components/skeletons/learning-requests-list-skeleton'
 import { Button } from '@/components/ui/button'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Plus, PlusCircle } from 'lucide-react'
+
+import { PlusCircle } from 'lucide-react'
 import Link from 'next/link'
-import React, { Suspense } from 'react'
+import React from 'react'
 import { LearningRequestsList } from './_components/learning-requests-list'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
@@ -36,7 +35,11 @@ const Page = async () => {
 
   if (error) {
     console.error('Error fetching learning requests:', error)
-    return <div>Error loading learning requests. Please try again later.</div>
+    return (
+      <div className='p-4'>
+        Error loading learning requests. Please try again later.
+      </div>
+    )
   }
 
   // Get user's credit balance
@@ -63,6 +66,7 @@ const Page = async () => {
         console.error('Error fetching exchanges:', exchangeError)
         return {
           ...request,
+
           exchange_count: 0,
           active_exchanges: 0,
           pending_exchanges: 0,

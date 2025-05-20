@@ -36,11 +36,6 @@ interface SkillRequest {
   title: string
 }
 
-interface Profile {
-  id: string
-  username: string
-}
-
 interface InitiateExchangeButtonProps {
   userId: string
   otherUserId: string
@@ -67,8 +62,7 @@ export const InitiateExchangeButton = ({
   otherUserName,
   mySkillOfferings,
   theirSkillOfferings,
-  mySkillRequests,
-  theirSkillRequests,
+
   buttonText = 'Initiate Exchange',
   variant = 'default',
   size = 'default',
@@ -164,11 +158,12 @@ export const InitiateExchangeButton = ({
       setIsOpen(false)
       router.refresh()
       router.push(`/dashboard/exchanges/${exchange.id}`)
-    } catch (error: any) {
-      console.error('Error initiating exchange:', error)
-      toast.error(
-        error.message || 'Failed to initiate exchange. Please try again.'
-      )
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(
+          error.message || 'Failed to initiate exchange. Please try again.'
+        )
+      } else [console.error('Error initiating exchange:', error)]
     } finally {
       setIsLoading(false)
     }

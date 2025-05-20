@@ -59,6 +59,21 @@ export const CreditBasedLearningButtonClient = ({
         throw new Error('You must be logged in to use credits')
       }
 
+      // Check existing swap
+
+      const { data: existingSwap } = await supabase
+        .from('swaps')
+        .select('id')
+        .eq('teacher_id', teacherId)
+        .eq('learner_id', userData.user.id)
+        .eq('skill_offering_id', skillId)
+        .eq('status', 'pending')
+        .maybeSingle()
+
+      if (existingSwap) {
+        toast.error('You already have a pending request for this skill.')
+      }
+
       // Create the swap (you learning from them)
       const { data: swap, error: swapError } = await supabase
         .from('swaps')
@@ -95,13 +110,12 @@ export const CreditBasedLearningButtonClient = ({
       }
 
       // Spend credits using RPC
-      const { data: transactionData, error: transactionError } =
-        await supabase.rpc('spend_credits', {
-          p_user_id: userData.user.id,
-          p_amount: 5,
-          p_description: 'Credits spent on learning without teaching',
-          p_related_id: exchange.id
-        })
+      const { error: transactionError } = await supabase.rpc('spend_credits', {
+        p_user_id: userData.user.id,
+        p_amount: 5,
+        p_description: 'Credits spent on learning without teaching',
+        p_related_id: exchange.id
+      })
 
       if (transactionError) {
         throw transactionError
@@ -111,7 +125,7 @@ export const CreditBasedLearningButtonClient = ({
       await supabase.from('notifications').insert({
         user_id: teacherId,
         type: 'credit_learning_request',
-        content: 'Someone wants to learn from you using credits!',
+        message: 'Someone wants to learn from you using credits!',
         related_id: exchange.id,
         is_read: false
       })
@@ -120,10 +134,12 @@ export const CreditBasedLearningButtonClient = ({
 
       setIsOpen(false)
       router.push(`/dashboard/exchanges/${exchange.id}`)
-    } catch (error: any) {
-      toast.error(
-        error.message || 'Failed to process your request. Please try again.'
-      )
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(
+          error.message || 'Failed to process your request. Please try again.'
+        )
+      }
     } finally {
       setIsLoading(false)
     }
@@ -166,7 +182,7 @@ export const CreditBasedLearningButtonClient = ({
             <div className='rounded-lg bg-amber-50 p-4 text-amber-800'>
               <p className='flex items-center font-medium'>
                 <Coins className='mr-2 h-5 w-5' />
-                You don't have enough credits.
+                You don&apos;t have enough credits.
               </p>
               <p className='mt-2 text-sm'>
                 You need 5 credits to make this request. Earn more credits by
@@ -187,6 +203,8 @@ export const CreditBasedLearningButtonClient = ({
           <Button
             onClick={initiateCreditsLearning}
             disabled={isLoading || !hasEnoughCredits}
+            aria-disabled={isLoading || !hasEnoughCredits}
+            aria-busy={isLoading}
           >
             {isLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
             Spend 5 Credits to Learn

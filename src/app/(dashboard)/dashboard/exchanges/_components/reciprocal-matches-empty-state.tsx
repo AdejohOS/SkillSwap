@@ -25,8 +25,8 @@ export const ReciprocalMatchesEmptyState = () => {
           </div>
           <div className='space-y-2'>
             <p className='text-muted-foreground'>
-              We couldn't find any users who both have skills you want to learn
-              and want to learn skills you can teach.
+              We couldn&apos;t find any users who both have skills you want to
+              learn and want to learn skills you can teach.
             </p>
             <p className='text-muted-foreground'>
               Try adding more skills you can teach or more learning requests to

@@ -30,7 +30,7 @@ export const CreditBasedLearningButtonWrapper = async (
   }
 
   // Get the user's credit balance directly from the credits table
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from('credits')
     .select('balance')
     .eq('user_id', user.id)

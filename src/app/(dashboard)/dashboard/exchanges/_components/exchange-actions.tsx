@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-import { Check, Loader2, X } from 'lucide-react'
+import { Check, Loader, X } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 
@@ -57,13 +57,54 @@ export const ExchangeActions = ({
     setIsLoading(true)
 
     try {
-      const { error: exchangeError } = await supabase
+      const updateData: any = { status: newStatus }
+
+      // If marking as completed, set the completed_at timestamp
+      if (newStatus === 'completed') {
+        updateData.completed_at = new Date().toISOString()
+      }
+
+      const { error } = await supabase
         .from('exchanges')
-        .update({ status: newStatus })
+        .update(updateData)
         .eq('id', exchange.id)
 
-      if (exchangeError) {
-        throw exchangeError
+      if (error) {
+        throw error
+      }
+
+      // If completing the exchange, also update any related swaps
+      if (newStatus === 'completed') {
+        // Get the related swaps
+        const { data: swapData } = await supabase
+          .from('exchanges')
+          .select('swap1_id, swap2_id')
+          .eq('id', exchange.id)
+          .single()
+
+        if (swapData) {
+          // Update swap1 if it exists
+          if (swapData.swap1_id) {
+            await supabase
+              .from('swaps')
+              .update({
+                status: 'completed',
+                completed_at: new Date().toISOString()
+              })
+              .eq('id', swapData.swap1_id)
+          }
+
+          // Update swap2 if it exists
+          if (swapData.swap2_id) {
+            await supabase
+              .from('swaps')
+              .update({
+                status: 'completed',
+                completed_at: new Date().toISOString()
+              })
+              .eq('id', swapData.swap2_id)
+          }
+        }
       }
 
       // Create notification for the other user
@@ -75,25 +116,22 @@ export const ExchangeActions = ({
           .eq('id', userData.user.id)
           .single()
 
-        function getNotificationTitle(status: string) {
-          switch (status) {
-            case 'accepted':
-              return 'Exchange Request Accepted'
-            case 'rejected':
-              return 'Exchange Request Declined'
-            case 'cancelled':
-              return 'Exchange Cancelled'
-            case 'completed':
-              return 'Exchange Completed'
-            default:
-              return 'Exchange Update'
-          }
-        }
-
         const notificationContent = getNotificationContent(
           newStatus,
-          currentUser?.username ?? 'User'
+          currentUser?.username || ' '
         )
+
+        await supabase.from('notifications').insert({
+          user_id: otherUser.id,
+          type: `exchange_${newStatus}`,
+          title: getNotificationTitle(newStatus),
+          message: notificationContent,
+          related_type: 'exchanges',
+          related_id: exchange.id,
+          is_read: false
+        })
+
+        toast.success(`Exchange has been ${newStatus}.`)
 
         await supabase.from('notifications').insert({
           user_id: otherUser.id,
@@ -109,12 +147,29 @@ export const ExchangeActions = ({
       toast.success(`Exchange has been ${newStatus}.`)
 
       router.refresh()
-    } catch (error: any) {
-      toast.error(
-        error.message || 'Failed to update exchange. Please try again.'
-      )
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(
+          error.message || 'Failed to update exchange. Please try again.'
+        )
+      }
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  function getNotificationTitle(status: string) {
+    switch (status) {
+      case 'accepted':
+        return 'Exchange Request Accepted'
+      case 'rejected':
+        return 'Exchange Request Declined'
+      case 'cancelled':
+        return 'Exchange Cancelled'
+      case 'completed':
+        return 'Exchange Completed'
+      default:
+        return 'Exchange Update'
     }
   }
 
@@ -150,7 +205,7 @@ export const ExchangeActions = ({
             disabled={isLoading}
           >
             {isLoading ? (
-              <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+              <Loader className='mr-2 h-4 w-4 animate-spin' />
             ) : (
               <Check className='mr-2 h-4 w-4' />
             )}
@@ -162,7 +217,7 @@ export const ExchangeActions = ({
             disabled={isLoading}
           >
             {isLoading ? (
-              <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+              <Loader className='mr-2 h-4 w-4 animate-spin' />
             ) : (
               <X className='mr-2 h-4 w-4' />
             )}
@@ -203,7 +258,7 @@ export const ExchangeActions = ({
           <AlertDialogTrigger asChild>
             <Button disabled={isLoading}>
               {isLoading ? (
-                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                <Loader className='mr-2 h-4 w-4 animate-spin' />
               ) : (
                 <Check className='mr-2 h-4 w-4' />
               )}

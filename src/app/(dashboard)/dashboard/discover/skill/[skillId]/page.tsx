@@ -149,7 +149,9 @@ const Page = async ({ params }: { params: Promise<{ skillId: string }> }) => {
               <h3 className='mb-2 font-medium'>Skill Level</h3>
               <ul className='space-y-1 text-sm'>
                 <li>
-                  <span className='font-medium'>Teacher's Experience:</span>{' '}
+                  <span className='font-medium'>
+                    Teacher&apos;s Experience:
+                  </span>{' '}
                   {skill.experience_level || 'Not specified'}
                 </li>
                 <li>

@@ -1,4 +1,3 @@
-import { cookies } from 'next/headers'
 import { Star, MapPin, Calendar, Globe } from 'lucide-react'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -117,14 +116,6 @@ export const PublicProfileHeader = async ({
             </div>
 
             {profile.bio && <p className='text-sm'>{profile.bio}</p>}
-
-            <div className='flex flex-wrap gap-2'>
-              {profile.interests?.map((interest: string, index: number) => (
-                <Badge key={index} variant='secondary'>
-                  {interest}
-                </Badge>
-              ))}
-            </div>
 
             <div className='flex flex-wrap gap-6 pt-2'>
               <div className='flex items-center gap-2'>

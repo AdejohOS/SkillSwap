@@ -13,7 +13,7 @@ import { ProfileSkills } from './_components/profile-skills'
 import { ProfileLearning } from './_components/profile-learning'
 import { ProfileReviews } from './_components/profile-reviews'
 
-const Page = async () => {
+const ProfilePage = async () => {
   const supabase = await createClient()
 
   // Get the current user
@@ -72,4 +72,4 @@ const Page = async () => {
   )
 }
 
-export default Page
+export default ProfilePage

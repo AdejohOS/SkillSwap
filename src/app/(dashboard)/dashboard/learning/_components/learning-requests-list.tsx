@@ -38,8 +38,32 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
 
+type LearningRequest = {
+  id: string
+  title: string
+  description: string | null
+  desired_level:
+    | 'Beginner'
+    | 'Intermediate'
+    | 'Advanced'
+    | 'Expert'
+    | string
+    | null
+  skill_categories: {
+    name: string
+  } | null
+  has_matches: boolean | null
+  exchange_count?: number
+  active_exchanges?: number
+  pending_exchanges?: number
+}
+
+interface SkillRequest {
+  desired_level: string
+}
+
 interface LearningRequestsListProps {
-  requests: any[]
+  requests: LearningRequest[]
   userId: string
   creditBalance?: number
 }
@@ -90,10 +114,10 @@ export function LearningRequestsList({
       toast.success('Your learning request has been successfully deleted.')
 
       router.refresh()
-    } catch (error: any) {
-      toast.error(
-        error.message || 'Failed to delete learning request. Please try again.'
-      )
+    } catch (error: unknown) {
+      if (error instanceof Error || typeof error === 'object') {
+        toast.error((error as Error)?.message || 'Something went wrong.')
+      }
     } finally {
       setIsDeleting(null)
     }
@@ -114,9 +138,9 @@ export function LearningRequestsList({
     }
   }
 
-  const hasEnoughCredits = (request: any) => {
+  const hasEnoughCredits = (desired_level: string) => {
     // Determine credit cost based on desired level
-    const creditCost = getCreditCost(request.desired_level)
+    const creditCost = getCreditCost(desired_level)
     return creditBalance >= creditCost
   }
 
@@ -220,7 +244,9 @@ export function LearningRequestsList({
               </div>
               <div className='flex items-center'>
                 <Coins className='mr-1 h-4 w-4 text-amber-500' />
-                <span>{getCreditCost(request.desired_level)} credits</span>
+                <span>
+                  {getCreditCost(request.desired_level ?? '')} credits
+                </span>
               </div>
               <div className='flex items-center'>
                 <CheckCircle2 className='mr-1 h-4 w-4 text-green-500' />
@@ -239,11 +265,11 @@ export function LearningRequestsList({
                 Find Exchange Partners
               </Link>
             </Button>
-            {hasEnoughCredits(request) && (
+            {hasEnoughCredits(request.desired_level ?? '') && (
               <Button variant='outline' asChild className='w-full'>
                 <Link href={`/dashboard/credits/use?request=${request.id}`}>
                   <Coins className='mr-2 h-4 w-4' />
-                  Use {getCreditCost(request.desired_level)} Credits
+                  Use {getCreditCost(request.desired_level || '')} Credits
                 </Link>
               </Button>
             )}
@@ -253,7 +279,7 @@ export function LearningRequestsList({
       {requests.length === 0 && (
         <div className='col-span-full py-10 text-center'>
           <p className='text-muted-foreground'>
-            You haven't added any learning requests yet.
+            You haven&apos;t added any learning requests yet.
           </p>
         </div>
       )}

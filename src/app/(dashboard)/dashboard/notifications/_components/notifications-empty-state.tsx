@@ -13,7 +13,9 @@ export const NotificationsEmptyState = () => {
     <Card>
       <CardHeader>
         <CardTitle>Notifications</CardTitle>
-        <CardDescription>You don't have any notifications yet.</CardDescription>
+        <CardDescription>
+          You don&apos;t have any notifications yet.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className='flex flex-col items-center justify-center p-8 text-center'>

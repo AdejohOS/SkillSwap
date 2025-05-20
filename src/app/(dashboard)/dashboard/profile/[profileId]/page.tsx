@@ -2,7 +2,7 @@ import { ProfileHeaderSkeleton } from '@/components/skeletons/profile-header-ske
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { createClient } from '@/utils/supabase/server'
-import { MessageSquare } from 'lucide-react'
+import { MessageSquare, Pencil } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import React, { Suspense } from 'react'
@@ -12,6 +12,15 @@ import { ProfileSkillsSkeleton } from '@/components/skeletons/profile-skill-skel
 import { PublicProfileSkills } from '../_components/public-profile-skills'
 import { ProfileReviewsSkeleton } from '@/components/skeletons/profile-review-skeleton'
 import { PublicProfileReviews } from '../_components/public-profile-reviews'
+import { ProfileHeader } from '../_components/profile-header'
+import { ProfileSkills } from '../_components/profile-skills'
+import { ProfileLearning } from '../_components/profile-learning'
+import { ProfileLearningSkeleton } from '@/components/skeletons/profile-learning-skeleton'
+import { ProfileExchanges } from '../_components/profile-exchanges'
+import { ProfileExchangesSkeleton } from '@/components/skeletons/profile-exchanges-skeleton'
+import { ProfileReviews } from '../_components/profile-reviews'
+import { ProfileCreditsSkeleton } from '@/components/skeletons/profile-credits-skeleton'
+import { ProfileCredits } from '../_components/profile-credits'
 
 const Page = async ({ params }: { params: Promise<{ profileId: string }> }) => {
   const { profileId } = await params
@@ -25,74 +34,58 @@ const Page = async ({ params }: { params: Promise<{ profileId: string }> }) => {
     return <div>Please sign in to view profiles.</div>
   }
 
-  const isOwnProfile = user.id === profileId
-
-  if (isOwnProfile) {
-    return (
-      <div className='space-y-6'>
-        <div>
-          <h2 className='text-3xl font-bold tracking-tight'>My Profile</h2>
-          <p className='text-muted-foreground'>This is your own profile.</p>
-        </div>
-
-        <div className='flex justify-center'>
-          <Button asChild>
-            <Link href='/dashboard/profile'>Go to My Profile</Link>
-          </Button>
-        </div>
-      </div>
-    )
-  }
-
-  const { data: profile, error } = await supabase
-    .from('profiles')
-    .select('username')
-    .eq('id', profileId)
-    .single()
-
-  if (error || !profile) {
-    notFound()
-  }
-
   return (
     <div className='space-y-6 p-4'>
       <div className='flex items-center justify-between'>
         <div>
-          <h2 className='text-3xl font-bold tracking-tight'>
-            {profile.username}'s Profile
-          </h2>
+          <h2 className='text-3xl font-bold tracking-tight'>My Profile</h2>
           <p className='text-muted-foreground'>
-            View {profile.username}'s skills and reviews.
+            View and manage your profile information.
           </p>
         </div>
-        <div className='flex gap-2'>
-          <Button variant='outline' asChild>
-            <Link href={`/dashboard/messages/${profileId}`}>
-              <MessageSquare className='mr-2 h-4 w-4' />
-              Message
-            </Link>
-          </Button>
-          <RequestSwapButton userId={profileId} />
-        </div>
+        <Button asChild>
+          <Link href='/dashboard/profile/edit'>
+            <Pencil className='mr-2 h-4 w-4' />
+            Edit Profile
+          </Link>
+        </Button>
       </div>
 
       <Suspense fallback={<ProfileHeaderSkeleton />}>
-        <PublicProfileHeader userId={profileId} />
+        <ProfileHeader userId={user.id} />
       </Suspense>
 
       <Tabs defaultValue='skills' className='space-y-4'>
         <TabsList>
-          <TabsTrigger value='skills'>Skills</TabsTrigger>
+          <TabsTrigger value='skills'>My Skills</TabsTrigger>
+          <TabsTrigger value='learning'>Learning</TabsTrigger>
+          <TabsTrigger value='exchanges'>Exchanges</TabsTrigger>
           <TabsTrigger value='reviews'>Reviews</TabsTrigger>
+          <TabsTrigger value='credits'>Credits</TabsTrigger>
         </TabsList>
         <TabsContent value='skills' className='space-y-4'>
           <Suspense fallback={<ProfileSkillsSkeleton />}>
-            <PublicProfileSkills userId={profileId} />
+            <ProfileSkills userId={user.id} />
+          </Suspense>
+        </TabsContent>
+        <TabsContent value='learning' className='space-y-4'>
+          <Suspense fallback={<ProfileLearningSkeleton />}>
+            <ProfileLearning userId={user.id} />
+          </Suspense>
+        </TabsContent>
+        <TabsContent value='exchanges' className='space-y-4'>
+          <Suspense fallback={<ProfileExchangesSkeleton />}>
+            <ProfileExchanges userId={user.id} />
           </Suspense>
         </TabsContent>
         <TabsContent value='reviews' className='space-y-4'>
           <Suspense fallback={<ProfileReviewsSkeleton />}>
-            <PublicProfileReviews userId={profileId} />
+            <ProfileReviews userId={user.id} />
+          </Suspense>
+        </TabsContent>
+        <TabsContent value='credits' className='space-y-4'>
+          <Suspense fallback={<ProfileCreditsSkeleton />}>
+            <ProfileCredits userId={user.id} />
           </Suspense>
         </TabsContent>
       </Tabs>

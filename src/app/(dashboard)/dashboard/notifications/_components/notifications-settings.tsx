@@ -71,8 +71,10 @@ export const NotificationSettings = ({
       )
 
       router.refresh()
-    } catch (error: any) {
-      toast.error(error.message || 'Something went wrong. Please try again.')
+    } catch (error: unknown) {
+      if (error instanceof Error || typeof error === 'object') {
+        toast.error((error as Error)?.message || 'Something went wrong.')
+      }
     } finally {
       setIsLoading(false)
     }

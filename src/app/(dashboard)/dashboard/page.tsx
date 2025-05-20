@@ -1,7 +1,5 @@
 import React, { Suspense } from 'react'
 
-import { AnalyticsHeader } from './analytics/_components/analytics-header'
-import { AnalyticsTabs } from './analytics/_components/analytics-tabs'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { StatsCardsSkeleton } from '@/components/skeletons/stats-cards-skeleton'

@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
-import React from 'react'
+import React, { Suspense } from 'react'
 import { SavedSearches } from './_components/saved-searches'
+import { SavedSearchesSkeleton } from '@/components/skeletons/saved-searches-skeleton'
 
 const Page = async () => {
   const supabase = await createClient()
@@ -22,7 +23,9 @@ const Page = async () => {
         </p>
       </div>
 
-      <SavedSearches userId={user.id} />
+      <Suspense fallback={<SavedSearchesSkeleton />}>
+        <SavedSearches userId={user.id} />
+      </Suspense>
     </div>
   )
 }

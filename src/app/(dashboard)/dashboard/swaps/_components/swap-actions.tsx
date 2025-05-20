@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import {
   CheckCircle,
   Clock,
-  Loader2,
+  Loader,
   ThumbsDown,
   ThumbsUp,
   XCircle
@@ -51,9 +51,16 @@ export const SwapActions = ({
     setIsLoading(true)
 
     try {
+      const updateData: any = { status }
+
+      // If marking as completed, set the completed_at timestamp
+      if (status === 'completed') {
+        updateData.completed_at = new Date().toISOString()
+      }
+
       const { error } = await supabase
         .from('swaps')
-        .update({ status })
+        .update(updateData)
         .eq('id', swap.id)
 
       if (error) {
@@ -63,8 +70,10 @@ export const SwapActions = ({
       toast.success(`You have ${status} the swap with ${otherUser.username}.`)
 
       router.refresh()
-    } catch (error: any) {
-      toast.error(error.message || 'Something went wrong. Please try again.')
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message || 'Something went wrong. Please try again.')
+      }
     } finally {
       setIsLoading(false)
     }
@@ -75,7 +84,8 @@ export const SwapActions = ({
 
     try {
       const updateData: any = {
-        status: 'completed'
+        status: 'completed',
+        completed_at: new Date().toISOString()
       }
 
       // Add feedback based on role
@@ -98,8 +108,10 @@ export const SwapActions = ({
 
       setIsCompletionDialogOpen(false)
       router.refresh()
-    } catch (error: any) {
-      toast.error(error.message || 'Something went wrong. Please try again.')
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message || 'Something went wrong. Please try again.')
+      }
     } finally {
       setIsLoading(false)
     }
@@ -118,7 +130,7 @@ export const SwapActions = ({
               className='flex-1'
             >
               {isLoading ? (
-                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                <Loader className='mr-2 h-4 w-4 animate-spin' />
               ) : (
                 <ThumbsUp className='mr-2 h-4 w-4' />
               )}
@@ -131,7 +143,7 @@ export const SwapActions = ({
               className='flex-1'
             >
               {isLoading ? (
-                <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                <Loader className='mr-2 h-4 w-4 animate-spin' />
               ) : (
                 <ThumbsDown className='mr-2 h-4 w-4' />
               )}
@@ -172,7 +184,7 @@ export const SwapActions = ({
             className='w-full'
           >
             {isLoading ? (
-              <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+              <Loader className='mr-2 h-4 w-4 animate-spin' />
             ) : null}
             Start Swap
           </Button>
@@ -220,7 +232,7 @@ export const SwapActions = ({
                 }}
               >
                 {isLoading ? (
-                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  <Loader className='mr-2 h-4 w-4 animate-spin' />
                 ) : null}
                 Complete Swap
               </AlertDialogAction>

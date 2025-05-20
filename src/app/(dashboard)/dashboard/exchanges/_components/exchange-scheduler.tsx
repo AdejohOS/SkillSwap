@@ -25,8 +25,46 @@ import { cn } from '@/lib/utils'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
 
+interface SkillOffering {
+  id: string
+  title: string
+  description: string
+  user_id: string
+}
+
+interface Swap {
+  id: string
+  status: string
+  scheduled_times: string[] | null
+  teacher_id: string
+  learner_id: string
+  skill_offerings: SkillOffering
+}
+
+interface Profile {
+  id: string
+  username: string
+  avatar_url: string | null
+}
+
+interface Exchange {
+  id: string
+  status: string
+  created_at: string
+  updated_at: string
+  user1_id: string
+  user2_id: string
+  swap1_id: string
+  swap2_id: string
+  created_by: string
+  user1: Profile
+  user2: Profile
+  swap1: Swap
+  swap2: Swap
+}
+
 interface ExchangeSchedulerProps {
-  exchange: any
+  exchange: Exchange
   swapId: string
   disabled?: boolean
 }
@@ -83,10 +121,12 @@ export function ExchangeScheduler({
       setTime('')
 
       router.refresh()
-    } catch (error: any) {
-      toast.error(
-        error.message || 'Failed to schedule session. Please try again.'
-      )
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(
+          error.message || 'Failed to schedule session. Please try again.'
+        )
+      }
     } finally {
       setIsLoading(false)
     }
