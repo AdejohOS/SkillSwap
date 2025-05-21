@@ -61,9 +61,11 @@ export function CreditTransactions({ userId }: { userId: string }) {
             created_at: transaction.created_at || ''
           }))
         )
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('Error fetching transactions:', err)
-        setError(err.message || 'Failed to load transactions')
+        if (err instanceof Error) {
+          setError(err.message || 'Failed to load transactions')
+        }
       } finally {
         setLoading(false)
       }

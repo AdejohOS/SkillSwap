@@ -26,9 +26,10 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { createClient } from '@/utils/supabase/client'
+import { LucideIcon } from 'lucide-react'
 
 // Map of category names to icons
-const categoryIcons: Record<string, any> = {
+const categoryIcons: Record<string, LucideIcon> = {
   Programming: Code,
   Languages: BookOpen,
   Music: Music,

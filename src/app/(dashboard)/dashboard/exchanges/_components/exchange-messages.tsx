@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
-import { StringValidation } from 'zod'
+
 import { CardContent, CardFooter } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Input } from '@/components/ui/input'
@@ -91,7 +91,7 @@ export function ExchangeMessages({
     return () => {
       if (channel) supabase.removeChannel(channel)
     }
-  }, [exchangeId])
+  }, [exchangeId, supabase])
 
   // Scroll to bottom when messages change
   useEffect(() => {

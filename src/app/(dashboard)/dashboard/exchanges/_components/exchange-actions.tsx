@@ -27,6 +27,10 @@ interface Profile {
   avatar_url: string | null
 }
 
+interface Update {
+  status: string
+  completed_at?: string | null
+}
 interface Exchange {
   id: string
   status: string
@@ -57,7 +61,7 @@ export const ExchangeActions = ({
     setIsLoading(true)
 
     try {
-      const updateData: any = { status: newStatus }
+      const updateData: Update = { status: newStatus }
 
       // If marking as completed, set the completed_at timestamp
       if (newStatus === 'completed') {

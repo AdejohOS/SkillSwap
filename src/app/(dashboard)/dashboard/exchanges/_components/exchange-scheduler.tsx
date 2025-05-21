@@ -50,13 +50,13 @@ interface Profile {
 interface Exchange {
   id: string
   status: string
-  created_at: string
-  updated_at: string
+  created_at: string | null
+  updated_at: string | null
   user1_id: string
   user2_id: string
-  swap1_id: string
-  swap2_id: string
-  created_by: string
+  swap1_id: string | null
+  swap2_id: string | null
+  created_by: string | null
   user1: Profile
   user2: Profile
   swap1: Swap

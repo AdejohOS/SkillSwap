@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { Loader2, X } from 'lucide-react'
+import { Loader } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -22,7 +22,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
+
 import { toast } from 'sonner'
 import { createClient } from '@/utils/supabase/client'
 
@@ -65,7 +65,6 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>
 export function ProfileForm({ profile }: { profile?: Profile }) {
   const [isLoading, setIsLoading] = useState(false)
 
-  const [newInterest, setNewInterest] = useState('')
   const router = useRouter()
   const supabase = createClient()
 
@@ -260,7 +259,7 @@ export function ProfileForm({ profile }: { profile?: Profile }) {
             Cancel
           </Button>
           <Button type='submit' disabled={isLoading}>
-            {isLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
+            {isLoading && <Loader className='mr-2 h-4 w-4 animate-spin' />}
             Save Changes
           </Button>
         </div>

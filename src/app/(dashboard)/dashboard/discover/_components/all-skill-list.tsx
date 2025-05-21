@@ -13,6 +13,12 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { createClient } from '@/utils/supabase/server'
 
+interface Profile {
+  id: string
+  username: string
+  avatar_url: string | null
+}
+
 export const AllSkillsList = async () => {
   const supabase = await createClient()
 
@@ -60,7 +66,7 @@ export const AllSkillsList = async () => {
       map[profile.id] = profile
       return map
     },
-    {} as Record<string, any>
+    {} as Record<string, Profile>
   )
 
   return (

@@ -1,9 +1,11 @@
 'use client'
 
 import Link from 'next/link'
+
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Trash, Clock, Star, Edit, Save } from 'lucide-react'
+
+import { Search, Trash, Clock } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -14,7 +16,6 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Input } from '@/components/ui/input'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -33,12 +34,10 @@ interface SavedSearchesProps {
   userId: string
 }
 
-export function SavedSearches({ userId }: SavedSearchesProps) {
+export const SavedSearches = ({ userId }: SavedSearchesProps) => {
   const [savedSearches, setSavedSearches] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [searchToDelete, setSearchToDelete] = useState<string | null>(null)
-  const [editingSearch, setEditingSearch] = useState<string | null>(null)
-  const [editedName, setEditedName] = useState('')
   const router = useRouter()
   const supabase = createClient()
 
@@ -46,6 +45,7 @@ export function SavedSearches({ userId }: SavedSearchesProps) {
   useEffect(() => {
     async function fetchSavedSearches() {
       setIsLoading(true)
+
       const { data, error } = await supabase
         .from('saved_searches')
         .select('*')
@@ -54,10 +54,11 @@ export function SavedSearches({ userId }: SavedSearchesProps) {
 
       if (error) {
         console.error('Error fetching saved searches:', error)
-        toast.error('Failed to load saved searches. Please try again.')
-      } else {
-        setSavedSearches(data || [])
+        setIsLoading(false)
+        return
       }
+
+      setSavedSearches(data || [])
       setIsLoading(false)
     }
 
@@ -71,56 +72,23 @@ export function SavedSearches({ userId }: SavedSearchesProps) {
         .from('saved_searches')
         .delete()
         .eq('id', searchId)
+
       if (error) throw error
 
       setSavedSearches(prev => prev.filter(search => search.id !== searchId))
+
       toast.success('Your saved search has been deleted.')
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(
-          error.message || 'Failed to delete search. Please try again.'
-        )
-      }
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to delete search. Please try again.')
     } finally {
       setSearchToDelete(null)
-    }
-  }
-
-  // Start editing a search name
-  function startEditing(search: any) {
-    setEditingSearch(search.id)
-    setEditedName(search.name || search.query || 'Unnamed Search')
-  }
-
-  // Save edited search name
-  async function saveSearchName(searchId: string) {
-    try {
-      const { error } = await supabase
-        .from('saved_searches')
-        .update({ name: editedName })
-        .eq('id', searchId)
-      if (error) throw error
-
-      setSavedSearches(prev =>
-        prev.map(search =>
-          search.id === searchId ? { ...search, name: editedName } : search
-        )
-      )
-      toast.success('Your saved search has been renamed.')
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(
-          error.message || 'Failed to update search. Please try again.'
-        )
-      }
-    } finally {
-      setEditingSearch(null)
     }
   }
 
   // Execute a saved search
   function executeSearch(search: any) {
     const params = new URLSearchParams()
+
     if (search.query) params.set('query', search.query)
 
     if (search.filters) {
@@ -139,6 +107,27 @@ export function SavedSearches({ userId }: SavedSearchesProps) {
     }
 
     router.push(`/dashboard/discover/search?${params.toString()}`)
+  }
+
+  // Format the search date
+  function formatSearchDate(dateString: string) {
+    return new Date(dateString).toLocaleDateString()
+  }
+
+  // Get active filters count
+  function getActiveFiltersCount(filters: any) {
+    if (!filters) return 0
+
+    let count = 0
+    if (filters.category) count++
+    if (filters.experience_level) count++
+    if (filters.teaching_method) count++
+    if (filters.location) count++
+    if (filters.min_rating > 0) count++
+    if (filters.available_now) count++
+    if (filters.has_reviews) count++
+
+    return count
   }
 
   if (isLoading) {
@@ -167,7 +156,7 @@ export function SavedSearches({ userId }: SavedSearchesProps) {
         <CardContent>
           <div className='flex flex-col items-center justify-center p-8 text-center'>
             <div className='bg-muted flex h-20 w-20 items-center justify-center rounded-full'>
-              <Star className='text-muted-foreground h-10 w-10' />
+              <Search className='text-muted-foreground h-10 w-10' />
             </div>
             <h3 className='mt-4 text-lg font-semibold'>No saved searches</h3>
             <p className='text-muted-foreground mt-2 mb-4 max-w-sm text-sm'>
@@ -197,68 +186,21 @@ export function SavedSearches({ userId }: SavedSearchesProps) {
               className='flex items-center justify-between rounded-lg border p-4'
             >
               <div className='flex-1 space-y-1'>
-                {editingSearch === search.id ? (
-                  <div className='mb-2 flex items-center gap-2'>
-                    <Input
-                      value={editedName}
-                      onChange={e => setEditedName(e.target.value)}
-                      className='max-w-xs'
-                      autoFocus
-                    />
-                    <Button
-                      size='sm'
-                      onClick={() => saveSearchName(search.id)}
-                      disabled={!editedName.trim()}
-                    >
-                      <Save className='mr-1 h-4 w-4' />
-                      Save
-                    </Button>
-                    <Button
-                      size='sm'
-                      variant='ghost'
-                      onClick={() => setEditingSearch(null)}
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                ) : (
-                  <div className='flex items-center gap-2'>
-                    <h4 className='font-medium'>
-                      {search.name || search.query || 'Unnamed Search'}
-                    </h4>
-                    {search.filters &&
-                      Object.keys(search.filters).filter(
-                        key => search.filters[key]
-                      ).length > 0 && (
-                        <Badge variant='secondary'>
-                          {
-                            Object.keys(search.filters).filter(
-                              key => search.filters[key]
-                            ).length
-                          }{' '}
-                          filters
-                        </Badge>
-                      )}
-                  </div>
-                )}
-
-                {!editingSearch && (
-                  <>
-                    <div className='text-muted-foreground flex items-center text-sm'>
-                      <Clock className='mr-1 h-3 w-3' />
-                      <span>
-                        Saved on{' '}
-                        {new Date(search.created_at).toLocaleDateString()}
-                      </span>
-                    </div>
-                    {search.query && (
-                      <div className='mt-1 text-sm'>
-                        <span className='text-muted-foreground'>Query: </span>
-                        <span>{search.query}</span>
-                      </div>
-                    )}
-                  </>
-                )}
+                <div className='flex items-center gap-2'>
+                  <h4 className='font-medium'>
+                    {search.query || 'All Skills'}
+                  </h4>
+                  {getActiveFiltersCount(search.filters) > 0 && (
+                    <Badge variant='secondary'>
+                      {getActiveFiltersCount(search.filters)} filter
+                      {getActiveFiltersCount(search.filters) !== 1 ? 's' : ''}
+                    </Badge>
+                  )}
+                </div>
+                <div className='text-muted-foreground flex items-center text-sm'>
+                  <Clock className='mr-1 h-3 w-3' />
+                  <span>Saved on {formatSearchDate(search.created_at)}</span>
+                </div>
               </div>
               <div className='flex items-center gap-2'>
                 <Button
@@ -267,15 +209,6 @@ export function SavedSearches({ userId }: SavedSearchesProps) {
                   onClick={() => executeSearch(search)}
                 >
                   Search
-                </Button>
-                <Button
-                  variant='ghost'
-                  size='icon'
-                  className='h-8 w-8'
-                  onClick={() => startEditing(search)}
-                >
-                  <Edit className='h-4 w-4' />
-                  <span className='sr-only'>Edit search</span>
                 </Button>
                 <AlertDialog
                   open={searchToDelete === search.id}

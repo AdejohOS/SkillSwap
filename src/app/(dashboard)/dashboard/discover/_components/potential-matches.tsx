@@ -15,6 +15,12 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { InitiateSwapButton } from './initiate-swap-button'
 
+interface Profile {
+  id: string
+  username: string
+  avatar_url: string | null
+}
+
 export const PotentialMatches = async () => {
   const supabase = await createClient()
   const {
@@ -72,7 +78,7 @@ export const PotentialMatches = async () => {
       map[profile.id] = profile
       return map
     },
-    {} as Record<string, any>
+    {} as Record<string, Profile>
   )
 
   return (

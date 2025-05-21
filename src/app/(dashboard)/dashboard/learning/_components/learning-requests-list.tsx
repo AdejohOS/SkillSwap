@@ -58,10 +58,6 @@ type LearningRequest = {
   pending_exchanges?: number
 }
 
-interface SkillRequest {
-  desired_level: string
-}
-
 interface LearningRequestsListProps {
   requests: LearningRequest[]
   userId: string

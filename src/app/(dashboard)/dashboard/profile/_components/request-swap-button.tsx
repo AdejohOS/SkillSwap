@@ -26,6 +26,22 @@ import {
 import { toast } from 'sonner'
 import { createClient } from '@/utils/supabase/client'
 
+interface UserSkills {
+  id: string
+  title: string
+  skill_categories: {
+    name: string
+  } | null
+}
+
+interface MyRequests {
+  id: string
+  title: string
+  skill_categories: {
+    name: string
+  } | null
+}
+
 interface RequestSwapButtonProps {
   userId: string
 }
@@ -33,8 +49,8 @@ interface RequestSwapButtonProps {
 export function RequestSwapButton({ userId }: RequestSwapButtonProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
-  const [userSkills, setUserSkills] = useState<any[]>([])
-  const [myRequests, setMyRequests] = useState<any[]>([])
+  const [userSkills, setUserSkills] = useState<UserSkills[]>([])
+  const [myRequests, setMyRequests] = useState<MyRequests[]>([])
   const [selectedSkill, setSelectedSkill] = useState('')
   const [selectedRequest, setSelectedRequest] = useState('')
   const router = useRouter()
@@ -122,8 +138,10 @@ export function RequestSwapButton({ userId }: RequestSwapButtonProps) {
       router.push(`/dashboard/swaps/${swap.id}`)
       router.refresh()
       setIsOpen(false)
-    } catch (error: any) {
-      toast.error(error.message || 'Something went wrong. Please try again.')
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message || 'Something went wrong. Please try again.')
+      }
     } finally {
       setIsLoading(false)
     }
@@ -184,8 +202,8 @@ export function RequestSwapButton({ userId }: RequestSwapButtonProps) {
             </Select>
             {myRequests.length === 0 && (
               <p className='text-muted-foreground text-xs'>
-                You don't have any active learning requests. Please create one
-                first.
+                You don&apos;t have any active learning requests. Please create
+                one first.
               </p>
             )}
           </div>

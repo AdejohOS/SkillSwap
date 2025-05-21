@@ -11,6 +11,11 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { createClient } from '@/utils/supabase/server'
 
+interface Profile {
+  id: string
+  username: string
+  avatar_url: string | null
+}
 interface PublicProfileReviewsProps {
   userId: string
 }
@@ -74,7 +79,7 @@ export const PublicProfileReviews = async ({
       map[profile.id] = profile
       return map
     },
-    {} as Record<string, any>
+    {} as Record<string, Profile>
   )
 
   // Combine and format reviews
@@ -107,7 +112,7 @@ export const PublicProfileReviews = async ({
       <div className='rounded-lg border p-8 text-center'>
         <h3 className='font-medium'>No reviews yet</h3>
         <p className='text-muted-foreground mt-1 text-sm'>
-          This user hasn't received any reviews yet.
+          This user hasn&apos;t received any reviews yet.
         </p>
       </div>
     )

@@ -163,7 +163,9 @@ export const InitiateExchangeButton = ({
         toast.error(
           error.message || 'Failed to initiate exchange. Please try again.'
         )
-      } else [console.error('Error initiating exchange:', error)]
+      } else {
+        console.error('Error initiating exchange:', error)
+      }
     } finally {
       setIsLoading(false)
     }

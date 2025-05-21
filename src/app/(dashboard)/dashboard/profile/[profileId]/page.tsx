@@ -2,16 +2,15 @@ import { ProfileHeaderSkeleton } from '@/components/skeletons/profile-header-ske
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { createClient } from '@/utils/supabase/server'
-import { MessageSquare, Pencil } from 'lucide-react'
+import { Pencil } from 'lucide-react'
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
+
 import React, { Suspense } from 'react'
-import { RequestSwapButton } from '../_components/request-swap-button'
-import { PublicProfileHeader } from '../_components/public-profile-header'
+
 import { ProfileSkillsSkeleton } from '@/components/skeletons/profile-skill-skeleton'
-import { PublicProfileSkills } from '../_components/public-profile-skills'
+
 import { ProfileReviewsSkeleton } from '@/components/skeletons/profile-review-skeleton'
-import { PublicProfileReviews } from '../_components/public-profile-reviews'
+
 import { ProfileHeader } from '../_components/profile-header'
 import { ProfileSkills } from '../_components/profile-skills'
 import { ProfileLearning } from '../_components/profile-learning'
@@ -22,8 +21,7 @@ import { ProfileReviews } from '../_components/profile-reviews'
 import { ProfileCreditsSkeleton } from '@/components/skeletons/profile-credits-skeleton'
 import { ProfileCredits } from '../_components/profile-credits'
 
-const Page = async ({ params }: { params: Promise<{ profileId: string }> }) => {
-  const { profileId } = await params
+const Page = async () => {
   const supabase = await createClient()
 
   const {

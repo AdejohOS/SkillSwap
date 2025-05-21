@@ -14,6 +14,20 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { createClient } from '@/utils/supabase/server'
 
+interface Profile {
+  id: string
+  username: string
+  avatar_url: string | null
+}
+
+interface Swap {
+  id: string
+  skill_offerings: {
+    id: string
+    title: string
+  }
+}
+
 interface RecentExchangesProps {
   userId: string
 }
@@ -87,7 +101,7 @@ export const RecentExchanges = async ({ userId }: RecentExchangesProps) => {
       map[profile.id] = profile
       return map
     },
-    {} as Record<string, any>
+    {} as Record<string, Profile>
   )
 
   const swapMap = (swaps || []).reduce(
@@ -95,7 +109,7 @@ export const RecentExchanges = async ({ userId }: RecentExchangesProps) => {
       map[swap.id] = swap
       return map
     },
-    {} as Record<string, any>
+    {} as Record<string, Swap>
   )
 
   return (
