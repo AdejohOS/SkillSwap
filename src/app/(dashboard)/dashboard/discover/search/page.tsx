@@ -4,8 +4,8 @@ import { AdvancedSearch } from './_components/advanced-search'
 import { SearchResultsSkeleton } from '@/components/skeletons/search-results-skeleton'
 import { SearchResults } from './_components/search-results'
 
-interface SearchPageProps {
-  searchParams: {
+const Page = async (props: {
+  searchParams: Promise<{
     query?: string
     category?: string
     experience?: string
@@ -14,11 +14,10 @@ interface SearchPageProps {
     rating?: string
     available?: string
     reviews?: string
-  }
-}
-
-const Page = async ({ searchParams }: SearchPageProps) => {
+  }>
+}) => {
   const supabase = await createClient()
+  const searchParams = await props.searchParams
 
   // Get the current user
   const {
