@@ -18,11 +18,7 @@ import { createClient } from '@/utils/supabase/client'
 import { useState } from 'react'
 import { Loader } from 'lucide-react'
 
-interface LoginFormProps {
-  onCancel?: () => void
-}
-
-export const LoginForm = ({ onCancel }: LoginFormProps) => {
+export const LoginForm = () => {
   const [loadingProvider, setLoadingProvider] = useState<
     'google' | 'github' | null
   >(null)
@@ -32,15 +28,18 @@ export const LoginForm = ({ onCancel }: LoginFormProps) => {
     const supabase = createClient()
 
     try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: provider,
         options: {
           redirectTo: `${window.location.origin}/auth/callback`
         }
       })
       if (error) throw error
-    } catch (error: any) {
-      toast.error(error.message || 'An error occurred during Google sign up')
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message || 'An error occurred during sign up')
+      }
+
       setLoadingProvider(null)
     }
   }

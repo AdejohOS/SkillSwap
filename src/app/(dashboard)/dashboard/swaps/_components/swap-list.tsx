@@ -16,6 +16,12 @@ import { Badge } from '@/components/ui/badge'
 import { createClient } from '@/utils/supabase/server'
 import { SwapsEmptyState } from './swaps-empty-state'
 
+interface Profile {
+  id: string
+  username: string
+  avatar_url: string | null
+}
+
 export const SwapsList = async ({
   status = 'all'
 }: {
@@ -88,7 +94,7 @@ export const SwapsList = async ({
       map[profile.id] = profile
       return map
     },
-    {} as Record<string, any>
+    {} as Record<string, Profile>
   )
 
   return (

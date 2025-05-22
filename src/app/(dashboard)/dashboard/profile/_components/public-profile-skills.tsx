@@ -1,4 +1,3 @@
-import { cookies } from 'next/headers'
 import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
@@ -44,7 +43,7 @@ export const PublicProfileSkills = async ({
       <div className='rounded-lg border p-8 text-center'>
         <h3 className='font-medium'>No active skills</h3>
         <p className='text-muted-foreground mt-1 text-sm'>
-          This user hasn't added any active skills yet.
+          This user hasn&apos;t added any active skills yet.
         </p>
       </div>
     )

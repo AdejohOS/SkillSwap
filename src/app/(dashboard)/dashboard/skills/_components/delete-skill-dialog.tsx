@@ -51,8 +51,10 @@ export function DeleteSkillDialog({
 
       setIsOpen(false)
       router.refresh()
-    } catch (error: any) {
-      toast.error(error.message || 'Something went wrong. Please try again.')
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message || 'Something went wrong. Please try again.')
+      }
     } finally {
       setIsLoading(false)
     }

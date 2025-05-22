@@ -17,6 +17,12 @@ import { createClient } from '@/utils/supabase/client'
 import { SearchEmptyState } from '../../search/_components/search-empty-state'
 import { SkillSwapButton } from '../../../swaps/_components/skill-swap-button'
 
+interface Profile {
+  id: string
+  username: string
+  avatar_url: string | null
+  location: string | null
+}
 interface CategorySkillsProps {
   categoryId: string
   userId: string
@@ -32,7 +38,7 @@ export async function CategorySkills({
   const { data: skills, error } = await supabase
     .from('skill_offerings')
     .select('*')
-    .eq('category_id', Number(categoryId))
+    .eq('category_id', categoryId)
     .eq('is_active', true)
     .neq('user_id', userId)
     .order('created_at', { ascending: false })
@@ -58,7 +64,7 @@ export async function CategorySkills({
       map[profile.id] = profile
       return map
     },
-    {} as Record<string, any>
+    {} as Record<string, Profile>
   )
 
   // Get average ratings for teachers
@@ -136,11 +142,6 @@ export async function CategorySkills({
                         ? 'In-Person Only'
                         : 'Online & In-Person'}
                   </Badge>
-                  {skill.available_now && (
-                    <Badge variant='default' className='bg-green-500'>
-                      Available Now
-                    </Badge>
-                  )}
                 </div>
               </CardContent>
               <CardFooter className='flex justify-between border-t pt-4'>

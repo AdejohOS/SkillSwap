@@ -11,7 +11,7 @@ export const SkillsEmptyState = () => {
       </div>
       <h3 className='mt-4 text-lg font-semibold'>No skills found</h3>
       <p className='text-muted-foreground mt-2 mb-4 max-w-sm text-sm'>
-        You haven't added any skills yet. Add a skill to start teaching and
+        You haven&apos;t added any skills yet. Add a skill to start teaching and
         swapping with others.
       </p>
       <Button asChild>

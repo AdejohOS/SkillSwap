@@ -16,6 +16,12 @@ import { createClient } from '@/utils/supabase/server'
 import { SearchEmptyState } from './search-empty-state'
 import { SkillSwapButton } from '../../../swaps/_components/skill-swap-button'
 
+interface Profile {
+  id: string
+  username: string
+  avatar_url: string | null
+  location: string | null
+}
 interface SearchResultsProps {
   searchParams: {
     query?: string
@@ -70,7 +76,7 @@ export const SearchResults = async ({
       map[profile.id] = profile
       return map
     },
-    {} as Record<string, any>
+    {} as Record<string, Profile>
   )
 
   // Get categories for the skills

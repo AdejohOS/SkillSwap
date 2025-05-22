@@ -27,6 +27,14 @@ import { Label } from '@/components/ui/label'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
 
+interface UserSkills {
+  id: string
+  title: string
+  skill_categories?: {
+    name: string
+  }
+}
+
 interface ExchangeInitiationButtonClientProps {
   skillId: string
   teacherId: string
@@ -39,7 +47,7 @@ interface ExchangeInitiationButtonClientProps {
     | 'destructive'
   size?: 'default' | 'sm' | 'lg' | 'icon'
   className?: string
-  userSkills: any[]
+  userSkills: UserSkills[]
   userId: string
 }
 
@@ -130,10 +138,12 @@ export function ExchangeInitiationButtonClient({
 
       setIsOpen(false)
       router.push(`/dashboard/exchanges/${exchange.id}`)
-    } catch (error: any) {
-      toast.error(
-        error.message || 'Failed to initiate exchange. Please try again.'
-      )
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(
+          error.message || 'Failed to initiate exchange. Please try again.'
+        )
+      }
     } finally {
       setIsLoading(false)
     }
@@ -190,20 +200,21 @@ export function ExchangeInitiationButtonClient({
                   How skill exchanges work
                 </p>
                 <p className='mt-2 text-sm'>
-                  You'll teach your selected skill, and in return, you'll learn
-                  the skill you're requesting. Both parties need to accept the
-                  exchange before scheduling sessions.
+                  You&apos;ll teach your selected skill, and in return,
+                  you&apos;ll learn the skill you&apos;re requesting. Both
+                  parties need to accept the exchange before scheduling
+                  sessions.
                 </p>
               </div>
             </div>
           ) : (
             <div className='rounded-lg bg-amber-50 p-4 text-amber-800'>
               <p className='font-medium'>
-                You don't have any skills to offer yet.
+                You don&apos;t have any skills to offer yet.
               </p>
               <p className='mt-2 text-sm'>
                 To initiate an exchange, you need to add at least one skill that
-                you can teach. Go to "My Skills" to add a skill.
+                you can teach. Go to &apos;My Skills&apos; to add a skill.
               </p>
             </div>
           )}

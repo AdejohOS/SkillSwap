@@ -19,6 +19,11 @@ import { SwapActions } from '../_components/swap-actions'
 import { SwapScheduler } from '../_components/swap-scheduler'
 import { SwapMessages } from '../_components/swap-messages'
 
+interface Time {
+  start: string
+  end: string
+}
+
 const Page = async ({ params }: { params: Promise<{ swapId: string }> }) => {
   const { swapId } = await params
 
@@ -191,19 +196,13 @@ const Page = async ({ params }: { params: Promise<{ swapId: string }> }) => {
                     Scheduled Sessions:
                   </h4>
                   <ul className='space-y-2'>
-                    {swap.scheduled_times.map((time: any, index: number) => {
-                      if (
-                        typeof time === 'string' ||
-                        typeof time === 'number'
-                      ) {
-                        return (
-                          <li key={index} className='flex items-center text-sm'>
-                            <Calendar className='text-muted-foreground mr-2 h-4 w-4' />
-                            <span>{new Date(time).toLocaleString()}</span>
-                          </li>
-                        )
-                      }
-                      return null
+                    {(swap.scheduled_times as string[]).map((time, index) => {
+                      return (
+                        <li key={index} className='flex items-center text-sm'>
+                          <Calendar className='text-muted-foreground mr-2 h-4 w-4' />
+                          <span>{new Date(time).toLocaleString()}</span>
+                        </li>
+                      )
                     })}
                   </ul>
                 </div>

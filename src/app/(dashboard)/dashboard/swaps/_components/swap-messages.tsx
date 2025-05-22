@@ -12,16 +12,36 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { CardContent, CardFooter } from '@/components/ui/card'
 import { createClient } from '@/utils/supabase/client'
 
+interface OtherUser {
+  id: string
+  username: string
+  avatar_url: string | null
+}
+
+interface Message {
+  id: string
+  swap_id: string
+  sender_id: string
+  content: string
+  created_at: string
+}
+
+interface CurrentUser {
+  id: string
+  username: string
+  avatar_url: string | null
+}
+null
 interface SwapMessagesProps {
   swapId: string
-  otherUser: any
+  otherUser: OtherUser
 }
 
 export const SwapMessages = ({ swapId, otherUser }: SwapMessagesProps) => {
-  const [messages, setMessages] = useState<any[]>([])
+  const [messages, setMessages] = useState<Message[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [currentUser, setCurrentUser] = useState<any>(null)
+  const [currentUser, setCurrentUser] = useState<CurrentUser>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const supabase = createClient()

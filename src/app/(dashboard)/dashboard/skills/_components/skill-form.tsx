@@ -31,6 +31,24 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
 
+interface Category {
+  id: string
+  name: string
+}
+
+interface Skill {
+  id?: string
+  title: string
+  description: string
+  category_id: string
+  experience_level: string
+  teaching_method: string
+  difficulty_level: string
+  is_active: boolean
+  session_duration: number
+  max_students: number
+}
+
 const skillFormSchema = z.object({
   title: z
     .string()
@@ -75,8 +93,8 @@ const skillFormSchema = z.object({
 
 type SkillFormValues = z.infer<typeof skillFormSchema>
 
-export function SkillForm({ skill }: { skill?: any }) {
-  const [categories, setCategories] = useState<any[]>([])
+export function SkillForm({ skill }: { skill?: Skill }) {
+  const [categories, setCategories] = useState<Category[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const supabase = createClient()
@@ -106,8 +124,8 @@ export function SkillForm({ skill }: { skill?: any }) {
     teaching_method: skill?.teaching_method || 'both',
     difficulty_level: skill?.difficulty_level || 'beginner',
     is_active: skill?.is_active ?? true,
-    session_duration: skill?.session_duration?.toString() || '60',
-    max_students: skill?.max_students?.toString() || '1'
+    session_duration: skill?.session_duration ?? 60,
+    max_students: skill?.max_students ?? 1
   }
 
   const form = useForm<SkillFormValues>({
@@ -155,8 +173,10 @@ export function SkillForm({ skill }: { skill?: any }) {
 
       router.push('/dashboard/skills')
       router.refresh()
-    } catch (error: any) {
-      toast.error(error.message || 'Something went wrong. Please try again.')
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message || 'Something went wrong. Please try again.')
+      }
     } finally {
       setIsLoading(false)
     }

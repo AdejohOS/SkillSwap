@@ -28,7 +28,7 @@ import { toast } from 'sonner'
 interface SkillOffering {
   id: string
   title: string
-  description: string
+  description: string | null
   user_id: string
 }
 
@@ -38,7 +38,7 @@ interface Swap {
   scheduled_times: string[] | null
   teacher_id: string
   learner_id: string
-  skill_offerings: SkillOffering
+  skill_offerings: SkillOffering | null
 }
 
 interface Profile {
@@ -59,8 +59,8 @@ interface Exchange {
   created_by: string | null
   user1: Profile
   user2: Profile
-  swap1: Swap
-  swap2: Swap
+  swap1: Swap | null
+  swap2: Swap | null
 }
 
 interface ExchangeSchedulerProps {

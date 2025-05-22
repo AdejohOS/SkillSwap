@@ -38,8 +38,22 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
 
+interface Skill {
+  id: string
+  title: string
+  description: string | null
+  skill_categories: {
+    name: string
+  } | null
+  experience_level: string | null
+  teaching_method: string | null
+  session_duration: number | null
+  exchange_count?: number
+  active_exchanges?: number
+  pending_exchanges?: number
+}
 interface SkillsListProps {
-  skills: any[]
+  skills: Skill[]
   userId: string
 }
 
@@ -85,8 +99,12 @@ export const SkillsList = ({ skills, userId }: SkillsListProps) => {
       toast.success('Your skill has been successfully deleted.')
 
       router.refresh()
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to delete skill. Please try again.')
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(
+          error.message || 'Failed to delete skill. Please try again.'
+        )
+      }
     } finally {
       setIsDeleting(null)
     }
@@ -230,7 +248,7 @@ export const SkillsList = ({ skills, userId }: SkillsListProps) => {
       {skills.length === 0 && (
         <div className='col-span-full py-10 text-center'>
           <p className='text-muted-foreground'>
-            You haven't added any skills yet.
+            You haven&apos;t added any skills yet.
           </p>
         </div>
       )}

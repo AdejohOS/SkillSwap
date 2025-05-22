@@ -123,11 +123,11 @@ const Page = async ({
               <CardHeader>
                 <CardTitle>Teaching Session</CardTitle>
                 <CardDescription>
-                  You are teaching {otherUser.username} the skill "
+                  You are teaching {otherUser.username} the skill &quot;
                   {isUser1
                     ? exchange.swap1?.skill_offerings?.title
                     : exchange.swap2?.skill_offerings?.title}
-                  "
+                  &quot;
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -176,11 +176,11 @@ const Page = async ({
               <CardHeader>
                 <CardTitle>Learning Session</CardTitle>
                 <CardDescription>
-                  {otherUser.username} is teaching you the skill "
+                  {otherUser.username} is teaching you the skill &quot;
                   {isUser1
                     ? exchange.swap2?.skill_offerings?.title
                     : exchange.swap1?.skill_offerings?.title}
-                  "
+                  &quot;
                 </CardDescription>
               </CardHeader>
               <CardContent>

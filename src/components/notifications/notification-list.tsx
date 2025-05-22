@@ -12,6 +12,16 @@ import { cn } from '@/lib/utils'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
 
+interface Notifications {
+  id: string
+  title: string | null
+  message: string
+  type: string
+  is_read: boolean | null
+  created_at: string | null
+  related_type?: string | null
+  related_id?: string | null
+}
 interface NotificationListProps {
   onNotificationClick?: () => void
   limit?: number
@@ -23,7 +33,7 @@ export const NotificationList = ({
   limit = 5,
   showViewAll = true
 }: NotificationListProps) => {
-  const [notifications, setNotifications] = useState<any[]>([])
+  const [notifications, setNotifications] = useState<Notifications[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
   const supabase = createClient()
@@ -77,7 +87,7 @@ export const NotificationList = ({
   }, [supabase, limit])
 
   // Mark a notification as read and navigate to related content
-  async function handleNotificationClick(notification: any) {
+  async function handleNotificationClick(notification: Notifications) {
     try {
       // Mark as read if not already read
       if (!notification.is_read) {
@@ -101,8 +111,10 @@ export const NotificationList = ({
       if (onNotificationClick) {
         onNotificationClick()
       }
-    } catch (error: any) {
-      toast.error('Failed to process notification')
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error('Failed to process notification')
+      }
     }
   }
 
@@ -159,7 +171,7 @@ export const NotificationList = ({
         <Bell className='text-muted-foreground mb-2 h-10 w-10' />
         <h3 className='font-medium'>No notifications</h3>
         <p className='text-muted-foreground text-sm'>
-          You don't have any notifications yet.
+          You don&apos;t have any notifications yet.
         </p>
       </div>
     )
@@ -192,7 +204,7 @@ export const NotificationList = ({
                   {notification.message}
                 </p>
                 <p className='text-muted-foreground text-xs'>
-                  {formatNotificationDate(notification.created_at)}
+                  {formatNotificationDate(notification.created_at || '')}
                 </p>
               </div>
             </button>

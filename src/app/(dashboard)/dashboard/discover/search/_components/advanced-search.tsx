@@ -35,6 +35,11 @@ import { Separator } from '@/components/ui/separator'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
 
+interface Category {
+  id: string
+  name: string
+}
+
 export const AdvancedSearch = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -61,7 +66,7 @@ export const AdvancedSearch = () => {
   const [hasReviews, setHasReviews] = useState(initialHasReviews)
 
   // State for categories list
-  const [categories, setCategories] = useState<any[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
   const [locations, setLocations] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [activeFilters, setActiveFilters] = useState<string[]>([])
@@ -168,15 +173,18 @@ export const AdvancedSearch = () => {
 
       const searchData = {
         user_id: userData.user.id,
-        query,
-        filters: {
-          category,
-          experience_level: experienceLevel,
-          teaching_method: teachingMethod,
-          location,
-          min_rating: minRating,
-          available_now: availableNow,
-          has_reviews: hasReviews
+        name: query || 'Saved Search',
+        query: {
+          query,
+          filters: {
+            category,
+            experience_level: experienceLevel,
+            teaching_method: teachingMethod,
+            location,
+            min_rating: minRating,
+            available_now: availableNow,
+            has_reviews: hasReviews
+          }
         },
         created_at: new Date().toISOString()
       }
@@ -186,8 +194,10 @@ export const AdvancedSearch = () => {
       if (error) throw error
 
       toast.success('You can access your saved searches from your profile.')
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to save search. Please try again.')
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message || 'Failed to save search. Please try again.')
+      }
     }
   }
 

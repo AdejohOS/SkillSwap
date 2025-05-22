@@ -151,7 +151,9 @@ export const SavedSearches = ({ userId }: SavedSearchesProps) => {
       <Card>
         <CardHeader>
           <CardTitle>Saved Searches</CardTitle>
-          <CardDescription>You haven't saved any searches yet.</CardDescription>
+          <CardDescription>
+            You haven&apos;t saved any searches yet.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className='flex flex-col items-center justify-center p-8 text-center'>
@@ -161,7 +163,8 @@ export const SavedSearches = ({ userId }: SavedSearchesProps) => {
             <h3 className='mt-4 text-lg font-semibold'>No saved searches</h3>
             <p className='text-muted-foreground mt-2 mb-4 max-w-sm text-sm'>
               Save your searches to quickly access them later. You can save a
-              search by clicking the "Save Search" button in the search filters.
+              search by clicking the &apos;Save Search&apos; button in the
+              search filters.
             </p>
             <Button asChild>
               <Link href='/dashboard/discover'>Start Searching</Link>

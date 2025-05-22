@@ -29,7 +29,7 @@ export const UserMenu = () => {
     )
   }
 
-  const { full_name, avatar_url, username, email } = user || {
+  const { full_name, avatar_url, email } = user || {
     full_name: '',
     avatar_url: ''
   }

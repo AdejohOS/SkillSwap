@@ -6,15 +6,9 @@ import { useRouter } from 'next/navigation'
 import { Bell } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from '@/components/ui/popover'
 
 import { createClient } from '@/utils/supabase/client'
-import { toast } from 'sonner'
-import { NotificationList } from './notification-list'
+
 import { DropdownMenuItem } from '@radix-ui/react-dropdown-menu'
 import {
   DropdownMenu,
@@ -24,13 +18,23 @@ import {
   DropdownMenuTrigger
 } from '../ui/dropdown-menu'
 
+interface Notifications {
+  id: string
+  title: string | null
+  message: string
+  type: string
+  is_read: boolean | null
+  created_at: string | null
+  related_type?: string | null
+  related_id?: string | null
+}
 interface NotificationBellProps {
   userId: string
 }
 
 export const NotificationBell = ({ userId }: NotificationBellProps) => {
   const [unreadCount, setUnreadCount] = useState(0)
-  const [notifications, setNotifications] = useState<any[]>([])
+  const [notifications, setNotifications] = useState<Notifications[]>([])
 
   const router = useRouter()
   const supabase = createClient()
@@ -105,7 +109,7 @@ export const NotificationBell = ({ userId }: NotificationBellProps) => {
       .eq('id', notificationId)
   }
 
-  function handleNotificationClick(notification: any) {
+  function handleNotificationClick(notification: Notifications) {
     markAsRead(notification.id)
 
     // Navigate based on notification type and related content
@@ -156,7 +160,9 @@ export const NotificationBell = ({ userId }: NotificationBellProps) => {
                     {notification.message}
                   </p>
                   <p className='text-muted-foreground mt-1 text-xs'>
-                    {new Date(notification.created_at).toLocaleString()}
+                    {new Date(
+                      notification.created_at || 'unknown'
+                    ).toLocaleString()}
                   </p>
                 </div>
                 {!notification.is_read && (

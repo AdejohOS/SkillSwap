@@ -30,10 +30,36 @@ import { Label } from '@/components/ui/label'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
 
+interface Swap {
+  id: string
+  status: string
+  created_at: string | null
+  updated_at: string | null
+  scheduled_times: string[] | null
+  agreement_details: string | null
+  notes: string | null
+  teacher_id: string
+  learner_id: string
+  teacher_rating: number | null
+  learner_rating: number | null
+  teacher_feedback: string | null
+  learner_feedback: string | null
+}
+interface OtherUser {
+  id: string
+  username: string
+}
+
+interface UpdateData {
+  status: string
+  completed_at?: string | null
+  teacher_feedback?: string | null
+  learner_feedback?: string | null
+}
 interface SwapActionsProps {
-  swap: any
+  swap: Swap
   isTeacher: boolean
-  otherUser: any
+  otherUser: OtherUser
 }
 
 export const SwapActions = ({
@@ -51,7 +77,7 @@ export const SwapActions = ({
     setIsLoading(true)
 
     try {
-      const updateData: any = { status }
+      const updateData: UpdateData = { status }
 
       // If marking as completed, set the completed_at timestamp
       if (status === 'completed') {

@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { Button } from './ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { ArrowRight, BookOpen, Code, Music, Palette } from 'lucide-react'
