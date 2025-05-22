@@ -109,7 +109,7 @@ export const SwapActions = ({
     setIsLoading(true)
 
     try {
-      const updateData: any = {
+      const updateData: UpdateData = {
         status: 'completed',
         completed_at: new Date().toISOString()
       }

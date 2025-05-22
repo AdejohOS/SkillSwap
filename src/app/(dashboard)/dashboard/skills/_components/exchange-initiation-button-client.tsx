@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-import { ArrowLeftRight, Loader2 } from 'lucide-react'
+import { ArrowLeftRight, Loader } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 
@@ -129,7 +129,7 @@ export function ExchangeInitiationButtonClient({
       await supabase.from('notifications').insert({
         user_id: teacherId,
         type: 'exchange_request',
-        content: 'Someone wants to exchange skills with you!',
+        message: 'Someone wants to exchange skills with you!',
         related_id: exchange.id,
         is_read: false
       })
@@ -169,7 +169,7 @@ export function ExchangeInitiationButtonClient({
         <div className='space-y-4 py-4'>
           {isLoading ? (
             <div className='flex justify-center py-4'>
-              <Loader2 className='text-primary h-8 w-8 animate-spin' />
+              <Loader className='text-primary h-8 w-8 animate-spin' />
             </div>
           ) : userSkills.length > 0 ? (
             <div className='space-y-4'>
@@ -232,7 +232,7 @@ export function ExchangeInitiationButtonClient({
             onClick={initiateExchange}
             disabled={isLoading || userSkills.length === 0 || !selectedSkillId}
           >
-            {isLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
+            {isLoading && <Loader className='mr-2 h-4 w-4 animate-spin' />}
             Initiate Exchange
           </Button>
         </DialogFooter>

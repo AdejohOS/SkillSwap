@@ -19,19 +19,26 @@ interface OtherUser {
 }
 
 interface Message {
-  id: string
-  swap_id: string
-  sender_id: string
   content: string
-  created_at: string
+  created_at: string | null
+  exchange_id: string | null
+  id: string
+  is_read: boolean | null
+  sender_id: string
 }
 
 interface CurrentUser {
-  id: string
-  username: string
   avatar_url: string | null
+  bio: string | null
+  created_at: string | null
+  email: string | null
+  full_name: string | null
+  id: string
+  location: string | null
+  updated_at: string | null
+  username: string
 }
-null
+
 interface SwapMessagesProps {
   swapId: string
   otherUser: OtherUser
@@ -41,7 +48,7 @@ export const SwapMessages = ({ swapId, otherUser }: SwapMessagesProps) => {
   const [messages, setMessages] = useState<Message[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [currentUser, setCurrentUser] = useState<CurrentUser>(null)
+  const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const supabase = createClient()
@@ -84,7 +91,7 @@ export const SwapMessages = ({ swapId, otherUser }: SwapMessagesProps) => {
             filter: `swap_id=eq.${swapId}`
           },
           payload => {
-            setMessages(current => [...current, payload.new])
+            setMessages(current => [...current, payload.new as Message])
           }
         )
         .subscribe()
@@ -120,8 +127,12 @@ export const SwapMessages = ({ swapId, otherUser }: SwapMessagesProps) => {
       }
 
       setNewMessage('')
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to send message. Please try again.')
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(
+          error.message || 'Failed to send message. Please try again.'
+        )
+      }
     } finally {
       setIsLoading(false)
     }
@@ -184,10 +195,13 @@ export const SwapMessages = ({ swapId, otherUser }: SwapMessagesProps) => {
                       <p
                         className={`text-muted-foreground mt-1 text-xs ${isCurrentUser ? 'text-right' : ''}`}
                       >
-                        {new Date(message.created_at).toLocaleTimeString([], {
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}
+                        {new Date(message.created_at || '').toLocaleTimeString(
+                          [],
+                          {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          }
+                        )}
                       </p>
                     </div>
                     {isCurrentUser && (

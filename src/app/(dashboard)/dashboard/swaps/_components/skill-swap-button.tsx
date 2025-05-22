@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
-import { Loader2 } from 'lucide-react'
+import { Loader } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -26,7 +26,13 @@ import {
 } from '@/components/ui/select'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
-
+interface Request {
+  id: string
+  title: string
+  skill_categories?: {
+    name: string
+  } | null
+}
 interface SkillSwapButtonProps {
   skillId: string
   teacherId: string
@@ -38,7 +44,7 @@ export const SkillSwapButton = ({
 }: SkillSwapButtonProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
-  const [myRequests, setMyRequests] = useState<any[]>([])
+  const [myRequests, setMyRequests] = useState<Request[]>([])
   const [selectedRequest, setSelectedRequest] = useState('')
   const router = useRouter()
   const supabase = createClient()
@@ -115,8 +121,10 @@ export const SkillSwapButton = ({
       router.push(`/dashboard/swaps/${swap.id}`)
       router.refresh()
       setIsOpen(false)
-    } catch (error: any) {
-      toast.error(error.message || 'Something went wrong. Please try again.')
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message || 'Something went wrong. Please try again.')
+      }
     } finally {
       setIsLoading(false)
     }
@@ -157,8 +165,8 @@ export const SkillSwapButton = ({
             </Select>
             {myRequests.length === 0 && (
               <p className='text-muted-foreground text-xs'>
-                You don't have any active learning requests. Please create one
-                first.
+                You don&apos;t have any active learning requests. Please create
+                one first.
               </p>
             )}
           </div>
@@ -175,7 +183,7 @@ export const SkillSwapButton = ({
             onClick={initiateSwap}
             disabled={isLoading || !selectedRequest}
           >
-            {isLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
+            {isLoading && <Loader className='mr-2 h-4 w-4 animate-spin' />}
             Request Swap
           </Button>
         </DialogFooter>

@@ -42,8 +42,15 @@ const categoryIcons: Record<string, LucideIcon> = {
   Crafts: Scissors
 }
 
+interface Category {
+  id: string
+  name: string
+  description: string | null
+  count?: number
+}
+
 export function SkillCategoriesList() {
-  const [categories, setCategories] = useState<any[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const supabase = createClient()
 

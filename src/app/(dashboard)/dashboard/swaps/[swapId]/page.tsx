@@ -19,11 +19,6 @@ import { SwapActions } from '../_components/swap-actions'
 import { SwapScheduler } from '../_components/swap-scheduler'
 import { SwapMessages } from '../_components/swap-messages'
 
-interface Time {
-  start: string
-  end: string
-}
-
 const Page = async ({ params }: { params: Promise<{ swapId: string }> }) => {
   const { swapId } = await params
 

@@ -25,8 +25,12 @@ import { cn } from '@/lib/utils'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
 
+interface Swap {
+  id: string
+  scheduled_times: string[] | null
+}
 interface SwapSchedulerProps {
-  swap: any
+  swap: Swap
   disabled?: boolean
 }
 
@@ -77,10 +81,12 @@ export const SwapScheduler = ({
       setTime('')
 
       router.refresh()
-    } catch (error: any) {
-      toast.error(
-        error.message || 'Failed to schedule session. Please try again.'
-      )
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(
+          error.message || 'Failed to schedule session. Please try again.'
+        )
+      }
     } finally {
       setIsLoading(false)
     }
@@ -105,10 +111,12 @@ export const SwapScheduler = ({
       toast.success('The scheduled session has been removed.')
 
       router.refresh()
-    } catch (error: any) {
-      toast.error(
-        error.message || 'Failed to remove session. Please try again.'
-      )
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(
+          error.message || 'Failed to remove session. Please try again.'
+        )
+      }
     } finally {
       setIsLoading(false)
     }
