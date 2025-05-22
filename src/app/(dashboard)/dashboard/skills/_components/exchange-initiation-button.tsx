@@ -27,6 +27,11 @@ import { Label } from '@/components/ui/label'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
 
+interface Skill {
+  id: string
+  title: string
+}
+
 interface ExchangeInitiationButtonProps {
   skillId: string
   teacherId: string
@@ -51,7 +56,7 @@ export function ExchangeInitiationButton({
   const [isLoading, setIsLoading] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [selectedSkill, setSelectedSkill] = useState<string>('')
-  const [mySkills, setMySkills] = useState<any[]>([])
+  const [mySkills, setMySkills] = useState<Skill[]>([])
   const [hasLoadedSkills, setHasLoadedSkills] = useState(false)
   const router = useRouter()
   const supabase = createClient()
@@ -81,10 +86,12 @@ export function ExchangeInitiationButton({
 
       setMySkills(skills || [])
       setHasLoadedSkills(true)
-    } catch (error: any) {
-      toast.error(
-        error.message || 'Failed to load your skills. Please try again.'
-      )
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(
+          error.message || 'Failed to load your skills. Please try again.'
+        )
+      }
     } finally {
       setIsLoading(false)
     }
@@ -158,7 +165,7 @@ export function ExchangeInitiationButton({
       await supabase.from('notifications').insert({
         user_id: teacherId,
         type: 'exchange_request',
-        content: 'Someone has proposed a skill exchange with you!',
+        message: 'Someone has proposed a skill exchange with you!',
         related_id: exchange.id,
         is_read: false
       })
@@ -169,10 +176,12 @@ export function ExchangeInitiationButton({
 
       setIsOpen(false)
       router.push(`/dashboard/exchanges/${exchange.id}`)
-    } catch (error: any) {
-      toast.error(
-        error.message || 'Failed to initiate exchange. Please try again.'
-      )
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(
+          error.message || 'Failed to initiate exchange. Please try again.'
+        )
+      }
     } finally {
       setIsLoading(false)
     }
@@ -230,7 +239,7 @@ export function ExchangeInitiationButton({
 
           {mySkills.length === 0 && !isLoading && (
             <p className='text-sm text-amber-600'>
-              You don't have any active skills to offer. Please add a skill
+              You don&apos;t have any active skills to offer. Please add a skill
               first.
             </p>
           )}

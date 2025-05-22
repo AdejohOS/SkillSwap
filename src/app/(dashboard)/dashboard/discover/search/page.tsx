@@ -34,7 +34,7 @@ const Page = async ({ searchParams }: SearchPageProps) => {
     const { data: category } = await supabase
       .from('skill_categories')
       .select('name')
-      .eq('id', Number(searchParams.category))
+      .eq('id', searchParams.category)
       .single()
 
     if (category) {
