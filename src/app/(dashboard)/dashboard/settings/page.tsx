@@ -35,7 +35,7 @@ const Page = async () => {
           <TabsTrigger value='privacy'>Privacy</TabsTrigger>
         </TabsList>
         <TabsContent value='notifications' className='space-y-4'>
-          <NotificationSettings settings={profile?.notification_settings} />
+          <NotificationSettings />
         </TabsContent>
         <TabsContent value='account' className='space-y-4'>
           <div className='rounded-lg border p-8 text-center'>
