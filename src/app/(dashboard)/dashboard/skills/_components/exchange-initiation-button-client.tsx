@@ -30,9 +30,9 @@ import { toast } from 'sonner'
 interface UserSkills {
   id: string
   title: string
-  skill_categories?: {
+  skill_categories: {
     name: string
-  }
+  } | null
 }
 
 interface ExchangeInitiationButtonClientProps {
