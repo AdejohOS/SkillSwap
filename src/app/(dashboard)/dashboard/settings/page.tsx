@@ -14,7 +14,7 @@ const Page = async () => {
     return <div>Please sign in to view your settings.</div>
   }
 
-  const { data: profile } = await supabase
+  const {} = await supabase
     .from('profiles')
     .select('notification_settings')
     .eq('id', user.id)
