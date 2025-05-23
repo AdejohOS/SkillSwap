@@ -104,6 +104,8 @@ export const ReciprocalMatches = async ({ userId }: ReciprocalMatchesProps) => {
                 partnerId={match.user2_id}
                 mySkillId={match.i_can_teach_skill_id}
                 theirSkillId={match.they_can_teach_skill_id}
+                otherUserName={match.user2_name}
+                buttonText='Propose Exchange'
               />
             </CardFooter>
           </Card>
