@@ -15,25 +15,6 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { InitiateSwapButton } from './initiate-swap-button'
 
-interface Match {
-  offering_id: string
-  teacher_id: string
-  teacher_name: string
-  category_name: string
-  skill_title: string
-  match_score: number
-}
-
-interface Request {
-  id: string
-  title: string
-  category_id: string
-}
-
-interface MatchResult {
-  request: Request
-  matches: Match[]
-}
 interface Profile {
   id: string
   username: string
@@ -81,10 +62,9 @@ export const PotentialMatches = async () => {
     )
   }
 
-  const teacherIds: Set<string> = new Set(
+  const teacherIds = new Set(
     matchResults.flatMap(
-      (result: MatchResult) =>
-        result.matches?.map((match: Match) => match.teacher_id) || []
+      result => result.matches?.map(match => match.teacher_id) || []
     )
   )
 
@@ -118,9 +98,8 @@ export const PotentialMatches = async () => {
               </div>
 
               <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3'>
-                {result.matches.map((match: Match) => {
-                  const teacherProfile: Profile | undefined =
-                    teacherProfileMap[match.teacher_id]
+                {result.matches.map(match => {
+                  const teacherProfile = teacherProfileMap[match.teacher_id]
                   return (
                     <Card key={match.offering_id} className='flex flex-col'>
                       <CardHeader className='flex flex-row items-start justify-between space-y-0'>

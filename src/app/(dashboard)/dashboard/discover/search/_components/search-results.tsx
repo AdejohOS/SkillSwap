@@ -1,3 +1,4 @@
+import { cookies } from 'next/headers'
 import Link from 'next/link'
 import { Star } from 'lucide-react'
 
@@ -12,26 +13,15 @@ import {
 } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
-import { createClient } from '@/utils/supabase/server'
 import { SearchEmptyState } from './search-empty-state'
+import { createClient } from '@/utils/supabase/server'
 import { SkillSwapButton } from '../../../swaps/_components/skill-swap-button'
 
-interface Skill {
-  id: string
-  title: string
-  description: string
-  user_id: string
-  category_id: string
-  experience_level: string
-  teaching_method: 'online' | 'in_person' | 'both'
-  available_now: boolean
-}
-
-interface TeacherProfile {
+interface Profile {
   id: string
   username: string
-  avatar_url: string | null
-  location: string | null
+  avatar_url?: string | null
+  location?: string | null
 }
 
 interface Category {
@@ -61,14 +51,14 @@ export const SearchResults = async ({
 
   // Call the search_skills function
   const { data: skills, error } = await supabase.rpc('search_skills', {
-    search_query: searchParams.query || null,
-    category_id: searchParams.category || null,
-    experience_level: searchParams.experience || null,
-    teaching_method: searchParams.method || null,
-    location: searchParams.location || null,
+    search_query: searchParams.query || undefined,
+    filter_category_id: searchParams.category || undefined,
+    filter_experience_level: searchParams.experience || undefined,
+    filter_teaching_method: searchParams.method || undefined,
+    filter_location: searchParams.location || undefined,
     min_rating: searchParams.rating ? Number.parseInt(searchParams.rating) : 0,
-    available_now: searchParams.available === 'true',
-    has_reviews: searchParams.reviews === 'true',
+    filter_available_now: searchParams.available === 'true',
+    filter_has_reviews: searchParams.reviews === 'true',
     current_user_id: userId
   })
 
@@ -81,7 +71,8 @@ export const SearchResults = async ({
     return <SearchEmptyState searchParams={searchParams} />
   }
 
-  const teacherIds: string[] = skills.map((skill: Skill) => skill.user_id)
+  // Get user profiles for the skills
+  const teacherIds = skills.map(skill => skill.user_id)
   const { data: teacherProfiles } = await supabase
     .from('profiles')
     .select('id, username, avatar_url, location')
@@ -92,12 +83,12 @@ export const SearchResults = async ({
       map[profile.id] = profile
       return map
     },
-    {} as Record<string, TeacherProfile>
+    {} as Record<string, Profile>
   )
 
   // Get categories for the skills
-  const categoryIds: string[] = Array.from(
-    new Set(skills.map((skill: Skill) => skill.category_id))
+  const categoryIds = Array.from(
+    new Set(skills.map(skill => skill.category_id))
   )
   const { data: categories } = await supabase
     .from('skill_categories')
@@ -117,13 +108,8 @@ export const SearchResults = async ({
     user_ids: teacherIds
   })
 
-  interface UserAverageRating {
-    user_id: string
-    average_rating: number
-  }
-
   const ratingsMap = (ratings || []).reduce(
-    (map: Record<string, number>, item: UserAverageRating) => {
+    (map, item) => {
       map[item.user_id] = item.average_rating
       return map
     },
@@ -137,11 +123,10 @@ export const SearchResults = async ({
       </div>
 
       <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3'>
-        {skills.map((skill: Skill) => {
-          const teacherProfile: TeacherProfile | undefined =
-            teacherProfileMap[skill.user_id]
-          const category: Category | undefined = categoryMap[skill.category_id]
-          const rating: number = ratingsMap[skill.user_id] || 0
+        {skills.map(skill => {
+          const teacherProfile = teacherProfileMap[skill.user_id]
+          const category = categoryMap[skill.category_id]
+          const rating = ratingsMap[skill.user_id] || 0
 
           return (
             <Card key={skill.id} className='flex flex-col'>

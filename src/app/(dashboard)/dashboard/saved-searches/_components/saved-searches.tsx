@@ -1,4 +1,5 @@
 'use client'
+/* eslint @typescript-eslint/no-explicit-any: "error" */
 
 import Link from 'next/link'
 
@@ -30,49 +31,12 @@ import {
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
 
-interface SavedSearch {
-  id: string
-  user_id: string
-  query: string | null
-  filters: {
-    category?: string
-    experience_level?: string
-    teaching_method?: string
-    location?: string
-    min_rating: number
-    available_now?: boolean
-    has_reviews?: boolean
-  }
-  created_at: string
-}
-interface ExecuteSearch {
-  query: string | null
-  filters: {
-    category?: string
-    experience_level?: string
-    teaching_method?: string
-    location?: string
-    min_rating: number
-    available_now?: boolean
-    has_reviews?: boolean
-  }
-}
-
-interface GetFilterCount {
-  category?: string
-  experience_level?: string
-  teaching_method?: string
-  location?: string
-  min_rating: number
-  available_now?: boolean
-  has_reviews?: boolean
-}
 interface SavedSearchesProps {
   userId: string
 }
 
 export const SavedSearches = ({ userId }: SavedSearchesProps) => {
-  const [savedSearches, setSavedSearches] = useState<SavedSearch[]>([])
+  const [savedSearches, setSavedSearches] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [searchToDelete, setSearchToDelete] = useState<string | null>(null)
   const router = useRouter()
@@ -115,19 +79,15 @@ export const SavedSearches = ({ userId }: SavedSearchesProps) => {
       setSavedSearches(prev => prev.filter(search => search.id !== searchId))
 
       toast.success('Your saved search has been deleted.')
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(
-          error.message || 'Failed to delete search. Please try again.'
-        )
-      }
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to delete search. Please try again.')
     } finally {
       setSearchToDelete(null)
     }
   }
 
   // Execute a saved search
-  function executeSearch(search: ExecuteSearch) {
+  function executeSearch(search: any) {
     const params = new URLSearchParams()
 
     if (search.query) params.set('query', search.query)
@@ -156,7 +116,7 @@ export const SavedSearches = ({ userId }: SavedSearchesProps) => {
   }
 
   // Get active filters count
-  function getActiveFiltersCount(filters: GetFilterCount) {
+  function getActiveFiltersCount(filters: any) {
     if (!filters) return 0
 
     let count = 0
