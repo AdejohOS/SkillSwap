@@ -39,14 +39,14 @@ interface Category {
 interface Skill {
   id?: string
   title: string
-  description: string
-  category_id: string
-  experience_level: string
-  teaching_method: string
-  difficulty_level: string
-  is_active: boolean
-  session_duration: number
-  max_students: number
+  description: string | null
+  category_id: string | null
+  experience_level: string | null
+  teaching_method: string | null
+  difficulty_level: string | null
+  is_active: boolean | null
+  session_duration: number | null
+  max_students: number | null
 }
 
 const skillFormSchema = z.object({

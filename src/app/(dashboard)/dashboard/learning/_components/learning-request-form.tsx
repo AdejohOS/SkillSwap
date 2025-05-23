@@ -34,12 +34,12 @@ import { Checkbox } from '@/components/ui/checkbox'
 interface LearningRequest {
   id: string
   title: string
-  description: string
-  category_id: string
-  current_skill_level: 'beginner' | 'intermediate' | 'advanced'
-  desired_level: 'beginner' | 'intermediate' | 'advanced'
-  preferred_learning_method: 'online' | 'in-person' | 'both'
-  goals?: string
+  description: string | null
+  category_id: string | null
+  current_skill_level: string | null
+  desired_level: string | null
+  preferred_learning_method: string | null
+  goals?: string | null
   availability: {
     weekdays: boolean
     weekends: boolean

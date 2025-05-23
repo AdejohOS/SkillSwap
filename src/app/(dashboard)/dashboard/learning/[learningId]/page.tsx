@@ -31,6 +31,22 @@ const Page = async ({
   if (error || !request) {
     notFound()
   }
+  // Ensure availability is parsed and not null
+  const parsedRequest = {
+    ...request,
+    availability: request.availability
+      ? typeof request.availability === 'string'
+        ? JSON.parse(request.availability)
+        : request.availability
+      : {
+          weekdays: false,
+          weekends: false,
+          mornings: false,
+          afternoons: false,
+          evenings: false
+        }
+  }
+
   return (
     <div className='space-y-6 p-4'>
       <div>
@@ -42,7 +58,7 @@ const Page = async ({
         </p>
       </div>
 
-      <LearningRequestForm request={request} />
+      <LearningRequestForm request={parsedRequest} />
     </div>
   )
 }
