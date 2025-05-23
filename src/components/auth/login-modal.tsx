@@ -5,10 +5,10 @@ import { LoginForm } from './login-form'
 import { useLoginModal } from '@/hooks/use-login-modal'
 
 export const LoginUserModal = () => {
-  const { isOpen, setIsOpen, close } = useLoginModal()
+  const { isOpen, setIsOpen } = useLoginModal()
   return (
     <ResponsiveModal open={isOpen} onOpenChange={setIsOpen}>
-      <LoginForm onCancel={close} />
+      <LoginForm />
     </ResponsiveModal>
   )
 }
