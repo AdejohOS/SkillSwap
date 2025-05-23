@@ -26,7 +26,7 @@ const Page = async ({
   const { data: category, error } = await supabase
     .from('skill_categories')
     .select('*')
-    .eq('id', Number(categoryId))
+    .eq('id', categoryId)
     .single()
 
   if (error || !category) {
