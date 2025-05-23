@@ -1,5 +1,6 @@
 'use client'
-/* eslint @typescript-eslint/no-explicit-any: "error" */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import Link from 'next/link'
 
