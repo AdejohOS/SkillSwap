@@ -14,6 +14,14 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { createClient } from '@/utils/supabase/server'
 
+type Match = {
+  user2_id: string
+  user2_avatar_url?: string | null
+  user2_name: string
+  match_score: number
+  i_can_teach_skill_title: string
+  they_can_teach_skill_title: string
+}
 interface RecommendedMatchesProps {
   userId: string
 }
@@ -55,7 +63,7 @@ export const RecommendedMatches = async ({
       </CardHeader>
       <CardContent className='space-y-4'>
         {matches && matches.length > 0 ? (
-          matches.map(match => (
+          matches.map((match: Match) => (
             <div key={match.user2_id} className='flex items-center space-x-4'>
               <Avatar>
                 <AvatarImage
