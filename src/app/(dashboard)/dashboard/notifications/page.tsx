@@ -1,5 +1,5 @@
 import { createClient } from '@/utils/supabase/server'
-import React from 'react'
+
 import { NotificationsContent } from './_components/notifications-content'
 
 const Page = async () => {

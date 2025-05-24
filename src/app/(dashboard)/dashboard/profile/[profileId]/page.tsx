@@ -5,7 +5,7 @@ import { createClient } from '@/utils/supabase/server'
 import { Pencil } from 'lucide-react'
 import Link from 'next/link'
 
-import React, { Suspense } from 'react'
+import { Suspense } from 'react'
 
 import { ProfileSkillsSkeleton } from '@/components/skeletons/profile-skill-skeleton'
 

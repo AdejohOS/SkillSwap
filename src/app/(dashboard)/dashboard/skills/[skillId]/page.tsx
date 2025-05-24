@@ -1,4 +1,3 @@
-import React from 'react'
 import { SkillForm } from '../_components/skill-form'
 import { createClient } from '@/utils/supabase/server'
 import { notFound } from 'next/navigation'

@@ -1,5 +1,5 @@
 import { createClient } from '@/utils/supabase/server'
-import React, { Suspense } from 'react'
+import { Suspense } from 'react'
 import { AdvancedSearch } from './_components/advanced-search'
 import { SearchResultsSkeleton } from '@/components/skeletons/search-results-skeleton'
 import { SearchResults } from './_components/search-results'

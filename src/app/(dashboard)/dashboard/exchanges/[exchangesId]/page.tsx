@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { createClient } from '@/utils/supabase/server'
 
 import { notFound, redirect } from 'next/navigation'
-import React from 'react'
+
 import { ExchangeMessages } from '../_components/exchange-messages'
 import { ExchangeScheduler } from '../_components/exchange-scheduler'
 import { ExchangeDetail } from '../_components/exchange-detail'

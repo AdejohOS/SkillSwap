@@ -1,4 +1,3 @@
-import React from 'react'
 import { SkillForm } from '../_components/skill-form'
 
 const Page = () => {

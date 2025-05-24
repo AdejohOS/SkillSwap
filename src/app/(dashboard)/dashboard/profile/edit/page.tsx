@@ -1,5 +1,5 @@
 import { createClient } from '@/utils/supabase/server'
-import React from 'react'
+
 import { ProfileForm } from '../_components/profile-form'
 
 const Page = async () => {

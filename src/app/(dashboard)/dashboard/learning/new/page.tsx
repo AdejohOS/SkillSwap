@@ -1,4 +1,3 @@
-import React from 'react'
 import { LearningRequestForm } from '../_components/learning-request-form'
 
 const Page = () => {

@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { AnalyticsHeader } from './_components/analytics-header'

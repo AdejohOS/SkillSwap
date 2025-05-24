@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server'
 import { notFound } from 'next/navigation'
-import React from 'react'
+
 import { LearningRequestForm } from '../_components/learning-request-form'
 
 const Page = async ({

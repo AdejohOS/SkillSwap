@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import { Suspense } from 'react'
 
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'

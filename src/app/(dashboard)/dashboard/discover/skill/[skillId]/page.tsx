@@ -10,7 +10,6 @@ import {
 import { hasEnoughCredits } from '@/lib/credit-helpers'
 import { createClient } from '@/utils/supabase/server'
 import Link from 'next/link'
-import React from 'react'
 
 import { DottedSeparator } from '@/components/ui/dotted-separator'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'

@@ -2,7 +2,7 @@ import { PotentialMatchesSkeleton } from '@/components/skeletons/potential-match
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
-import React, { Suspense } from 'react'
+import { Suspense } from 'react'
 import { PotentialMatches } from './_components/potential-matches'
 import { AllSkillsListSkeleton } from '@/components/skeletons/all-skill-list-skeleton'
 import { AllSkillsList } from './_components/all-skill-list'

@@ -1,6 +1,6 @@
 import { SwapsListSkeleton } from '@/components/skeletons/swap-list-skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import React, { Suspense } from 'react'
+import { Suspense } from 'react'
 import { SwapsList } from './_components/swap-list'
 
 const Page = () => {

@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { createClient } from '@/utils/supabase/server'
-import React from 'react'
+
 import { NotificationSettings } from '../notifications/_components/notifications-settings'
 
 const Page = async () => {

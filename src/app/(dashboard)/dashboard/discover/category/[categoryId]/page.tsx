@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server'
 import { notFound } from 'next/navigation'
-import React, { Suspense } from 'react'
+import { Suspense } from 'react'
 import { AdvancedSearch } from '../../search/_components/advanced-search'
 import { SearchResultsSkeleton } from '@/components/skeletons/search-results-skeleton'
 import { CategorySkills } from '../_components/category-skills'
