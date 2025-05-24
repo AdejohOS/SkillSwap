@@ -1,66 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { createClient } from '@/utils/supabase/server'
+
 import { ArrowDownCircle, ArrowUpCircle, Clock, Coins } from 'lucide-react'
 
 const Page = async () => {
-  const supabase = await createClient()
-
-  // Get the current user
-  const {
-    data: { user }
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    return <div>Please sign in to view your credits.</div>
-  }
-
-  // Fetch the user's credit balance from the credits table
-  const { data: creditData, error: creditError } = await supabase
-    .from('credits')
-    .select('balance')
-    .eq('user_id', user.id)
-    .single()
-
-  // If the user doesn't have a credit record yet, create one with the default balance (5)
-  let balance = 0
-  if (creditError && creditError.code === 'PGRST116') {
-    const { data: newCredit, error: insertError } = await supabase
-      .from('credits')
-      .insert({ user_id: user.id, balance: 5 })
-      .select('balance')
-      .single()
-
-    if (insertError) {
-      console.error('Error creating credit record:', insertError)
-    } else if (newCredit) {
-      balance = newCredit.balance
-    }
-  } else if (creditError) {
-    console.error('Error fetching credit balance:', creditError)
-  } else {
-    balance = creditData?.balance || 0
-  }
-
-  // Fetch credit statistics
-  const { data: earnedTotal } = await supabase
-    .from('credit_transactions')
-    .select('amount')
-    .eq('user_id', user.id)
-    .gt('amount', 0)
-    .limit(1000)
-
-  const { data: spentTotal } = await supabase
-    .from('credit_transactions')
-    .select('amount')
-    .eq('user_id', user.id)
-    .lt('amount', 0)
-    .limit(1000)
-
-  // Calculate totals
-  const totalEarned = earnedTotal?.reduce((sum, tx) => sum + tx.amount, 0) || 0
-  const totalSpent =
-    spentTotal?.reduce((sum, tx) => sum + Math.abs(tx.amount), 0) || 0
-
   return (
     <div className='space-y-6 p-4'>
       <div>
@@ -79,7 +21,7 @@ const Page = async () => {
             <Coins className='h-4 w-4 text-yellow-500' />
           </CardHeader>
           <CardContent>
-            <div className='text-2xl font-bold'>{balance}</div>
+            <div className='text-2xl font-bold'>Balance</div>
             <p className='text-muted-foreground text-xs'>
               Available to spend on learning new skills
             </p>
@@ -91,7 +33,7 @@ const Page = async () => {
             <ArrowUpCircle className='h-4 w-4 text-green-500' />
           </CardHeader>
           <CardContent>
-            <div className='text-2xl font-bold'>{totalEarned}</div>
+            <div className='text-2xl font-bold'>total</div>
             <p className='text-muted-foreground text-xs'>
               Credits earned from teaching and other activities
             </p>
@@ -103,7 +45,7 @@ const Page = async () => {
             <ArrowDownCircle className='h-4 w-4 text-red-500' />
           </CardHeader>
           <CardContent>
-            <div className='text-2xl font-bold'>{totalSpent}</div>
+            <div className='text-2xl font-bold'>totalSpent</div>
             <p className='text-muted-foreground text-xs'>
               Credits spent on learning skills
             </p>
