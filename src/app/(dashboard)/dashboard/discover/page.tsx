@@ -11,6 +11,8 @@ import { AdvancedSearch } from './search/_components/advanced-search'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
+export const dynamic = 'force-dynamic'
+
 const Page = () => {
   return (
     <div className='space-y-6 p-4'>
