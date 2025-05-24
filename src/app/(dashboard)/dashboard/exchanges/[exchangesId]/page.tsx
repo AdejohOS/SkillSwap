@@ -16,7 +16,6 @@ import { ExchangeScheduler } from '../_components/exchange-scheduler'
 import { ExchangeDetail } from '../_components/exchange-detail'
 
 export const dynamic = 'force-dynamic'
-
 const Page = async ({
   params
 }: {

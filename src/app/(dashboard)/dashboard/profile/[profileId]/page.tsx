@@ -21,6 +21,7 @@ import { ProfileReviews } from '../_components/profile-reviews'
 import { ProfileCreditsSkeleton } from '@/components/skeletons/profile-credits-skeleton'
 import { ProfileCredits } from '../_components/profile-credits'
 
+export const dynamic = 'force-dynamic'
 const Page = async () => {
   const supabase = await createClient()
 

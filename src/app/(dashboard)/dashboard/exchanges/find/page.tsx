@@ -3,6 +3,7 @@ import { createClient } from '@/utils/supabase/server'
 import React, { Suspense } from 'react'
 import { ReciprocalMatches } from '../_components/reciprocal-matches'
 
+export const dynamic = 'force-dynamic'
 const Page = async () => {
   const supabase = await createClient()
 

@@ -7,6 +7,7 @@ import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { SkillsEmptyState } from './_components/skill-empty-state'
 
+export const dynamic = 'force-dynamic'
 const Page = async () => {
   const supabase = await createClient()
 

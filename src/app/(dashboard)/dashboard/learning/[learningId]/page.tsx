@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 
 import { LearningRequestForm } from '../_components/learning-request-form'
 
+export const dynamic = 'force-dynamic'
 const Page = async ({
   params
 }: {
