@@ -6,6 +6,8 @@ import Link from 'next/link'
 import { Suspense } from 'react'
 import { ExchangesList } from './_components/exchanges-list'
 
+export const dynamic = 'force-dynamic'
+
 const Page = async () => {
   const supabase = await createClient()
 
