@@ -1,5 +1,6 @@
 import { SkillForm } from '../_components/skill-form'
 
+export const dynamic = 'force-dynamic'
 const Page = () => {
   return (
     <div className='space-y-6 p-4'>
