@@ -9,7 +9,6 @@ import { redirect } from 'next/navigation'
 import { LearningRequestsEmptyState } from './_components/learning-requests-empty-state'
 
 export const dynamic = 'force-dynamic'
-
 const Page = async () => {
   const supabase = await createClient()
   const {

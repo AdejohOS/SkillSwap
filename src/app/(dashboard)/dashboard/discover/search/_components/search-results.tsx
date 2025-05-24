@@ -14,7 +14,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { SearchEmptyState } from './search-empty-state'
 import { createClient } from '@/utils/supabase/server'
-import { SkillSwapButton } from '../../../swaps/_components/skill-swap-button'
+import { SkillSwapButton } from './skill-swap-button'
 
 interface Profile {
   id: string
