@@ -11,7 +11,6 @@ import { RecommendedMatches } from './_components/recomended-matches'
 import { RecommendedMatchesSkeleton } from '@/components/skeletons/recommended-matches-skeleton'
 
 export const dynamic = 'force-dynamic'
-
 const Page = async () => {
   const supabase = await createClient()
 
