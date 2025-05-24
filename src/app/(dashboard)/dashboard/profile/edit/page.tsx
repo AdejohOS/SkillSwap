@@ -2,6 +2,7 @@ import { createClient } from '@/utils/supabase/server'
 
 import { ProfileForm } from '../_components/profile-form'
 
+export const dynamic = 'force-dynamic'
 const Page = async () => {
   const supabase = await createClient()
 
