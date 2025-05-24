@@ -4,6 +4,8 @@ import { AdvancedSearch } from './_components/advanced-search'
 import { SearchResultsSkeleton } from '@/components/skeletons/search-results-skeleton'
 import { SearchResults } from './_components/search-results'
 
+export const dynamic = 'force-dynamic'
+
 const Page = async (props: {
   searchParams: Promise<{
     query?: string
