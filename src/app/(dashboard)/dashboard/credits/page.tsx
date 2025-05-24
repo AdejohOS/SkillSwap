@@ -1,8 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { createClient } from '@/utils/supabase/server'
 import { ArrowDownCircle, ArrowUpCircle, Clock, Coins } from 'lucide-react'
-import React, { Suspense } from 'react'
-import { CreditTransactions } from './_components/credit-transactions'
+import React from 'react'
 
 const Page = async () => {
   const supabase = await createClient()
@@ -157,10 +156,6 @@ const Page = async () => {
           </Card>
         </div>
       </div>
-
-      <Suspense fallback={'Loading transactions'}>
-        <CreditTransactions userId={user.id} />
-      </Suspense>
     </div>
   )
 }
