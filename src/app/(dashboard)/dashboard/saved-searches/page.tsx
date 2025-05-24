@@ -3,6 +3,8 @@ import { Suspense } from 'react'
 import { SavedSearches } from './_components/saved-searches'
 import { SavedSearchesSkeleton } from '@/components/skeletons/saved-searches-skeleton'
 
+export const dynamic = 'force-dynamic'
+
 const Page = async () => {
   const supabase = await createClient()
 
