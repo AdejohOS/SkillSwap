@@ -23,7 +23,7 @@ export const CreditSystem = () => {
         <div className='grid gap-6 md:grid-cols-3'>
           <Card>
             <CardHeader className='text-center'>
-              <Coins className='text-primary mx-auto mb-4 h-12 w-12' />
+              <Coins className='mx-auto mb-4 h-12 w-12 text-cyan-700' />
               <CardTitle>Earn Credits</CardTitle>
               <CardDescription>
                 Complete teaching sessions, refer friends, or participate in
@@ -55,7 +55,7 @@ export const CreditSystem = () => {
           </Card>
           <Card>
             <CardHeader className='text-center'>
-              <Coins className='text-primary mx-auto mb-4 h-12 w-12' />
+              <Coins className='mx-auto mb-4 h-12 w-12 text-cyan-700' />
               <CardTitle>Spend Credits</CardTitle>
               <CardDescription>
                 Use your credits to learn from others without having to teach in
@@ -87,7 +87,7 @@ export const CreditSystem = () => {
           </Card>
           <Card>
             <CardHeader className='text-center'>
-              <Coins className='text-primary mx-auto mb-4 h-12 w-12' />
+              <Coins className='mx-auto mb-4 h-12 w-12 text-cyan-700' />
               <CardTitle>Benefits</CardTitle>
               <CardDescription>
                 Our credit system creates a balanced ecosystem for all users

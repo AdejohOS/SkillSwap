@@ -4,9 +4,14 @@ export const CoreFeatures = () => {
   return (
     <section className='px-4 py-12 md:py-24'>
       <div className='mx-auto max-w-7xl'>
-        <h2 className='mb-16 text-center text-3xl font-bold text-cyan-900 md:text-4xl'>
-          Core Features
-        </h2>
+        <div className='mb-10 text-center'>
+          <h2 className='text-3xl font-bold tracking-tighter text-cyan-900 sm:text-4xl'>
+            Core Features
+          </h2>
+          <p className='text-muted-foreground mt-4 text-xl'>
+            What makes us unique
+          </p>
+        </div>
 
         <div className='grid gap-10 md:grid-cols-2'>
           <div className='flex items-start gap-4'>

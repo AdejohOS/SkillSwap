@@ -26,14 +26,11 @@ export const NavBar = () => {
           </Link>
 
           <div className='hidden items-center gap-4 md:flex'>
-            <Link href='/blog'>
-              <Button variant='ghost'>Blog</Button>
+            <Link href='/dashboard'>
+              <Button variant='ghost'>Dashboard</Button>
             </Link>
-            <Link href='/blog'>
-              <Button variant='ghost'>Terms</Button>
-            </Link>
-            <Link href='/blog'>
-              <Button variant='ghost'>Discord</Button>
+            <Link href='/dashboard/profile'>
+              <Button variant='ghost'>Profile</Button>
             </Link>
           </div>
           <div>

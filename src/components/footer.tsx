@@ -36,26 +36,26 @@ export const Footer = () => {
             </div>
           </div>
           <div className='flex gap-8'>
-            <Link
-              href='/about'
-              className='text-gray-600 hover:text-emerald-700'
-            >
+            <Link href='/about' className='text-gray-600 hover:text-cyan-700'>
               About
             </Link>
-            <Link href='/faq' className='text-gray-600 hover:text-emerald-700'>
+            <Link href='/faq' className='text-gray-600 hover:text-cyan-700'>
               FAQ
             </Link>
             <Link
-              href='/contact'
-              className='text-gray-600 hover:text-emerald-700'
+              href='/legal/terms'
+              className='text-gray-600 hover:text-cyan-700'
             >
-              Contact
+              Terms & Conditions
             </Link>
             <Link
-              href='/privacy'
-              className='text-gray-600 hover:text-emerald-700'
+              href='/legal/privacy'
+              className='text-gray-600 hover:text-cyan-700'
             >
               Privacy
+            </Link>
+            <Link href='/contact' className='text-gray-600 hover:text-cyan-700'>
+              Contact
             </Link>
           </div>
         </div>
