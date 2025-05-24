@@ -2,6 +2,8 @@ import { createClient } from '@/utils/supabase/server'
 
 import { NotificationsContent } from './_components/notifications-content'
 
+export const dynamic = 'force-dynamic'
+
 const Page = async () => {
   const supabase = await createClient()
 
