@@ -157,7 +157,8 @@ const Page = async () => {
           </Card>
         </div>
       </div>
-      <Suspense fallback={'Loading transactions...'}>
+
+      <Suspense fallback={'Loading transactions'}>
         <CreditTransactions userId={user.id} />
       </Suspense>
     </div>
