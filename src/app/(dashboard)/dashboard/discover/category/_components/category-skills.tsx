@@ -15,7 +15,7 @@ import { Badge } from '@/components/ui/badge'
 
 import { createClient } from '@/utils/supabase/client'
 import { SearchEmptyState } from '../../search/_components/search-empty-state'
-import { SkillSwapButton } from '../../../swaps/_components/skill-swap-button'
+import { SkillSwapButton } from '../../search/_components/skill-swap-button'
 
 interface Profile {
   id: string
