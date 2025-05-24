@@ -13,6 +13,8 @@ import { ProfileSkills } from './_components/profile-skills'
 import { ProfileLearning } from './_components/profile-learning'
 import { ProfileReviews } from './_components/profile-reviews'
 
+export const dynamic = 'force-dynamic'
+
 const ProfilePage = async () => {
   const supabase = await createClient()
 
