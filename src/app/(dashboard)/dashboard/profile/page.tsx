@@ -24,7 +24,7 @@ const ProfilePage = async () => {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    return <div>Please sign in to view your profile.</div>
+    return <div className='p-4'>Please sign in to view your profile.</div>
   }
 
   return (

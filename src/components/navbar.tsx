@@ -24,15 +24,26 @@ export const NavBar = () => {
             </span>
             Skill<span className='text-orange-600'>Swap</span>
           </Link>
+          {user ? (
+            <div className='hidden items-center gap-4 md:flex'>
+              <Link href='/dashboard'>
+                <Button variant='ghost'>Dashboard</Button>
+              </Link>
+              <Link href='/dashboard/profile'>
+                <Button variant='ghost'>Profile</Button>
+              </Link>
+            </div>
+          ) : (
+            <div className='hidden items-center gap-4 md:flex'>
+              <Link href='/discord'>
+                <Button variant='ghost'>Discord</Button>
+              </Link>
+              <Link href='/blog'>
+                <Button variant='ghost'>Blog</Button>
+              </Link>
+            </div>
+          )}
 
-          <div className='hidden items-center gap-4 md:flex'>
-            <Link href='/dashboard'>
-              <Button variant='ghost'>Dashboard</Button>
-            </Link>
-            <Link href='/dashboard/profile'>
-              <Button variant='ghost'>Profile</Button>
-            </Link>
-          </div>
           <div>
             {user ? (
               <UserMenu />

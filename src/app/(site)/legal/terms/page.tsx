@@ -18,15 +18,15 @@ const TermsOfService = () => {
             </CardHeader>
             <CardContent className='space-y-4'>
               <p>
-                By accessing and using SkillSwap ("the Service"), you accept and
-                agree to be bound by the terms and provision of this agreement.
-                If you do not agree to abide by the above, please do not use
-                this service.
+                By accessing and using SkillSwap (&apos;the Service&apos;), you
+                accept and agree to be bound by the terms and provision of this
+                agreement. If you do not agree to abide by the above, please do
+                not use this service.
               </p>
               <p>
-                These Terms and Conditions ("Terms") govern your use of our peer
-                learning marketplace where users can exchange skills, knowledge,
-                and expertise with one another.
+                These Terms and Conditions (&apos;Terms&apos;) govern your use
+                of our peer learning marketplace where users can exchange
+                skills, knowledge, and expertise with one another.
               </p>
             </CardContent>
           </Card>
@@ -193,10 +193,10 @@ const TermsOfService = () => {
             </CardHeader>
             <CardContent className='space-y-4'>
               <p>
-                THE SERVICE IS PROVIDED "AS IS" WITHOUT WARRANTIES OF ANY KIND.
-                WE DISCLAIM ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING
-                WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE,
-                AND NON-INFRINGEMENT.
+                THE SERVICE IS PROVIDED &apos;AS IS&apos; WITHOUT WARRANTIES OF
+                ANY KIND. WE DISCLAIM ALL WARRANTIES, EXPRESS OR IMPLIED,
+                INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+                PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
               </p>
               <p>SkillSwap is not responsible for:</p>
               <ul className='list-disc space-y-2 pl-6'>
@@ -293,8 +293,7 @@ const TermsOfService = () => {
             <CardContent className='space-y-4'>
               <p>
                 These Terms are governed by and construed in accordance with the
-                laws of [Your Jurisdiction], without regard to conflict of law
-                principles.
+                laws of Nigeria, without regard to conflict of law principles.
               </p>
             </CardContent>
           </Card>

@@ -20,10 +20,10 @@ const PrivacyPage = () => {
             </CardHeader>
             <CardContent className='space-y-4'>
               <p>
-                SkillSwap ("we," "our," or "us") is committed to protecting your
-                privacy. This Privacy Policy explains how we collect, use,
-                disclose, and safeguard your information when you use our peer
-                learning marketplace.
+                SkillSwap (&apos;we,&apos; &apos;our,&apos; or &apos;us&apos;)
+                is committed to protecting your privacy. This Privacy Policy
+                explains how we collect, use, disclose, and safeguard your
+                information when you use our peer learning marketplace.
               </p>
               <p>
                 By using our Service, you consent to the data practices
@@ -282,7 +282,7 @@ const PrivacyPage = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle>9. Children's Privacy</CardTitle>
+              <CardTitle>9. Children&apos;s Privacy</CardTitle>
             </CardHeader>
             <CardContent className='space-y-4'>
               <p>
@@ -336,8 +336,8 @@ const PrivacyPage = () => {
               <p>
                 We may update this Privacy Policy from time to time. We will
                 notify you of any material changes by posting the new policy on
-                this page and updating the "Last updated" date. We encourage you
-                to review this policy periodically.
+                this page and updating the &apos;Last updated&apos; date. We
+                encourage you to review this policy periodically.
               </p>
             </CardContent>
           </Card>
