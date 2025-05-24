@@ -4,6 +4,7 @@ import { Hero } from '@/components/hero'
 import { HowItWorks } from '@/components/how-it-works'
 import { JoinCommunity } from '@/components/join-community'
 
+export const dynamic = 'force-dynamic'
 export default function Home() {
   return (
     <section className=''>
