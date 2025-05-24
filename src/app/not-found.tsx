@@ -2,6 +2,8 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ArrowLeftIcon } from 'lucide-react'
 
+export const dynamic = 'force-dynamic'
+
 export default function NotFound() {
   return (
     <section className='flex h-screen items-center justify-center'>
