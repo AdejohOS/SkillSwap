@@ -10,7 +10,7 @@ import { CtaSection } from './_components/cta-section'
 export const dynamic = 'force-dynamic'
 const Page = () => {
   return (
-    <section className='pt-24'>
+    <section className='pt-16 md:pt-24'>
       <HeroSection />
       <MissionSection />
       <HowItWorksSection />
