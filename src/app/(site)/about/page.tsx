@@ -7,6 +7,7 @@ import { CommunitySection } from './_components/community-section'
 import { StatsSection } from './_components/stats-section'
 import { CtaSection } from './_components/cta-section'
 
+export const dynamic = 'force-dynamic'
 const Page = () => {
   return (
     <section className='pt-24'>
