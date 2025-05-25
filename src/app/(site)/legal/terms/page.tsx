@@ -134,7 +134,7 @@ const TermsOfService = () => {
                 <li>Share inappropriate, offensive, or illegal content</li>
                 <li>
                   Attempt to gain unauthorized access to the Service or other
-                  users' accounts
+                  users&apos; accounts
                 </li>
                 <li>
                   Use the Service for commercial purposes without authorization
