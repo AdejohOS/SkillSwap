@@ -35,7 +35,7 @@ export const Footer = () => {
               />
             </div>
           </div>
-          <div className='flex gap-8'>
+          <div className='flex flex-wrap gap-8'>
             <Link href='/about' className='text-gray-600 hover:text-cyan-700'>
               About
             </Link>
