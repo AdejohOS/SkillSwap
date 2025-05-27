@@ -43,7 +43,7 @@ const Page = async () => {
     )
   }
 
-  // Get user's credit balance
+  // Get the user's credit balance using direct table query
   const { data: creditData } = await supabase
     .from('credits')
     .select('balance')
@@ -52,52 +52,60 @@ const Page = async () => {
 
   const creditBalance = creditData?.balance || 0
 
-  // For each request, get exchange statistics and check for matches
+  // For each request, get exchange statistics with better error handling
   const requestsWithExchanges = await Promise.all(
     requests.map(async request => {
-      // Get exchanges for this request
-      const { data: exchangeData, error: exchangeError } = await supabase.rpc(
-        'get_exchanges_by_skill_request',
-        {
-          request_id: request.id
-        }
-      )
+      try {
+        const { data: exchangeData, error: exchangeError } = await supabase.rpc(
+          'get_exchanges_by_skill_request',
+          {
+            request_id: request.id
+          }
+        )
 
-      if (exchangeError) {
-        console.error('Error fetching exchanges:', exchangeError)
+        if (exchangeError) {
+          console.error(
+            'Error fetching exchanges for request:',
+            request.id,
+            exchangeError
+          )
+          return {
+            ...request,
+            exchange_count: 0,
+            active_exchanges: 0,
+            pending_exchanges: 0,
+            has_matches: false
+          }
+        }
+
+        const activeExchanges =
+          exchangeData?.filter(ex =>
+            ['accepted', 'in_progress'].includes(ex.exchange_status)
+          ) || []
+
+        const pendingExchanges =
+          exchangeData?.filter(ex => ex.exchange_status === 'pending') || []
+
         return {
           ...request,
-
+          exchange_count: exchangeData?.length || 0,
+          active_exchanges: activeExchanges.length,
+          pending_exchanges: pendingExchanges.length,
+          has_matches: exchangeData && exchangeData.length > 0
+        }
+      } catch (err) {
+        console.error(
+          'Exception fetching exchanges for request:',
+          request.id,
+          err
+        )
+        return {
+          ...request,
           exchange_count: 0,
           active_exchanges: 0,
           pending_exchanges: 0,
           has_matches: false
         }
-      }
-
-      const activeExchanges =
-        exchangeData?.filter(ex =>
-          ['accepted', 'in_progress'].includes(ex.exchange_status)
-        ) || []
-
-      const pendingExchanges =
-        exchangeData?.filter(ex => ex.exchange_status === 'pending') || []
-
-      // Check if there are potential matches for this request
-      const { data: matchData } = await supabase
-        .from('skill_offerings')
-        .select('id')
-        .eq('is_active', true)
-        .neq('user_id', user.id)
-        .eq('category_id', request.category_id || '')
-        .limit(1)
-
-      return {
-        ...request,
-        exchange_count: exchangeData?.length || 0,
-        active_exchanges: activeExchanges.length,
-        pending_exchanges: pendingExchanges.length,
-        has_matches: matchData && matchData.length > 0
       }
     })
   )
@@ -115,7 +123,7 @@ const Page = async () => {
         <Button asChild>
           <Link href='/dashboard/learning/new'>
             <PlusCircle className='mr-2 h-4 w-4' />
-            Add Request
+            Add Learning Request
           </Link>
         </Button>
       </div>

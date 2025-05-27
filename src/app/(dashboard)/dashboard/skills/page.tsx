@@ -50,7 +50,7 @@ const Page = async () => {
       const { data: exchangeData, error: exchangeError } = await supabase.rpc(
         'get_exchanges_by_skill_offering',
         {
-          skill_id: skill.id
+          offering_id: skill.id
         }
       )
 

@@ -103,7 +103,9 @@ export type Database = {
           completed_at: string | null
           created_at: string | null
           created_by: string | null
+          credit_amount: number | null
           id: string
+          is_credit_based: boolean | null
           request_id: string | null
           status: string
           swap1_id: string | null
@@ -116,7 +118,9 @@ export type Database = {
           completed_at?: string | null
           created_at?: string | null
           created_by?: string | null
+          credit_amount?: number | null
           id?: string
+          is_credit_based?: boolean | null
           request_id?: string | null
           status: string
           swap1_id?: string | null
@@ -129,7 +133,9 @@ export type Database = {
           completed_at?: string | null
           created_at?: string | null
           created_by?: string | null
+          credit_amount?: number | null
           id?: string
+          is_credit_based?: boolean | null
           request_id?: string | null
           status?: string
           swap1_id?: string | null
@@ -639,6 +645,7 @@ export type Database = {
           completed_at: string | null
           created_at: string | null
           id: string
+          is_credit_based: boolean | null
           learner_feedback: string | null
           learner_id: string
           learner_rating: number | null
@@ -657,6 +664,7 @@ export type Database = {
           completed_at?: string | null
           created_at?: string | null
           id?: string
+          is_credit_based?: boolean | null
           learner_feedback?: string | null
           learner_id: string
           learner_rating?: number | null
@@ -675,6 +683,7 @@ export type Database = {
           completed_at?: string | null
           created_at?: string | null
           id?: string
+          is_credit_based?: boolean | null
           learner_feedback?: string | null
           learner_id?: string
           learner_rating?: number | null
@@ -788,14 +797,14 @@ export type Database = {
           },
           {
             foreignKeyName: "swaps_teacher_id_fkey"
-            columns: ["swap1_teacher_id"]
+            columns: ["swap2_teacher_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "swaps_teacher_id_fkey"
-            columns: ["swap2_teacher_id"]
+            columns: ["swap1_teacher_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -878,16 +887,16 @@ export type Database = {
         Returns: Json
       }
       get_exchanges_by_skill_offering: {
-        Args: { skill_id: string }
+        Args: { offering_id: string }
         Returns: {
           exchange_id: string
           exchange_status: string
-          exchange_created_at: string
-          is_teacher: boolean
-          other_user_id: string
-          other_user_name: string
-          other_skill_id: string
-          other_skill_title: string
+          swap1_id: string
+          swap2_id: string
+          user1_id: string
+          user2_id: string
+          created_at: string
+          updated_at: string
         }[]
       }
       get_exchanges_by_skill_request: {
@@ -895,12 +904,12 @@ export type Database = {
         Returns: {
           exchange_id: string
           exchange_status: string
-          exchange_created_at: string
-          is_learner: boolean
-          other_user_id: string
-          other_user_name: string
-          skill_offering_id: string
-          skill_offering_title: string
+          swap1_id: string
+          swap2_id: string
+          user1_id: string
+          user2_id: string
+          created_at: string
+          updated_at: string
         }[]
       }
       get_learning_analytics: {
@@ -947,7 +956,7 @@ export type Database = {
         }[]
       }
       get_user_credit_balance: {
-        Args: { user_id_param: string }
+        Args: { p_user_id: string }
         Returns: number
       }
       has_enough_credits: {

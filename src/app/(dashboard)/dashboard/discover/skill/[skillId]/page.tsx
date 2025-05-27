@@ -54,7 +54,7 @@ const Page = async ({ params }: { params: Promise<{ skillId: string }> }) => {
   }
 
   if (!skill) {
-    return <div>Skill not found.</div>
+    return <div className='p-4'>Skill not found.</div>
   }
 
   // Check if this is the user's own skill
@@ -179,6 +179,8 @@ const Page = async ({ params }: { params: Promise<{ skillId: string }> }) => {
                 <CreditBasedLearningButtonWrapper
                   skillId={skill.id}
                   teacherId={skill.user_id}
+                  skillTitle={skill.title}
+                  teacherName={skill.profiles?.username}
                   variant='outline'
                 />
               )}

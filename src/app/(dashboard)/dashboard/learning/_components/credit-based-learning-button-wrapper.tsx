@@ -1,9 +1,12 @@
-import { createClient } from '@/utils/supabase/server'
+import { getUserCreditBalance } from '@/lib/credit-helpers'
 import { CreditBasedLearningButtonClient } from './credit-based-learning-button-client'
+import { createClient } from '@/utils/supabase/server'
 
 interface CreditBasedLearningButtonWrapperProps {
   skillId: string
   teacherId: string
+  skillTitle?: string
+  teacherName?: string
   variant?:
     | 'default'
     | 'outline'
@@ -13,6 +16,7 @@ interface CreditBasedLearningButtonWrapperProps {
     | 'destructive'
   size?: 'default' | 'sm' | 'lg' | 'icon'
   className?: string
+  creditCost?: number
 }
 
 export const CreditBasedLearningButtonWrapper = async (
@@ -29,17 +33,31 @@ export const CreditBasedLearningButtonWrapper = async (
     return null
   }
 
-  // Get the user's credit balance directly from the credits table
-  const { data } = await supabase
-    .from('credits')
-    .select('balance')
-    .eq('user_id', user.id)
+  // Get skill details for better UX
+  const { data: skill } = await supabase
+    .from('skill_offerings')
+    .select(
+      `
+      title,
+      profiles!skill_offerings_user_id_fkey(username)
+    `
+    )
+    .eq('id', props.skillId)
     .single()
 
-  const creditBalance = data?.balance || 0
+  // Get user's credit balance
+  const creditBalance = await getUserCreditBalance(user.id)
 
-  // Pass the credit balance to the client component
+  // Pass all necessary data to the client component
   return (
-    <CreditBasedLearningButtonClient {...props} userCredits={creditBalance} />
+    <CreditBasedLearningButtonClient
+      {...props}
+      userId={user.id}
+      userCredits={creditBalance}
+      skillTitle={props.skillTitle || skill?.title || 'this skill'}
+      teacherName={
+        props.teacherName || skill?.profiles?.username || 'this teacher'
+      }
+    />
   )
 }

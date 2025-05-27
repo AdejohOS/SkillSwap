@@ -35,17 +35,6 @@ export const DashboardNavbar = async () => {
         </div>
 
         {user && <NotificationBell userId={user.id} />}
-        <div className='relative'>
-          <Button variant='ghost' size='icon' type='button'>
-            <MessageSquare className='size-5' />
-          </Button>
-          <Badge
-            variant='destructive'
-            className='absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center p-0 text-xs transition-transform'
-          >
-            2
-          </Badge>
-        </div>
 
         <UserMenu />
       </div>

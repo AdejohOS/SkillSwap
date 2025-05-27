@@ -58,6 +58,11 @@ type LearningRequest = {
   pending_exchanges?: number
 }
 
+interface EnoughCredit {
+  id: string
+  desired_level: string
+}
+
 interface LearningRequestsListProps {
   requests: LearningRequest[]
   userId: string
@@ -85,20 +90,23 @@ export function LearningRequestsList({
         }
       )
 
-      if (exchangeError) throw exchangeError
-
-      const activeExchanges = exchangeData?.filter(ex =>
-        ['pending', 'accepted', 'in_progress'].includes(ex.exchange_status)
-      )
-
-      if (activeExchanges && activeExchanges.length > 0) {
-        toast.error(
-          'This request has active exchanges. Please complete or cancel them first.'
+      if (exchangeError) {
+        console.error('Error checking exchanges:', exchangeError)
+        // Continue with deletion even if we can't check exchanges
+      } else {
+        const activeExchanges = exchangeData?.filter(ex =>
+          ['pending', 'accepted', 'in_progress'].includes(ex.exchange_status)
         )
-        return
+
+        if (activeExchanges && activeExchanges.length > 0) {
+          toast.error(
+            'This request has active exchanges. Please complete or cancel them first.'
+          )
+          return
+        }
       }
 
-      // If no active exchanges, proceed with deletion
+      // Proceed with deletion
       const { error } = await supabase
         .from('skill_requests')
         .delete()
@@ -111,14 +119,17 @@ export function LearningRequestsList({
 
       router.refresh()
     } catch (error: unknown) {
-      if (error instanceof Error || typeof error === 'object') {
-        toast.error((error as Error)?.message || 'Something went wrong.')
+      console.error('Delete error:', error)
+      if (error instanceof Error) {
+        toast(
+          error.message ||
+            'Failed to delete learning request. Please try again.'
+        )
       }
     } finally {
       setIsDeleting(null)
     }
   }
-
   const getDesiredLevelColor = (level: string) => {
     switch (level?.toLowerCase()) {
       case 'beginner':
@@ -166,7 +177,11 @@ export function LearningRequestsList({
               </CardTitle>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant='ghost' className='h-8 w-8 p-0'>
+                  <Button
+                    variant='ghost'
+                    className='h-8 w-8 p-0'
+                    aria-label='More options'
+                  >
                     <span className='sr-only'>Open menu</span>
                     <MoreHorizontal className='h-4 w-4' />
                   </Button>
@@ -241,7 +256,7 @@ export function LearningRequestsList({
               <div className='flex items-center'>
                 <Coins className='mr-1 h-4 w-4 text-amber-500' />
                 <span>
-                  {getCreditCost(request.desired_level ?? '')} credits
+                  {getCreditCost(request.desired_level || '')} credits
                 </span>
               </div>
               <div className='flex items-center'>
@@ -261,7 +276,7 @@ export function LearningRequestsList({
                 Find Exchange Partners
               </Link>
             </Button>
-            {hasEnoughCredits(request.desired_level ?? '') && (
+            {hasEnoughCredits(request.desired_level || '') && (
               <Button variant='outline' asChild className='w-full'>
                 <Link href={`/dashboard/credits/use?request=${request.id}`}>
                   <Coins className='mr-2 h-4 w-4' />

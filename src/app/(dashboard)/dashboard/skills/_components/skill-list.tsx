@@ -70,7 +70,7 @@ export const SkillsList = ({ skills, userId }: SkillsListProps) => {
       const { data: exchangeData, error: exchangeError } = await supabase.rpc(
         'get_exchanges_by_skill_offering',
         {
-          skill_id: id
+          offering_id: id
         }
       )
 
