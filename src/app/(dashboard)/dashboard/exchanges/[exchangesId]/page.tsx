@@ -178,11 +178,12 @@ const Page = async ({
                 <CardHeader>
                   <CardTitle>Teaching Session</CardTitle>
                   <CardDescription>
-                    You are teaching {otherUser.username} the skill "
-                    {myTeachingSwap.skill_offerings?.title || 'Unknown Skill'}"
+                    You are teaching {otherUser.username} the skill &apos;
+                    {myTeachingSwap.skill_offerings?.title || 'Unknown Skill'}
+                    &apos;
                     {exchange.is_credit_based && (
                       <span className='ml-2 font-medium text-amber-600'>
-                        (Credit-based - You'll earn{' '}
+                        (Credit-based - You&apos;ll earn{' '}
                         {exchange.credit_amount || 5} credits)
                       </span>
                     )}
@@ -224,7 +225,7 @@ const Page = async ({
                 <CardHeader>
                   <CardTitle>Learning Session</CardTitle>
                   <CardDescription>
-                    {otherUser.username} is teaching you the skill "
+                    {otherUser.username} is teaching you the skill &apos;
                     {myLearningSwap.skill_offerings?.title || 'Unknown Skill'}"
                     {exchange.is_credit_based && (
                       <span className='ml-2 font-medium text-amber-600'>

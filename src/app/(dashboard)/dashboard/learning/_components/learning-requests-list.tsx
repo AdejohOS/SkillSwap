@@ -58,11 +58,6 @@ type LearningRequest = {
   pending_exchanges?: number
 }
 
-interface EnoughCredit {
-  id: string
-  desired_level: string
-}
-
 interface LearningRequestsListProps {
   requests: LearningRequest[]
   userId: string

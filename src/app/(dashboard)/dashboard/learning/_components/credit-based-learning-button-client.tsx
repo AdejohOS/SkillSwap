@@ -187,8 +187,8 @@ export const CreditBasedLearningButtonClient = ({
                 You have enough credits for this learning request.
               </p>
               <p className='mt-2 text-sm'>
-                {creditCost} credits will be deducted from your balance. You'll
-                have {userCredits - creditCost} credits remaining.
+                {creditCost} credits will be deducted from your balance.
+                You&apos;ll have {userCredits - creditCost} credits remaining.
               </p>
             </div>
           ) : (

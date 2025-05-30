@@ -1,9 +1,8 @@
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { UserMenu } from '@/components/user-menu'
-import { MessageSquare, Search } from 'lucide-react'
+import { Search } from 'lucide-react'
 import { MobileSidebar } from './mobile-sidebar'
-import { Badge } from '@/components/ui/badge'
+
 import { NotificationBell } from '@/components/notifications/notification-bell'
 import { createClient } from '@/utils/supabase/server'
 

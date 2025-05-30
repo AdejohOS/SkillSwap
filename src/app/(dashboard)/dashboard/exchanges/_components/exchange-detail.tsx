@@ -63,8 +63,6 @@ export const ExchangeDetail = ({
   currentUserId,
   otherUser
 }: ExchangeDetailProps) => {
-  const isUser1 = exchange.user1_id === currentUserId
-
   // Get the swaps
   const swap1 = exchange.swap1
   const swap2 = exchange.swap2

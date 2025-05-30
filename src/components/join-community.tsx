@@ -3,7 +3,6 @@
 import { Button } from './ui/button'
 import { ArrowRight } from 'lucide-react'
 import { useLoginModal } from '@/hooks/use-login-modal'
-import { useEffect, useState } from 'react'
 
 export const JoinCommunity = () => {
   const { open } = useLoginModal()
