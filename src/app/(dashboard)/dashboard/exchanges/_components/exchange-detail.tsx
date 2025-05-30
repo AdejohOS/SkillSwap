@@ -44,6 +44,8 @@ interface Exchange {
   swap1_id: string | null
   swap2_id: string | null
   created_by: string | null
+  is_credit_based: boolean | null
+  credit_amount: number | null
   user1: Profile
   user2: Profile
   swap1: Swap | null
@@ -63,9 +65,48 @@ export const ExchangeDetail = ({
 }: ExchangeDetailProps) => {
   const isUser1 = exchange.user1_id === currentUserId
 
-  // Get the skills being exchanged
-  const mySwap = isUser1 ? exchange.swap1 : exchange.swap2
-  const theirSwap = isUser1 ? exchange.swap2 : exchange.swap1
+  // Get the swaps
+  const swap1 = exchange.swap1
+  const swap2 = exchange.swap2
+
+  // Determine which swap belongs to the current user based on teacher_id
+  let mySwap: Swap | null = null
+  let theirSwap: Swap | null = null
+
+  if (exchange.is_credit_based) {
+    // In credit-based exchanges, only one swap should have a skill_offering
+    // The other should be null/empty since no skill is being taught back
+    const swapWithSkill = swap1?.skill_offerings ? swap1 : swap2
+    if (swapWithSkill?.teacher_id === currentUserId) {
+      mySwap = swapWithSkill
+      theirSwap = null // Current user is teaching, no reciprocal swap
+    }
+
+    // Determine which swap belongs to the current user based on teacher/learner roles
+    if (swapWithSkill?.teacher_id === currentUserId) {
+      // Current user is teaching
+      mySwap = swapWithSkill
+      theirSwap = null // They're not teaching anything back
+    } else {
+      // Current user is learning
+      mySwap = null // Current user is not teaching anything
+      theirSwap = swapWithSkill
+    }
+  } else {
+    // Regular reciprocal exchange - use teacher_id to determine which swap belongs to current user
+    if (swap1?.teacher_id === currentUserId) {
+      mySwap = swap1
+      theirSwap = swap2
+    } else if (swap2?.teacher_id === currentUserId) {
+      mySwap = swap2
+      theirSwap = swap1
+    } else {
+      // Fallback to the old logic if teacher_id is not available
+      const isUser1 = exchange.user1_id === currentUserId
+      mySwap = isUser1 ? swap1 : swap2
+      theirSwap = isUser1 ? swap2 : swap1
+    }
+  }
 
   // Format exchange status
   const getStatusColor = () => {
@@ -91,17 +132,30 @@ export const ExchangeDetail = ({
         <CardHeader>
           <div className='flex items-center justify-between'>
             <div>
-              <CardTitle>Exchange Summary</CardTitle>
+              <CardTitle>
+                {exchange.is_credit_based
+                  ? 'Credit-Based Learning'
+                  : 'Skill Exchange'}
+              </CardTitle>
               <CardDescription>
-                Skill exchange with {otherUser.username}
+                {exchange.is_credit_based
+                  ? `Learning session with ${otherUser.username}`
+                  : `Skill exchange with ${otherUser.username}`}
               </CardDescription>
             </div>
-            <Badge
-              className={`uppercase ${getStatusColor()}`}
-              variant='outline'
-            >
-              {exchange.status}
-            </Badge>
+            <div className='flex gap-2'>
+              {exchange.is_credit_based && (
+                <Badge variant='secondary'>
+                  {exchange.credit_amount || 5} Credits
+                </Badge>
+              )}
+              <Badge
+                className={`uppercase ${getStatusColor()}`}
+                variant='outline'
+              >
+                {exchange.status}
+              </Badge>
+            </div>
           </div>
         </CardHeader>
         <CardContent className='space-y-6'>
@@ -122,51 +176,86 @@ export const ExchangeDetail = ({
               <div>
                 <h3 className='text-lg font-medium'>{otherUser.username}</h3>
                 <p className='text-muted-foreground text-sm'>
-                  Exchange Partner
+                  {exchange.is_credit_based
+                    ? 'Learning Partner'
+                    : 'Exchange Partner'}
                 </p>
               </div>
             </div>
 
             <div className='text-muted-foreground flex items-center text-sm'>
               <Clock className='mr-2 h-4 w-4' />
-              <span className='mr-1'>Created</span>
-              {exchange.created_at ? (
-                <time dateTime={exchange.created_at}>
-                  {format(new Date(exchange.created_at), 'PPP')}
-                </time>
-              ) : (
-                'Unknown'
-              )}
+              Created {format(new Date(exchange.created_at || ''), 'PPP')}
             </div>
           </div>
 
           <div className='rounded-md border p-4'>
-            <h3 className='mb-4 font-medium'>Exchange Details</h3>
-            <div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
-              <div className='space-y-2'>
-                <div className='flex items-center gap-2 text-sm font-medium'>
-                  <ArrowLeftRight className='h-4 w-4 rotate-180' />
-                  <span>You teach</span>
-                </div>
-                <div className='bg-muted rounded-md p-3'>
-                  <h4 className='font-medium'>
-                    {mySwap?.skill_offerings?.title || 'Not specified'}
-                  </h4>
-                </div>
-              </div>
+            <h3 className='mb-4 font-medium'>
+              {exchange.is_credit_based
+                ? 'Learning Details'
+                : 'Exchange Details'}
+            </h3>
 
-              <div className='space-y-2'>
-                <div className='flex items-center gap-2 text-sm font-medium'>
-                  <ArrowLeftRight className='h-4 w-4' />
-                  <span>They teach</span>
+            {exchange.is_credit_based ? (
+              // Credit-based exchange display
+              <div className='space-y-4'>
+                <div className='grid grid-cols-1 gap-4'>
+                  <div className='space-y-2'>
+                    <div className='flex items-center gap-2 text-sm font-medium'>
+                      <ArrowLeftRight className='h-4 w-4' />
+                      <span>Skill being taught</span>
+                    </div>
+                    <div className='bg-muted rounded-md p-3'>
+                      <h4 className='font-medium'>
+                        {mySwap?.skill_offerings?.title ||
+                          theirSwap?.skill_offerings?.title ||
+                          'Not specified'}
+                      </h4>
+                      <p className='text-muted-foreground mt-1 text-sm'>
+                        {mySwap?.teacher_id === currentUserId
+                          ? 'You are teaching this skill'
+                          : 'You are learning this skill'}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div className='bg-muted rounded-md p-3'>
-                  <h4 className='font-medium'>
-                    {theirSwap?.skill_offerings?.title || 'Not specified'}
-                  </h4>
+                <div className='text-muted-foreground rounded-md bg-blue-50 p-3 text-sm'>
+                  <p>
+                    💡 This is a credit-based learning session.
+                    {mySwap?.teacher_id === currentUserId
+                      ? ` You'll earn ${exchange.credit_amount || 5} credits for teaching.`
+                      : ` You spent ${exchange.credit_amount || 5} credits to learn this skill.`}
+                  </p>
                 </div>
               </div>
-            </div>
+            ) : (
+              // Regular reciprocal exchange display
+              <div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
+                <div className='space-y-2'>
+                  <div className='flex items-center gap-2 text-sm font-medium'>
+                    <ArrowLeftRight className='h-4 w-4 rotate-180' />
+                    <span>You teach</span>
+                  </div>
+                  <div className='bg-muted rounded-md p-3'>
+                    <h4 className='font-medium'>
+                      {mySwap?.skill_offerings?.title || 'Not specified'}
+                    </h4>
+                  </div>
+                </div>
+
+                <div className='space-y-2'>
+                  <div className='flex items-center gap-2 text-sm font-medium'>
+                    <ArrowLeftRight className='h-4 w-4' />
+                    <span>They teach</span>
+                  </div>
+                  <div className='bg-muted rounded-md p-3'>
+                    <h4 className='font-medium'>
+                      {theirSwap?.skill_offerings?.title || 'Not specified'}
+                    </h4>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className='space-y-4'>
@@ -175,7 +264,10 @@ export const ExchangeDetail = ({
             {mySwap?.scheduled_times && mySwap.scheduled_times.length > 0 ? (
               <div className='space-y-2'>
                 <h4 className='text-muted-foreground text-sm font-medium'>
-                  You teaching:
+                  {exchange.is_credit_based &&
+                  mySwap.teacher_id === currentUserId
+                    ? 'Your teaching sessions:'
+                    : 'You teaching:'}
                 </h4>
                 <ul className='space-y-2'>
                   {mySwap.scheduled_times.map((time: string, index: number) => (
@@ -193,16 +285,21 @@ export const ExchangeDetail = ({
                 </ul>
               </div>
             ) : (
-              <p className='text-muted-foreground text-sm'>
-                No teaching sessions scheduled yet.
-              </p>
+              mySwap && (
+                <p className='text-muted-foreground text-sm'>
+                  No teaching sessions scheduled yet.
+                </p>
+              )
             )}
 
             {theirSwap?.scheduled_times &&
             theirSwap.scheduled_times.length > 0 ? (
               <div className='space-y-2'>
                 <h4 className='text-muted-foreground text-sm font-medium'>
-                  You learning:
+                  {exchange.is_credit_based &&
+                  theirSwap.teacher_id !== currentUserId
+                    ? 'Your learning sessions:'
+                    : 'You learning:'}
                 </h4>
                 <ul className='space-y-2'>
                   {theirSwap.scheduled_times.map(
@@ -222,10 +319,20 @@ export const ExchangeDetail = ({
                 </ul>
               </div>
             ) : (
-              <p className='text-muted-foreground text-sm'>
-                No learning sessions scheduled yet.
-              </p>
+              theirSwap && (
+                <p className='text-muted-foreground text-sm'>
+                  No learning sessions scheduled yet.
+                </p>
+              )
             )}
+
+            {exchange.is_credit_based &&
+              !mySwap?.scheduled_times?.length &&
+              !theirSwap?.scheduled_times?.length && (
+                <p className='text-muted-foreground text-sm'>
+                  No sessions scheduled yet.
+                </p>
+              )}
           </div>
 
           <ExchangeActions

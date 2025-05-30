@@ -14,6 +14,27 @@ import { notFound, redirect } from 'next/navigation'
 import { ExchangeMessages } from '../_components/exchange-messages'
 import { ExchangeScheduler } from '../_components/exchange-scheduler'
 import { ExchangeDetail } from '../_components/exchange-detail'
+import { Metadata } from 'next'
+
+interface SkillOffering {
+  id: string
+  title: string
+  description: string | null
+  user_id: string
+}
+interface Swap {
+  id: string
+  status: string
+  scheduled_times: string[] | null
+  teacher_id: string
+  learner_id: string
+  skill_offerings: SkillOffering | null
+}
+
+export const metadata: Metadata = {
+  title: 'Exchange Details',
+  description: 'View and manage your skill exchange'
+}
 
 export const dynamic = 'force-dynamic'
 const Page = async ({
@@ -84,6 +105,36 @@ const Page = async ({
   const isRecipient = exchange.created_by !== currentUserId
   const needsApproval = isPending && isRecipient
 
+  let myTeachingSwap: Swap | null = null
+  let myLearningSwap: Swap | null = null
+  let teachingSwapId: string | null = null
+  let learningSwapId: string | null = null
+
+  if (exchange.is_credit_based) {
+    // For credit-based exchanges, there's only one swap
+    const activeSwap = exchange.swap1
+    if (activeSwap?.teacher_id === currentUserId) {
+      myTeachingSwap = activeSwap
+      teachingSwapId = exchange.swap1_id
+    } else if (activeSwap?.learner_id === currentUserId) {
+      myLearningSwap = activeSwap
+      learningSwapId = exchange.swap1_id
+    }
+  } else {
+    // For reciprocal exchanges, determine which swap is which based on teacher_id
+    if (exchange.swap1?.teacher_id === currentUserId) {
+      myTeachingSwap = exchange.swap1
+      teachingSwapId = exchange.swap1_id
+      myLearningSwap = exchange.swap2
+      learningSwapId = exchange.swap2_id
+    } else if (exchange.swap2?.teacher_id === currentUserId) {
+      myTeachingSwap = exchange.swap2
+      teachingSwapId = exchange.swap2_id
+      myLearningSwap = exchange.swap1
+      learningSwapId = exchange.swap1_id
+    }
+  }
+
   return (
     <div className='space-y-6 p-4'>
       <div>
@@ -109,119 +160,109 @@ const Page = async ({
         <Tabs defaultValue='overview' className='space-y-4'>
           <TabsList>
             <TabsTrigger value='overview'>Overview</TabsTrigger>
-            <TabsTrigger value='teaching'>Teaching</TabsTrigger>
-            <TabsTrigger value='learning'>Learning</TabsTrigger>
+            {myTeachingSwap && (
+              <TabsTrigger value='teaching'>Teaching</TabsTrigger>
+            )}
+            {myLearningSwap && (
+              <TabsTrigger value='learning'>Learning</TabsTrigger>
+            )}
           </TabsList>
 
           <TabsContent value='overview' className='space-y-4'>
             {/* Overview content is already shown in ExchangeDetail */}
           </TabsContent>
 
-          <TabsContent value='teaching' className='space-y-4'>
-            <Card>
-              <CardHeader>
-                <CardTitle>Teaching Session</CardTitle>
-                <CardDescription>
-                  You are teaching {otherUser.username} the skill &quot;
-                  {isUser1
-                    ? exchange.swap1?.skill_offerings?.title
-                    : exchange.swap2?.skill_offerings?.title}
-                  &quot;
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className='space-y-4'>
-                  {/* Teaching specific content */}
-                  {isUser1 && exchange.swap1_id ? (
+          {myTeachingSwap && teachingSwapId && (
+            <TabsContent value='teaching' className='space-y-4'>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Teaching Session</CardTitle>
+                  <CardDescription>
+                    You are teaching {otherUser.username} the skill "
+                    {myTeachingSwap.skill_offerings?.title || 'Unknown Skill'}"
+                    {exchange.is_credit_based && (
+                      <span className='ml-2 font-medium text-amber-600'>
+                        (Credit-based - You'll earn{' '}
+                        {exchange.credit_amount || 5} credits)
+                      </span>
+                    )}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className='space-y-4'>
                     <ExchangeScheduler
                       exchange={exchange}
-                      swapId={exchange.swap1_id}
+                      swapId={teachingSwapId}
                       disabled={
                         exchange.status !== 'accepted' &&
                         exchange.status !== 'in_progress'
                       }
                     />
-                  ) : !isUser1 && exchange.swap2_id ? (
-                    <ExchangeScheduler
-                      exchange={exchange}
-                      swapId={exchange.swap2_id}
-                      disabled={
-                        exchange.status !== 'accepted' &&
-                        exchange.status !== 'in_progress'
-                      }
-                    />
-                  ) : null}
-                </div>
-              </CardContent>
-            </Card>
+                  </div>
+                </CardContent>
+              </Card>
 
-            <Card className='flex h-[400px] flex-col'>
-              <CardHeader>
-                <CardTitle>Teaching Messages</CardTitle>
-                <CardDescription>
-                  Communicate with {otherUser.username} about your teaching
-                  session
-                </CardDescription>
-              </CardHeader>
-              <ExchangeMessages
-                exchangeId={exchangesId}
-                otherUser={otherUser}
-              />
-            </Card>
-          </TabsContent>
+              <Card className='flex h-[400px] flex-col'>
+                <CardHeader>
+                  <CardTitle>Teaching Messages</CardTitle>
+                  <CardDescription>
+                    Communicate with {otherUser.username} about your teaching
+                    session
+                  </CardDescription>
+                </CardHeader>
+                <ExchangeMessages
+                  exchangeId={exchangesId}
+                  otherUser={otherUser}
+                />
+              </Card>
+            </TabsContent>
+          )}
 
-          <TabsContent value='learning' className='space-y-4'>
-            <Card>
-              <CardHeader>
-                <CardTitle>Learning Session</CardTitle>
-                <CardDescription>
-                  {otherUser.username} is teaching you the skill &quot;
-                  {isUser1
-                    ? exchange.swap2?.skill_offerings?.title
-                    : exchange.swap1?.skill_offerings?.title}
-                  &quot;
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className='space-y-4'>
-                  {/* Learning specific content */}
-                  {isUser1 && exchange.swap2_id ? (
+          {myLearningSwap && learningSwapId && (
+            <TabsContent value='learning' className='space-y-4'>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Learning Session</CardTitle>
+                  <CardDescription>
+                    {otherUser.username} is teaching you the skill "
+                    {myLearningSwap.skill_offerings?.title || 'Unknown Skill'}"
+                    {exchange.is_credit_based && (
+                      <span className='ml-2 font-medium text-amber-600'>
+                        (Credit-based - You spent {exchange.credit_amount || 5}{' '}
+                        credits)
+                      </span>
+                    )}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className='space-y-4'>
                     <ExchangeScheduler
                       exchange={exchange}
-                      swapId={exchange.swap2_id}
+                      swapId={learningSwapId}
                       disabled={
                         exchange.status !== 'accepted' &&
                         exchange.status !== 'in_progress'
                       }
                     />
-                  ) : !isUser1 && exchange.swap1_id ? (
-                    <ExchangeScheduler
-                      exchange={exchange}
-                      swapId={exchange.swap1_id}
-                      disabled={
-                        exchange.status !== 'accepted' &&
-                        exchange.status !== 'in_progress'
-                      }
-                    />
-                  ) : null}
-                </div>
-              </CardContent>
-            </Card>
+                  </div>
+                </CardContent>
+              </Card>
 
-            <Card className='flex h-[400px] flex-col'>
-              <CardHeader>
-                <CardTitle>Learning Messages</CardTitle>
-                <CardDescription>
-                  Communicate with {otherUser.username} about your learning
-                  session
-                </CardDescription>
-              </CardHeader>
-              <ExchangeMessages
-                exchangeId={exchangesId}
-                otherUser={otherUser}
-              />
-            </Card>
-          </TabsContent>
+              <Card className='flex h-[400px] flex-col'>
+                <CardHeader>
+                  <CardTitle>Learning Messages</CardTitle>
+                  <CardDescription>
+                    Communicate with {otherUser.username} about your learning
+                    session
+                  </CardDescription>
+                </CardHeader>
+                <ExchangeMessages
+                  exchangeId={exchangesId}
+                  otherUser={otherUser}
+                />
+              </Card>
+            </TabsContent>
+          )}
         </Tabs>
       ) : null}
     </div>
