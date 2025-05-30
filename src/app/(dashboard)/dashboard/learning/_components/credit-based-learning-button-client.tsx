@@ -195,7 +195,7 @@ export const CreditBasedLearningButtonClient = ({
             <div className='rounded-lg bg-amber-50 p-4 text-amber-800'>
               <p className='flex items-center font-medium'>
                 <Coins className='mr-2 h-5 w-5' />
-                You don't have enough credits.
+                You don&apos;t have enough credits.
               </p>
               <p className='mt-2 text-sm'>
                 You need {creditCost} credits but only have {userCredits}. Earn

@@ -226,7 +226,8 @@ const Page = async ({
                   <CardTitle>Learning Session</CardTitle>
                   <CardDescription>
                     {otherUser.username} is teaching you the skill &apos;
-                    {myLearningSwap.skill_offerings?.title || 'Unknown Skill'}"
+                    {myLearningSwap.skill_offerings?.title || 'Unknown Skill'}
+                    &apos;
                     {exchange.is_credit_based && (
                       <span className='ml-2 font-medium text-amber-600'>
                         (Credit-based - You spent {exchange.credit_amount || 5}{' '}
