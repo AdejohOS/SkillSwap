@@ -20,8 +20,8 @@ export const JoinCommunity = () => {
 
         <p className='mx-auto mb-8 max-w-2xl text-xl leading-relaxed text-blue-100'>
           Start learning new skills, teaching others, and building meaningful
-          connections with learners worldwide. It's free to join and takes less
-          than 2 minutes to get started.
+          connections with learners worldwide. It&apos;s free to join and takes
+          less than 2 minutes to get started.
         </p>
 
         <div className='flex flex-col justify-center gap-4 sm:flex-row'>

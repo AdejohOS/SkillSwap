@@ -70,7 +70,6 @@ export const HowItWorksSection = () => {
       className='bg-gradient-to-br from-gray-50 via-white to-blue-50 py-20'
     >
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
-        {/* Header */}
         <div className='mb-20 text-center'>
           <div className='mb-6 inline-flex items-center gap-2 rounded-full bg-blue-100 px-4 py-2 text-sm font-medium text-blue-700'>
             <Users className='h-4 w-4' />
@@ -89,15 +88,12 @@ export const HowItWorksSection = () => {
           </p>
         </div>
 
-        {/* Steps */}
         <div className='relative'>
-          {/* Desktop connecting line */}
           <div className='absolute top-24 right-0 left-0 hidden h-0.5 bg-gradient-to-r from-blue-200 via-green-200 via-purple-200 to-orange-200 lg:block'></div>
 
           <div className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 lg:gap-6'>
             {steps.map((step, index) => (
               <div key={index} className='group relative'>
-                {/* Mobile connecting arrow */}
                 {index < steps.length - 1 && (
                   <div className='absolute -bottom-4 left-1/2 z-10 -translate-x-1/2 transform lg:hidden'>
                     <div className='flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-200 bg-white'>
@@ -106,11 +102,9 @@ export const HowItWorksSection = () => {
                   </div>
                 )}
 
-                {/* Card */}
                 <div
                   className={`${step.bgColor} h-full rounded-2xl border border-white/50 p-8 transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl`}
                 >
-                  {/* Step number and icon */}
                   <div className='relative mb-6'>
                     <div
                       className={`h-16 w-16 ${step.iconBg} mx-auto mb-4 flex items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110`}
@@ -124,7 +118,6 @@ export const HowItWorksSection = () => {
                     </div>
                   </div>
 
-                  {/* Content */}
                   <div className='text-center'>
                     <h3 className='mb-3 text-xl font-bold text-gray-900'>
                       {step.title}
@@ -133,7 +126,6 @@ export const HowItWorksSection = () => {
                       {step.description}
                     </p>
 
-                    {/* Details list */}
                     <ul className='space-y-2'>
                       {step.details.map((detail, detailIndex) => (
                         <li
@@ -148,7 +140,6 @@ export const HowItWorksSection = () => {
                   </div>
                 </div>
 
-                {/* Desktop connecting arrow */}
                 {index < steps.length - 1 && (
                   <div className='absolute top-24 -right-3 z-20 hidden lg:block'>
                     <div className='flex h-6 w-6 items-center justify-center rounded-full border-2 border-gray-200 bg-white shadow-sm'>
@@ -161,7 +152,6 @@ export const HowItWorksSection = () => {
           </div>
         </div>
 
-        {/* Bottom CTA */}
         <div className='mt-16 text-center'>
           <div className='rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 p-8 text-white'>
             <div className='mb-4 flex items-center justify-center gap-2'>
@@ -169,7 +159,7 @@ export const HowItWorksSection = () => {
               <span className='text-lg font-semibold'>Credit System</span>
             </div>
             <h3 className='mb-3 text-2xl font-bold'>
-              Can't find a skill exchange?
+              Can&apos;t find a skill exchange?
             </h3>
             <p className='mx-auto mb-6 max-w-2xl text-blue-100'>
               Use our credit system! Earn credits by teaching others, then spend

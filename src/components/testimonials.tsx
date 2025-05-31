@@ -9,7 +9,7 @@ export const TestimonialsSection = () => {
       content:
         'I learned Spanish by teaching Python programming. SkillSwap made it possible to exchange skills I never thought could be traded!',
       rating: 5,
-      avatar: '/placeholder.svg?height=60&width=60'
+      avatar: '/images/placeholder.svg?height=60&width=60'
     },
     {
       name: 'Marcus Johnson',
@@ -17,7 +17,7 @@ export const TestimonialsSection = () => {
       content:
         'The credit system is brilliant. I earned credits teaching design and used them to learn guitar from an amazing teacher in Brazil.',
       rating: 5,
-      avatar: '/placeholder.svg?height=60&width=60'
+      avatar: '/images/placeholder.svg?height=60&width=60'
     },
     {
       name: 'Priya Patel',
@@ -25,7 +25,7 @@ export const TestimonialsSection = () => {
       content:
         "Found my perfect language exchange partner through SkillSwap. We've been learning together for 6 months now!",
       rating: 5,
-      avatar: '/placeholder.svg?height=60&width=60'
+      avatar: '/images/placeholder.svg?height=60&width=60'
     }
   ]
 
@@ -69,7 +69,9 @@ export const TestimonialsSection = () => {
 
               <div className='flex items-center'>
                 <Image
-                  src={testimonial.avatar || '/placeholder.svg'}
+                  src={testimonial.avatar || '/images/placeholder.svg'}
+                  height={30}
+                  width={30}
                   alt={testimonial.name}
                   className='mr-4 h-12 w-12 rounded-full'
                 />

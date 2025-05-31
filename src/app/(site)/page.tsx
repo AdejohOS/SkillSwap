@@ -1,5 +1,5 @@
 import { CoreFeaturesSection } from '@/components/core-features-section'
-import { CreditSystem } from '@/components/credit-system'
+
 import { Hero } from '@/components/hero'
 import { HowItWorksSection } from '@/components/how-it-works'
 
