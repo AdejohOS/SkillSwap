@@ -18,12 +18,7 @@ export const CtaSection = () => {
           </p>
 
           <div className='mb-8 flex flex-col justify-center gap-4 sm:flex-row'>
-            <Button
-              asChild
-              size='lg'
-              variant='secondary'
-              className='px-8 text-lg'
-            >
+            <Button asChild size='lg' variant='secondary' className='text-lg'>
               <Link href='/auth/signup'>
                 Join SkillSwap Free
                 <ArrowRight className='ml-2 h-5 w-5' />
@@ -32,8 +27,8 @@ export const CtaSection = () => {
             <Button
               asChild
               size='lg'
-              variant='outline'
-              className='border-white px-8 text-lg text-white hover:bg-white hover:text-blue-600'
+              className='border text-lg'
+              variant='ghost'
             >
               <Link href='/dashboard/discover'>Explore Skills</Link>
             </Button>
