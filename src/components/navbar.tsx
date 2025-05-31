@@ -12,17 +12,17 @@ export const NavBar = () => {
   const { data: user } = useGetProfile()
 
   return (
-    <header className='fixed top-0 z-10 w-full bg-transparent drop-shadow-sm backdrop-blur-md'>
-      <div className='mx-auto max-w-7xl px-4 py-6'>
+    <header className='sticky top-0 z-50 border-b border-gray-200 bg-white/95 backdrop-blur-sm'>
+      <div className='mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8'>
         <div className='flex items-center justify-between'>
           <Link
             href='/'
             className='flex items-center gap-1 text-2xl font-bold tracking-tighter text-cyan-900'
           >
-            <span className='rounded bg-cyan-900 p-1'>
+            <span className='rounded bg-gradient-to-r from-blue-600 to-purple-600 p-1 text-white hover:from-blue-700 hover:to-purple-700'>
               <Repeat className='size-4 text-white' />
             </span>
-            Skill<span className='text-orange-600'>Swap</span>
+            SkillSwap
           </Link>
           {user ? (
             <div className='hidden items-center gap-4 md:flex'>
@@ -35,11 +35,17 @@ export const NavBar = () => {
             </div>
           ) : (
             <div className='hidden items-center gap-4 md:flex'>
-              <Link href='/discord'>
+              <Link href='/Features'>
                 <Button variant='ghost'>Discord</Button>
               </Link>
+              <Link href='/about'>
+                <Button variant='ghost'>About</Button>
+              </Link>
               <Link href='/blog'>
-                <Button variant='ghost'>Blog</Button>
+                <Button variant='ghost'>How it works</Button>
+              </Link>
+              <Link href='/legal/terms'>
+                <Button variant='ghost'>Terms</Button>
               </Link>
             </div>
           )}

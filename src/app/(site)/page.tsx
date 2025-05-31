@@ -1,18 +1,22 @@
-import { CoreFeatures } from '@/components/core-features'
+import { CoreFeaturesSection } from '@/components/core-features-section'
 import { CreditSystem } from '@/components/credit-system'
 import { Hero } from '@/components/hero'
-import { HowItWorks } from '@/components/how-it-works'
+import { HowItWorksSection } from '@/components/how-it-works'
+
 import { JoinCommunity } from '@/components/join-community'
+import { StatsSection } from '@/components/stats-section'
+import { TestimonialsSection } from '@/components/testimonials'
 
 export const dynamic = 'force-dynamic'
 export default function Home() {
   return (
     <section className=''>
       <Hero />
-      <HowItWorks />
-      <CreditSystem />
+      <HowItWorksSection />
 
-      <CoreFeatures />
+      <CoreFeaturesSection />
+      <StatsSection />
+      <TestimonialsSection />
       <JoinCommunity />
     </section>
   )

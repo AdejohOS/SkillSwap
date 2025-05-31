@@ -9,13 +9,16 @@ export const Footer = () => {
       <div className='mx-auto max-w-7xl'>
         <div className='flex flex-col items-center justify-between md:flex-row'>
           <div className='mb-6 md:mb-0'>
-            <h2 className='flex items-center gap-1 text-2xl font-bold text-cyan-800'>
-              <span className='rounded bg-cyan-900 p-1'>
+            <h2 className='flex items-center gap-1 text-2xl font-bold'>
+              <span className='rounded bg-gradient-to-r from-blue-600 to-purple-600 p-1 text-white hover:from-blue-700 hover:to-purple-700'>
                 <Repeat className='size-4 text-white' />
               </span>
-              Skill<span className='text-orange-600'>Swap</span>
+              SkillSwap
             </h2>
-            <p className='text-gray-600'>Peer-to-Peer Learning Marketplace</p>
+            <p className='mb-4 max-w-md text-gray-400'>
+              The peer learning marketplace where knowledge flows freely. Learn
+              any skill by teaching others or using our credit system.
+            </p>
             <div className='mt-3 flex gap-5'>
               <Image
                 alt='android'
