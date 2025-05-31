@@ -1,4 +1,5 @@
 import { Star, Quote } from 'lucide-react'
+import Image from 'next/image'
 
 export const TestimonialsSection = () => {
   const testimonials = [
@@ -39,8 +40,8 @@ export const TestimonialsSection = () => {
             </span>
           </h2>
           <p className='mx-auto max-w-2xl text-xl text-gray-600'>
-            Real stories from learners who've transformed their skills through
-            SkillSwap
+            Real stories from learners who&apos;ve transformed their skills
+            through SkillSwap
           </p>
         </div>
 
@@ -62,12 +63,12 @@ export const TestimonialsSection = () => {
               <div className='relative mb-6'>
                 <Quote className='absolute -top-2 -left-2 h-8 w-8 text-blue-200' />
                 <p className='pl-6 leading-relaxed text-gray-700'>
-                  "{testimonial.content}"
+                  &apos;{testimonial.content}&apos;
                 </p>
               </div>
 
               <div className='flex items-center'>
-                <img
+                <Image
                   src={testimonial.avatar || '/placeholder.svg'}
                   alt={testimonial.name}
                   className='mr-4 h-12 w-12 rounded-full'

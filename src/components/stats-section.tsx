@@ -36,8 +36,8 @@ export const StatsSection = () => {
             Trusted by Learners Worldwide
           </h2>
           <p className='mx-auto max-w-2xl text-xl text-blue-100'>
-            Join a thriving community that's transforming how people learn and
-            share knowledge
+            Join a thriving community that&apos;s transforming how people learn
+            and share knowledge
           </p>
         </div>
 
