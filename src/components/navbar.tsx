@@ -35,14 +35,15 @@ export const NavBar = () => {
             </div>
           ) : (
             <div className='hidden items-center gap-4 md:flex'>
-              <Link href='/Features'>
-                <Button variant='ghost'>Discord</Button>
+              <Link href='#features'>
+                <Button variant='ghost'>Features</Button>
+              </Link>
+
+              <Link href='#how-it-works'>
+                <Button variant='ghost'>How it works</Button>
               </Link>
               <Link href='/about'>
                 <Button variant='ghost'>About</Button>
-              </Link>
-              <Link href='/blog'>
-                <Button variant='ghost'>How it works</Button>
               </Link>
               <Link href='/legal/terms'>
                 <Button variant='ghost'>Terms</Button>

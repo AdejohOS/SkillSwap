@@ -14,10 +14,10 @@ export const Sidebar = () => {
         href='/'
         className='flex items-center gap-1 text-2xl font-bold tracking-tighter text-cyan-900'
       >
-        <span className='rounded bg-cyan-900 p-1'>
+        <span className='rounded bg-gradient-to-r from-blue-600 to-purple-600 p-1 text-white hover:from-blue-700 hover:to-purple-700'>
           <Repeat className='size-4 text-white' />
         </span>
-        Skill<span className='text-orange-600'>Swap</span>
+        SkillSwap
       </Link>
       <DottedSeparator className='my-4' />
 

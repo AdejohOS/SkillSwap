@@ -99,7 +99,7 @@ export const LoginForm = () => {
         <p className='text-muted-foreground mt-4 text-center text-sm'>
           By continuing, you confirm that you’ve read and accepted
           SkillSwap&apos;s {''}
-          <Link href='/legal/terms' className='text-teal-600 underline'>
+          <Link href='/legal/terms' className='text-blue-600 underline'>
             Terms and Conditions
           </Link>
         </p>
