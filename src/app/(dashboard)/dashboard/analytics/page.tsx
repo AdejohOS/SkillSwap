@@ -2,6 +2,8 @@ import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { AnalyticsHeader } from './_components/analytics-header'
 import { AnalyticsTabs } from './_components/analytics-tabs'
+import { Suspense } from 'react'
+import { AnalyticsHeaderSkeleton } from './_components/analytics-header-skeleton'
 
 export const dynamic = 'force-dynamic'
 
@@ -16,9 +18,14 @@ const Page = async () => {
     redirect('/')
   }
   return (
-    <div className='min-h-full space-y-6 p-4'>
-      <AnalyticsHeader />
-      <AnalyticsTabs />
+    <div className='space-y-8 p-4'>
+      <Suspense fallback={<AnalyticsHeaderSkeleton />}>
+        <AnalyticsHeader />
+      </Suspense>
+
+      <Suspense fallback={<div>Loading analytics...</div>}>
+        <AnalyticsTabs />
+      </Suspense>
     </div>
   )
 }

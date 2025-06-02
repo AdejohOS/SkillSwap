@@ -916,6 +916,19 @@ export type Database = {
         Args: { user_id: string }
         Returns: Json
       }
+      get_learning_stats: {
+        Args: { p_user_id: string; start_date?: string; end_date?: string }
+        Returns: {
+          unique_skills: number
+          new_skills: number
+          total_teachers: number
+          new_teachers: number
+          total_hours: number
+          total_sessions: number
+          credits_spent: number
+          credit_sessions: number
+        }[]
+      }
       get_potential_matches_for_request: {
         Args: { request_uuid: string }
         Returns: {
@@ -930,6 +943,17 @@ export type Database = {
       get_teaching_analytics: {
         Args: { user_id: string }
         Returns: Json
+      }
+      get_teaching_stats: {
+        Args: { p_user_id: string; start_date?: string; end_date?: string }
+        Returns: {
+          total_students: number
+          new_students: number
+          total_hours: number
+          total_sessions: number
+          credits_earned: number
+          credit_sessions: number
+        }[]
       }
       get_user_analytics_summary: {
         Args: { user_id: string }

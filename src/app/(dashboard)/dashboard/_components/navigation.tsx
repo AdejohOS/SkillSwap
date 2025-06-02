@@ -4,13 +4,15 @@ import { SettingsIcon } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
+  RiCoinsFill,
+  RiCoinsLine,
   RiDashboardHorizontalLine,
   RiGraduationCapFill,
   RiGraduationCapLine
 } from 'react-icons/ri'
 import { IoBookOutline, IoBookSharp } from 'react-icons/io5'
 import { PiUsersThree, PiUsersThreeFill } from 'react-icons/pi'
-import { BiMessageSquare, BiSolidMessageSquare } from 'react-icons/bi'
+
 import { MdLightbulb, MdLightbulbOutline } from 'react-icons/md'
 import { RiDashboardHorizontalFill } from 'react-icons/ri'
 import { FaRegBookmark, FaBookmark } from 'react-icons/fa'
@@ -49,8 +51,8 @@ const routes = [
   {
     label: 'Credits',
     href: '/credits',
-    icon: BiMessageSquare,
-    activeIcon: BiSolidMessageSquare
+    icon: RiCoinsLine,
+    activeIcon: RiCoinsFill
   },
   {
     label: 'Discover',

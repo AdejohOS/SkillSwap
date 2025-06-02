@@ -9,7 +9,11 @@ import {
   CartesianGrid,
   Legend,
   LineChart,
-  Line
+  Line,
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip
 } from 'recharts'
 import {
   ChartContainer,
@@ -47,157 +51,157 @@ export const LearningAnalyticsContent = ({
   timelineData,
   compact
 }: LearningAnalyticsContentProps) => {
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8']
+
+  if (compact) {
+    return (
+      <div className='h-[200px]'>
+        <ChartContainer
+          config={{
+            hours: {
+              label: 'Learning Hours',
+              color: 'hsl(var(--chart-2))'
+            }
+          }}
+          className='h-full'
+        >
+          <ResponsiveContainer width='100%' height='100%'>
+            <LineChart
+              data={timelineData.slice(-6)}
+              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+            >
+              <CartesianGrid strokeDasharray='3 3' />
+              <XAxis dataKey='period' />
+              <YAxis />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Line
+                type='monotone'
+                dataKey='hours'
+                stroke='var(--color-hours)'
+                name='Learning Hours'
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </ChartContainer>
+      </div>
+    )
+  }
   return (
     <>
-      {!compact && (
-        <>
-          <div>
-            <h3 className='mb-2 text-lg font-medium'>
-              Learning Requests Status
-            </h3>
-            <ChartContainer
-              config={{
-                pending: {
-                  label: 'Pending',
-                  color: 'hsl(var(--chart-1))'
-                },
-                accepted: {
-                  label: 'Accepted',
-                  color: 'hsl(var(--chart-2))'
-                },
-                completed: {
-                  label: 'Completed',
-                  color: 'hsl(var(--chart-3))'
-                }
-              }}
-              className='h-[300px]'
+      <div>
+        <h3 className='mb-2 text-lg font-medium'>Learning Requests Status</h3>
+        <ChartContainer
+          config={{
+            pending: {
+              label: 'Pending',
+              color: 'hsl(var(--chart-1))'
+            },
+            accepted: {
+              label: 'Accepted',
+              color: 'hsl(var(--chart-2))'
+            },
+            completed: {
+              label: 'Completed',
+              color: 'hsl(var(--chart-3))'
+            }
+          }}
+          className='h-[300px]'
+        >
+          <ResponsiveContainer width='100%' height='100%'>
+            <BarChart
+              data={requestsData}
+              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
             >
-              <ResponsiveContainer width='100%' height='100%'>
-                <BarChart
-                  data={requestsData}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 70 }}
-                >
-                  <CartesianGrid strokeDasharray='3 3' />
-                  <XAxis
-                    dataKey='skill_name'
-                    angle={-45}
-                    textAnchor='end'
-                    height={70}
-                  />
-                  <YAxis />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                  <Legend />
-                  <Bar
-                    dataKey='pending'
-                    fill='var(--color-pending)'
-                    name='Pending'
-                  />
-                  <Bar
-                    dataKey='accepted'
-                    fill='var(--color-accepted)'
-                    name='Accepted'
-                  />
-                  <Bar
-                    dataKey='completed'
-                    fill='var(--color-completed)'
-                    name='Completed'
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </ChartContainer>
-          </div>
+              <CartesianGrid strokeDasharray='3 3' />
+              <XAxis dataKey='skill_name' />
+              <YAxis />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Legend />
+              <Bar
+                dataKey='pending'
+                fill='var(--color-pending)'
+                name='Pending'
+              />
+              <Bar
+                dataKey='accepted'
+                fill='var(--color-accepted)'
+                name='Accepted'
+              />
+              <Bar
+                dataKey='completed'
+                fill='var(--color-completed)'
+                name='Completed'
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </ChartContainer>
+      </div>
 
-          <div className='grid gap-6 md:grid-cols-2'>
-            <div>
-              <h3 className='mb-2 text-lg font-medium'>Learning Progress</h3>
-              <ChartContainer
-                config={{
-                  progress: {
-                    label: 'Progress',
-                    color: 'hsl(var(--chart-4))'
-                  }
-                }}
-                className='h-[300px]'
-              >
-                <ResponsiveContainer width='100%' height='100%'>
-                  <LineChart
-                    data={progressData}
-                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                  >
-                    <CartesianGrid strokeDasharray='3 3' />
-                    <XAxis dataKey='skill_name' />
-                    <YAxis domain={[0, 100]} />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                    <Line
-                      type='monotone'
-                      dataKey='progress'
-                      stroke='var(--color-progress)'
-                      name='Progress %'
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </ChartContainer>
-            </div>
-
-            <div>
-              <h3 className='mb-2 text-lg font-medium'>Learning Hours</h3>
-              <ChartContainer
-                config={{
-                  hours: {
-                    label: 'Hours',
-                    color: 'hsl(var(--chart-5))'
-                  }
-                }}
-                className='h-[300px]'
-              >
-                <ResponsiveContainer width='100%' height='100%'>
-                  <BarChart
-                    data={timelineData}
-                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                  >
-                    <CartesianGrid strokeDasharray='3 3' />
-                    <XAxis dataKey='period' />
-                    <YAxis />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                    <Bar
-                      dataKey='hours'
-                      fill='var(--color-hours)'
-                      name='Hours'
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              </ChartContainer>
-            </div>
-          </div>
-        </>
-      )}
-
-      {compact && (
-        <div className='h-[200px]'>
+      <div className='grid gap-6 md:grid-cols-2'>
+        <div>
+          <h3 className='mb-2 text-lg font-medium'>Learning Timeline</h3>
           <ChartContainer
             config={{
               hours: {
                 label: 'Hours',
-                color: 'hsl(var(--chart-5))'
+                color: 'hsl(var(--chart-4))'
               }
             }}
-            className='h-full'
+            className='h-[300px]'
           >
             <ResponsiveContainer width='100%' height='100%'>
-              <BarChart
-                data={timelineData.slice(-5)}
+              <LineChart
+                data={timelineData}
                 margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
               >
                 <CartesianGrid strokeDasharray='3 3' />
                 <XAxis dataKey='period' />
                 <YAxis />
                 <ChartTooltip content={<ChartTooltipContent />} />
-                <Bar dataKey='hours' fill='var(--color-hours)' name='Hours' />
-              </BarChart>
+                <Line
+                  type='monotone'
+                  dataKey='hours'
+                  stroke='var(--color-hours)'
+                  name='Learning Hours'
+                />
+              </LineChart>
             </ResponsiveContainer>
           </ChartContainer>
         </div>
-      )}
+
+        <div>
+          <h3 className='mb-2 text-lg font-medium'>Learning Progress</h3>
+          <div className='h-[300px]'>
+            <ResponsiveContainer width='100%' height='100%'>
+              <PieChart>
+                <Pie
+                  data={progressData}
+                  cx='50%'
+                  cy='50%'
+                  labelLine={false}
+                  outerRadius={80}
+                  fill='#8884d8'
+                  dataKey='progress'
+                  nameKey='skill_name'
+                  label={({ skill_name, progress }) =>
+                    `${skill_name}: ${progress}%`
+                  }
+                >
+                  {progressData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip
+                  formatter={(value, name) => [`${value}% complete`, name]}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
     </>
   )
 }

@@ -14,7 +14,7 @@ const Page = async () => {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    return <div>Please sign in to view your credits.</div>
+    return <div className='p-4'>Please sign in to view your credits.</div>
   }
 
   // Fetch the user's credit balance from the credits table

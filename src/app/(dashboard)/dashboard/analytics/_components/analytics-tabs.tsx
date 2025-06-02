@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { AnalyticsOverviewSkeleton } from '@/components/skeletons/analytics-overview-skeleton'
+
 import { TeachingAnalyticsSkeleton } from '@/components/skeletons/teaching-analytics-skeleton'
 import { TeachingAnalytics } from './teaching-analytics'
 import { LearningAnalyticsSkeleton } from '@/components/skeletons/learning-analytics-skeleton'
@@ -10,23 +10,12 @@ import { EngagementAnalytics } from './engagement-analytics'
 
 export const AnalyticsTabs = () => {
   return (
-    <Tabs defaultValue='overview' className='space-y-4'>
-      <TabsList>
-        <TabsTrigger value='overview'>Overview</TabsTrigger>
+    <Tabs defaultValue='teaching' className='space-y-4'>
+      <TabsList className='grid w-full grid-cols-3'>
         <TabsTrigger value='teaching'>Teaching</TabsTrigger>
         <TabsTrigger value='learning'>Learning</TabsTrigger>
         <TabsTrigger value='engagement'>Engagement</TabsTrigger>
       </TabsList>
-
-      <TabsContent value='overview' className='space-y-4'>
-        <Suspense fallback={<AnalyticsOverviewSkeleton />}>
-          <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3'>
-            <Suspense fallback={<TeachingAnalyticsSkeleton />}>
-              <TeachingAnalytics compact />
-            </Suspense>
-          </div>
-        </Suspense>
-      </TabsContent>
 
       <TabsContent value='teaching' className='space-y-4'>
         <Suspense fallback={<TeachingAnalyticsSkeleton />}>

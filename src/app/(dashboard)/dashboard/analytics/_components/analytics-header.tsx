@@ -1,4 +1,4 @@
-import { CalendarRange, Clock, Users } from 'lucide-react'
+import { CalendarRange, Clock, Coins, Users } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 
 import { createClient } from '@/utils/supabase/server'
@@ -20,6 +20,9 @@ export const AnalyticsHeader = async () => {
     active_swaps: 0
   }
 
+  // Get credit balance
+  let creditBalance = 0
+
   // Only call RPC if user exists
   if (user) {
     const { data: summary } = await supabase.rpc('get_user_analytics_summary', {
@@ -28,6 +31,28 @@ export const AnalyticsHeader = async () => {
 
     if (summary && summary.length > 0) {
       stats = summary[0]
+    }
+
+    // Get credit balance from credits table
+    const { data: credits } = await supabase
+      .from('credits')
+      .select('balance')
+      .eq('user_id', user.id)
+      .single()
+
+    if (credits) {
+      creditBalance = credits.balance
+    } else {
+      // If no credit record exists, create one with default balance
+      const { data: newCredit } = await supabase
+        .from('credits')
+        .insert({ user_id: user.id, balance: 5 })
+        .select('balance')
+        .single()
+
+      if (newCredit) {
+        creditBalance = newCredit.balance
+      }
     }
   }
 
@@ -43,11 +68,11 @@ export const AnalyticsHeader = async () => {
         <DateRangePickerWrapper />
       </div>
 
-      <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
+      <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-5'>
         <Card>
           <CardContent className='p-6'>
             <div className='flex items-center gap-3'>
-              <Clock className='text-muted-foreground h-5 w-5' />
+              <Clock className='h-5 w-5 text-blue-500' />
               <div>
                 <p className='text-sm leading-none font-medium'>
                   Teaching Hours
@@ -63,7 +88,7 @@ export const AnalyticsHeader = async () => {
         <Card>
           <CardContent className='p-6'>
             <div className='flex items-center gap-3'>
-              <Clock className='text-muted-foreground h-5 w-5' />
+              <Clock className='h-5 w-5 text-green-500' />
               <div>
                 <p className='text-sm leading-none font-medium'>
                   Learning Hours
@@ -79,7 +104,7 @@ export const AnalyticsHeader = async () => {
         <Card>
           <CardContent className='p-6'>
             <div className='flex items-center gap-3'>
-              <Users className='text-muted-foreground h-5 w-5' />
+              <Users className='h-5 w-5 text-purple-500' />
               <div>
                 <p className='text-sm leading-none font-medium'>Total Swaps</p>
                 <p className='text-2xl font-bold'>{stats.total_swaps}</p>
@@ -91,10 +116,24 @@ export const AnalyticsHeader = async () => {
         <Card>
           <CardContent className='p-6'>
             <div className='flex items-center gap-3'>
-              <CalendarRange className='text-muted-foreground h-5 w-5' />
+              <CalendarRange className='h-5 w-5 text-orange-500' />
               <div>
                 <p className='text-sm leading-none font-medium'>Active Swaps</p>
                 <p className='text-2xl font-bold'>{stats.active_swaps}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className='p-6'>
+            <div className='flex items-center gap-3'>
+              <Coins className='h-5 w-5 text-amber-500' />
+              <div>
+                <p className='text-sm leading-none font-medium'>
+                  Credit Balance
+                </p>
+                <p className='text-2xl font-bold'>{creditBalance}</p>
               </div>
             </div>
           </CardContent>
