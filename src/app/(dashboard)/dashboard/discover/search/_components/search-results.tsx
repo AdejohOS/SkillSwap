@@ -48,72 +48,113 @@ export const SearchResults = async ({
 }: SearchResultsProps) => {
   const supabase = await createClient()
 
-  // Call the search_skills function
-  const { data: skills, error } = await supabase.rpc('search_skills', {
-    search_query: searchParams.query || undefined,
-    filter_category_id: searchParams.category || undefined,
-    filter_experience_level: searchParams.experience || undefined,
-    filter_teaching_method: searchParams.method || undefined,
-    filter_location: searchParams.location || undefined,
-    min_rating: searchParams.rating ? Number.parseInt(searchParams.rating) : 0,
-    filter_available_now: searchParams.available === 'true',
-    filter_has_reviews: searchParams.reviews === 'true',
-    current_user_id: userId
+  // Build the query using direct table queries instead of RPC
+  let query = supabase
+    .from('skill_offerings')
+    .select(
+      `
+      id,
+      user_id,
+      title,
+      description,
+      category_id,
+      experience_level,
+      teaching_method,
+      available_now,
+      profiles!inner(username, avatar_url, location),
+      skill_categories(name)
+    `
+    )
+    .eq('is_active', true)
+    .neq('user_id', userId)
+
+  // Apply search filters
+  if (searchParams.query) {
+    query = query.or(
+      `title.ilike.%${searchParams.query}%,description.ilike.%${searchParams.query}%`
+    )
+  }
+
+  if (searchParams.category && searchParams.category !== 'all') {
+    query = query.eq('category_id', searchParams.category)
+  }
+
+  if (searchParams.experience && searchParams.experience !== 'any') {
+    query = query.eq('experience_level', searchParams.experience)
+  }
+
+  if (searchParams.method && searchParams.method !== 'any') {
+    query = query.eq('teaching_method', searchParams.method)
+  }
+
+  if (searchParams.location && searchParams.location !== 'any') {
+    query = query.ilike('profiles.location', `%${searchParams.location}%`)
+  }
+
+  if (searchParams.available === 'true') {
+    query = query.eq('available_now', true)
+  }
+
+  const { data: skills, error } = await query.order('created_at', {
+    ascending: false
   })
 
   if (error) {
     console.error('Error searching skills:', error)
-    return <div>Error loading search results. Please try again later.</div>
+    return (
+      <div className='p-4'>
+        Error loading search results. Please try again later.
+      </div>
+    )
   }
 
   if (!skills || skills.length === 0) {
     return <SearchEmptyState searchParams={searchParams} />
   }
 
-  // Get user profiles for the skills
-  const teacherIds = skills.map(skill => skill.user_id)
-  const { data: teacherProfiles } = await supabase
-    .from('profiles')
-    .select('id, username, avatar_url, location')
-    .in('id', teacherIds)
+  // Get ratings for the skills if rating filter is applied
+  let ratingsMap: Record<string, number> = {}
 
-  const teacherProfileMap = (teacherProfiles || []).reduce(
-    (map, profile) => {
-      map[profile.id] = profile
-      return map
-    },
-    {} as Record<string, Profile>
-  )
+  if (searchParams.rating && Number(searchParams.rating) > 0) {
+    const reviewerIds = skills.map(skill => skill.user_id)
+    const { data: reviews } = await supabase
+      .from('reviews')
+      .select('reviewer_id, rating')
+      .in('reviewer_id', reviewerIds)
 
-  // Get categories for the skills
-  const categoryIds = Array.from(
-    new Set(skills.map(skill => skill.category_id))
-  )
-  const { data: categories } = await supabase
-    .from('skill_categories')
-    .select('id, name')
-    .in('id', categoryIds)
+    if (reviews) {
+      const ratingsByReviewer = reviews.reduce(
+        (acc, review) => {
+          if (!acc[review.reviewer_id]) {
+            acc[review.reviewer_id] = []
+          }
+          acc[review.reviewer_id].push(review.rating)
+          return acc
+        },
+        {} as Record<string, number[]>
+      )
 
-  const categoryMap = (categories || []).reduce(
-    (map, category) => {
-      map[category.id] = category
-      return map
-    },
-    {} as Record<string, Category>
-  )
+      ratingsMap = Object.entries(ratingsByReviewer).reduce(
+        (acc, [reviewerId, ratings]) => {
+          acc[reviewerId] =
+            ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
+          return acc
+        },
+        {} as Record<string, number>
+      )
 
-  // Get average ratings for teachers
-  const { data: ratings } = await supabase.rpc('get_user_average_ratings', {
-    user_ids: teacherIds
-  })
+      // Filter by minimum rating if specified
+      const minRating = Number(searchParams.rating)
+      const filteredSkills = skills.filter(skill => {
+        const rating = ratingsMap[skill.user_id] || 0
+        return rating >= minRating
+      })
 
-  const ratingsMap = (ratings || []).reduce(
-    (map, item) => {
-      map[item.user_id] = item.average_rating
-      return map
-    },
-    {} as Record<string, number>
-  )
+      if (filteredSkills.length !== skills.length) {
+        return <SearchEmptyState searchParams={searchParams} />
+      }
+    }
+  }
 
   return (
     <div className='space-y-4'>
@@ -123,8 +164,12 @@ export const SearchResults = async ({
 
       <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3'>
         {skills.map(skill => {
-          const teacherProfile = teacherProfileMap[skill.user_id]
-          const category = categoryMap[skill.category_id]
+          const profile = Array.isArray(skill.profiles)
+            ? skill.profiles[0]
+            : skill.profiles
+          const category = Array.isArray(skill.skill_categories)
+            ? skill.skill_categories[0]
+            : skill.skill_categories
           const rating = ratingsMap[skill.user_id] || 0
 
           return (
@@ -134,25 +179,22 @@ export const SearchResults = async ({
                   <Avatar>
                     <AvatarImage
                       src={
-                        teacherProfile?.avatar_url ||
+                        profile?.avatar_url ||
                         '/placeholder.svg?height=40&width=40'
                       }
-                      alt={teacherProfile?.username}
+                      alt={profile?.username}
                     />
                     <AvatarFallback>
-                      {teacherProfile?.username
-                        ?.substring(0, 2)
-                        .toUpperCase() || '??'}
+                      {profile?.username?.substring(0, 2).toUpperCase() || '??'}
                     </AvatarFallback>
                   </Avatar>
                   <div>
                     <CardTitle className='text-base'>
-                      {teacherProfile?.username}
+                      {profile?.username}
                     </CardTitle>
                     <CardDescription>
                       {category?.name}
-                      {teacherProfile?.location &&
-                        ` • ${teacherProfile.location}`}
+                      {profile?.location && ` • ${profile.location}`}
                     </CardDescription>
                   </div>
                 </div>

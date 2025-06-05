@@ -5,6 +5,7 @@ import { MobileSidebar } from './mobile-sidebar'
 
 import { NotificationBell } from '@/components/notifications/notification-bell'
 import { createClient } from '@/utils/supabase/server'
+import { SearchBar } from './search-bar'
 
 export const DashboardNavbar = async () => {
   const supabase = await createClient()
@@ -21,16 +22,7 @@ export const DashboardNavbar = async () => {
 
       <div className='flex items-center gap-3'>
         <div className='hidden md:block md:w-96 lg:w-[32rem] xl:w-[40rem]'>
-          <form>
-            <div className='relative'>
-              <Input
-                placeholder='Search skills, users...'
-                className='bg-muted pl-8'
-                type='search'
-              />
-              <Search className='absolute inset-y-1.5 left-0 flex items-center pl-2' />
-            </div>
-          </form>
+          <SearchBar />
         </div>
 
         {user && <NotificationBell userId={user.id} />}

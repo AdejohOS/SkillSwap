@@ -498,6 +498,7 @@ export type Database = {
       }
       skill_offerings: {
         Row: {
+          available_now: boolean | null
           category_id: string | null
           created_at: string | null
           description: string | null
@@ -513,6 +514,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          available_now?: boolean | null
           category_id?: string | null
           created_at?: string | null
           description?: string | null
@@ -528,6 +530,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          available_now?: boolean | null
           category_id?: string | null
           created_at?: string | null
           description?: string | null
@@ -940,6 +943,14 @@ export type Database = {
           match_score: number
         }[]
       }
+      get_search_suggestions: {
+        Args: { partial_query?: string; suggestion_limit?: number }
+        Returns: {
+          suggestion: string
+          type: string
+          count: number
+        }[]
+      }
       get_teaching_analytics: {
         Args: { user_id: string }
         Returns: Json
@@ -1000,28 +1011,44 @@ export type Database = {
         Returns: undefined
       }
       search_skills: {
-        Args: {
-          search_query?: string
-          filter_category_id?: string
-          filter_experience_level?: string
-          filter_teaching_method?: string
-          filter_location?: string
-          min_rating?: number
-          filter_available_now?: boolean
-          filter_has_reviews?: boolean
-          current_user_id?: string
-        }
+        Args:
+          | {
+              search_query?: string
+              category_filter?: number
+              experience_filter?: string
+              method_filter?: string
+              location_filter?: string
+              available_filter?: boolean
+              user_id_filter?: string
+              result_limit?: number
+              result_offset?: number
+            }
+          | {
+              search_query?: string
+              filter_category_id?: string
+              filter_experience_level?: string
+              filter_teaching_method?: string
+              filter_location?: string
+              min_rating?: number
+              filter_available_now?: boolean
+              filter_has_reviews?: boolean
+              current_user_id?: string
+            }
         Returns: {
           id: string
-          user_id: string
           title: string
           description: string
-          category_id: string
+          user_id: string
+          category_id: number
           experience_level: string
           teaching_method: string
           available_now: boolean
+          created_at: string
+          username: string
+          avatar_url: string
+          location: string
+          category_name: string
           rating: number
-          has_reviews: boolean
         }[]
       }
       spend_credits: {

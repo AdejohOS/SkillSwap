@@ -210,6 +210,7 @@ export const AdvancedSearch = () => {
         <div className='relative flex-1'>
           <Search className='text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4' />
           <Input
+            type='search'
             placeholder='Search skills, topics, or keywords...'
             className='pr-10 pl-8'
             value={query}
