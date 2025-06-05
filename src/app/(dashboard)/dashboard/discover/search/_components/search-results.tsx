@@ -16,18 +16,6 @@ import { SearchEmptyState } from './search-empty-state'
 import { createClient } from '@/utils/supabase/server'
 import { SkillSwapButton } from './skill-swap-button'
 
-interface Profile {
-  id: string
-  username: string
-  avatar_url?: string | null
-  location?: string | null
-}
-
-interface Category {
-  id: string
-  name: string
-}
-
 interface SearchResultsProps {
   searchParams: {
     query?: string

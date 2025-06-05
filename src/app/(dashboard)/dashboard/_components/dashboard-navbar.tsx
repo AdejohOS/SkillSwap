@@ -1,6 +1,5 @@
-import { Input } from '@/components/ui/input'
 import { UserMenu } from '@/components/user-menu'
-import { Search } from 'lucide-react'
+
 import { MobileSidebar } from './mobile-sidebar'
 
 import { NotificationBell } from '@/components/notifications/notification-bell'

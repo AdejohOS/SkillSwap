@@ -29,6 +29,16 @@ interface RecentSearch {
   timestamp: number
 }
 
+interface Profile {
+  username: string
+  avatar_url: string | null
+}
+
+interface SkillCategory {
+  id: string
+  name: string
+}
+
 export const SearchBar = () => {
   const [query, setQuery] = useState('')
   const [isOpen, setIsOpen] = useState(false)
@@ -110,9 +120,10 @@ export const SearchBar = () => {
             description: skill.description,
             user_id: skill.user_id,
             category_name:
-              (skill.skill_categories as any)?.name || 'Uncategorized',
-            username: (skill.profiles as any)?.username || 'Unknown',
-            avatar_url: (skill.profiles as any)?.avatar_url || null
+              (skill.skill_categories as SkillCategory)?.name ||
+              'Uncategorized',
+            username: (skill.profiles as Profile)?.username || 'Unknown',
+            avatar_url: (skill.profiles as Profile)?.avatar_url || null
           }))
           setResults(formattedResults)
         }
@@ -258,13 +269,13 @@ export const SearchBar = () => {
                         className='w-full justify-start text-xs'
                         onClick={() => handleSearch()}
                       >
-                        View all results for "{query}"
+                        View all results for &apos;{query}&apos;
                       </Button>
                     </div>
                   ) : (
                     !isLoading && (
                       <p className='text-muted-foreground text-sm'>
-                        No skills found for "{query}"
+                        No skills found for &apos;{query}&apos;
                       </p>
                     )
                   )}
