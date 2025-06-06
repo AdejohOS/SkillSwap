@@ -12,7 +12,7 @@ export const Sidebar = () => {
     <aside className='flex h-full w-full flex-col bg-neutral-100 p-4'>
       <Link
         href='/'
-        className='flex items-center gap-1 text-2xl font-bold tracking-tighter text-cyan-900'
+        className='flex items-center gap-1 text-2xl font-bold tracking-tighter'
       >
         <span className='rounded bg-gradient-to-r from-blue-600 to-purple-600 p-1 text-white hover:from-blue-700 hover:to-purple-700'>
           <Repeat className='size-4 text-white' />
