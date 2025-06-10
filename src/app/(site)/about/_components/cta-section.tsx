@@ -1,8 +1,11 @@
+'use client'
 import { Button } from '@/components/ui/button'
+import { useLoginModal } from '@/hooks/use-login-modal'
 import { ArrowRight, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 
 export const CtaSection = () => {
+  const { open } = useLoginModal()
   return (
     <section className='bg-gradient-to-r from-blue-600 to-purple-600 py-20 text-white'>
       <div className='container mx-auto px-4'>
@@ -18,11 +21,15 @@ export const CtaSection = () => {
           </p>
 
           <div className='mb-8 flex flex-col justify-center gap-4 sm:flex-row'>
-            <Button asChild size='lg' variant='secondary' className='text-lg'>
-              <Link href='/auth/signup'>
-                Join SkillSwap Free
-                <ArrowRight className='ml-2 h-5 w-5' />
-              </Link>
+            <Button
+              onClick={open}
+              asChild
+              size='lg'
+              variant='secondary'
+              className='flex items-center gap-2 text-lg'
+            >
+              Join SkillSwap Free
+              <ArrowRight className='h-5 w-5' />
             </Button>
             <Button
               asChild

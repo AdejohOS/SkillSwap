@@ -1,8 +1,11 @@
+'use client'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Sparkles } from 'lucide-react'
+import { useLoginModal } from '@/hooks/use-login-modal'
 
 export const JoinCommunity = () => {
+  const { open } = useLoginModal()
   return (
     <section className='relative overflow-hidden bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 py-20'>
       <div className='relative z-10 mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8'>
@@ -25,15 +28,15 @@ export const JoinCommunity = () => {
         </p>
 
         <div className='flex flex-col justify-center gap-4 sm:flex-row'>
-          <Link href='/auth/signup'>
-            <Button
-              size='lg'
-              className='bg-white px-8 py-4 text-lg font-semibold text-gray-900 hover:bg-gray-100'
-            >
-              Create Free Account
-              <ArrowRight className='ml-2 h-5 w-5' />
-            </Button>
-          </Link>
+          <Button
+            onClick={open}
+            size='lg'
+            className='bg-white px-8 py-4 text-lg font-semibold text-gray-900 hover:bg-gray-100'
+          >
+            Create Free Account
+            <ArrowRight className='ml-2 h-5 w-5' />
+          </Button>
+
           <Link href='/about'>
             <Button size='lg' className='text-lg font-semibold'>
               Learn More

@@ -1,8 +1,11 @@
+'use client'
+import { useLoginModal } from '@/hooks/use-login-modal'
 import { Button } from './ui/button'
 
 import { ArrowRight, BookOpen, Star, Users } from 'lucide-react'
 import Link from 'next/link'
 export const Hero = () => {
+  const { open } = useLoginModal()
   return (
     <section className='relative bg-gradient-to-br from-blue-50 via-white to-purple-50 pt-16 pb-20 sm:pt-20 sm:pb-32'>
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
@@ -26,15 +29,15 @@ export const Hero = () => {
           </p>
 
           <div className='mb-12 flex flex-col justify-center gap-4 sm:flex-row'>
-            <Link href='/auth/signup'>
-              <Button
-                size='lg'
-                className='bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-4 text-lg text-white hover:from-blue-700 hover:to-purple-700'
-              >
-                Start Learning Today
-                <ArrowRight className='ml-2 h-5 w-5' />
-              </Button>
-            </Link>
+            <Button
+              onClick={open}
+              size='lg'
+              className='bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-4 text-lg text-white hover:from-blue-700 hover:to-purple-700'
+            >
+              Start Learning Today
+              <ArrowRight className='ml-2 h-5 w-5' />
+            </Button>
+
             <Link href='#how-it-works'>
               <Button
                 size='lg'

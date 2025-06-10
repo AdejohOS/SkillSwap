@@ -1,8 +1,11 @@
+'use client'
 import { Button } from '@/components/ui/button'
+import { useLoginModal } from '@/hooks/use-login-modal'
 import { ArrowRight, Users, BookOpen, Star } from 'lucide-react'
 import Link from 'next/link'
 
 export const HeroSection = () => {
+  const { open } = useLoginModal()
   return (
     <section className='bg-gradient-to-br from-blue-50 to-indigo-100 py-20'>
       <div className='container mx-auto px-4'>
@@ -17,11 +20,14 @@ export const HeroSection = () => {
             opportunities.
           </p>
           <div className='mb-12 flex flex-col justify-center gap-4 sm:flex-row'>
-            <Button asChild size='lg' className='px-8 text-lg'>
-              <Link href='/auth/signup'>
-                Start Learning Today
-                <ArrowRight className='ml-2 h-5 w-5' />
-              </Link>
+            <Button
+              asChild
+              onClick={open}
+              size='lg'
+              className='flex items-center gap-2 text-lg'
+            >
+              Start Learning Today
+              <ArrowRight className='h-5 w-5' />
             </Button>
             <Button
               asChild
