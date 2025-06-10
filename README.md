@@ -1,4 +1,4 @@
-# 🧠 SkillSwap
+# 🔁 SkillSwap
 
 SkillSwap is a peer-to-peer learning marketplace where users can teach and learn
 real-world skills through flexible and personalized exchange sessions. Whether
@@ -30,7 +30,7 @@ Spanish, SkillSwap connects you to the right people, no money, just skills.
 
 ## 📸 Screenshots
 
-> Coming soon: Screenshots or a link to a live demo.
+> [Live Site](http://localhost:3000)
 
 ---
 
@@ -67,7 +67,15 @@ Spanish, SkillSwap connects you to the right people, no money, just skills.
    pnpm i
    ```
 
-3. **Run development server**
+3. **Add supabase credentials at .env.local**
+
+   NEXT_PUBLIC_SUPABASE_URL=your-url NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+   SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+
+4. **Run development server**
    ```bash
    pnpm dev
    ```
+
+Built with ❤️ by Sunday Adejoh Email: elusivebrown@gmail.com Portfolio:
+https://portfolio-gamma-sand-73.vercel.app/projects
