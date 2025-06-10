@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧠 SkillSwap
 
-## Getting Started
+SkillSwap is a peer-to-peer learning marketplace where users can teach and learn
+real-world skills through flexible and personalized exchange sessions. Whether
+you're a designer offering UI/UX lessons or a developer looking to learn
+Spanish, SkillSwap connects you to the right people, no money, just skills.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- 🔍 **Skill Discovery:** Full-text search with filters by category, experience
+  level, teaching method, location, and availability.
+- 💡 **Skill Offering & Requests:** Users can create detailed offerings or post
+  skill requests for others to discover.
+- 🤝 **Swaps System:** One-to-one learning exchanges connecting a learner with a
+  teacher.
+- 💬 **Messaging:** Chat with potential swap partners to coordinate sessions.
+- ⭐ **Reviews & Ratings:** Rate and review your learning experiences to build
+  trust.
+- 📍 **Location-aware Matching:** See skills available nearby.
+- 🔐 **Authentication:** Magic link + OAuth (Google, Facebook), with role-based
+  access.
+- 📈 **Credit System:** Manage and track learning credits.
+- 📦 **Scalable Backend:** Powered by Supabase with fine-grained RLS and
+  efficient PostgreSQL functions.
+- 💻 **Modern Frontend:** Built with Next.js 15 and Tailwind CSS.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📸 Screenshots
 
-## Learn More
+> Coming soon: Screenshots or a link to a live demo.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠️ Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Frontend   | Backend                     | Database | Auth                   | Realtime          | Styling      |
+| ---------- | --------------------------- | -------- | ---------------------- | ----------------- | ------------ |
+| Next.js 15 | Server Actions & API Routes | Supabase | Supabase Auth ( OAuth) | Supabase Realtime | Tailwind CSS |
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🧩 Future Plans (SaaS Vision)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Team plans for organizations and schools
+- Stripe integration for paid lessons and pro accounts
+- Skill certificates for verified sessions
+- Marketplace moderation dashboard
+- Mobile app (React Native or Flutter)
+
+---
+
+## 🧪 Setup Instructions
+
+1. **Clone the repo**
+
+   ```bash
+   git clone https://github.com/AdejohOS/SkillSwap.git
+   cd skillswap
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   pnpm i
+   ```
+
+3. **Run development server**
+   ```bash
+   pnpm dev
+   ```
