@@ -30,7 +30,7 @@ Spanish, SkillSwap connects you to the right people, no money, just skills.
 
 ## 📸 Screenshots
 
-> [Live Site](http://localhost:3000)
+> [Live Site](https://skill-swap-rho-beige.vercel.app/)
 
 ---
 
